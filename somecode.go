@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/spf13/viper"
-	"github.com/AlecAivazis/survey"
+	"github.com/AlecAivazis/survey/v2"
 	"fmt"
 )
 
