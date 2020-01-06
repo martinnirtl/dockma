@@ -49,6 +49,9 @@ func initConfig() {
 	viper.AddConfigPath(".")
 	viper.AddConfigPath(home)
 
+	// TODO enable use of --config-path flag or $DOCKMA_CONFIG_PATH environment variable
+	// DISCUSS dockma init asks where to place config path and sets env var accordingly !?
+	// viper.SetDefault("CONFIG_PATH", homedir.Dir())
 	// check also BindEnv
 	// viper.SetEnvPrefix("DOCKMA_")
 	// viper.AutomaticEnv()
