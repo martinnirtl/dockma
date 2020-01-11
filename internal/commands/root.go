@@ -3,62 +3,73 @@ package commands
 import (
 	"fmt"
 	"os"
+	"os/user"
+	"path"
+	"strings"
 
-	homedir "github.com/mitchellh/go-homedir" // alias import
+	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/ttacon/chalk"
 )
 
-func Execute() {
-	rootCmd := &cobra.Command{
-		Use:   "dockma",
-		Short: "Dockma is bringing your docker-compose game to the next level.",
-		Long:  `A fast and flexible CLI tool to boost your productivity during development with docker containers built with Go. Full documentation is available at https://dockma.dev`,
-	}
-
-	rootCmd.AddCommand(GetVersionCommand())
-	rootCmd.AddCommand(GetEnvironmentsCommand())
-
-	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
+var rootCmd = &cobra.Command{
+	Use:              "dockma",
+	Short:            "Dockma is bringing your docker-compose game to the next level.",
+	Long:             `A fast and flexible CLI tool to boost your productivity during development with docker containers built with Go. Full documentation is available at https://dockma.dev`,
+	PersistentPreRun: rootPreRunHook,
 }
 
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cobra.yaml)")
-	// rootCmd.PersistentFlags().StringP("author", "a", "YOUR NAME", "author name for copyright attribution")
-	// rootCmd.PersistentFlags().StringVarP(&userLicense, "license", "l", "", "name of license for the project")
-	// rootCmd.PersistentFlags().Bool("viper", true, "use Viper for configuration")
-	// viper.BindPFlag("author", rootCmd.PersistentFlags().Lookup("author"))
-	// viper.BindPFlag("useViper", rootCmd.PersistentFlags().Lookup("viper"))
-	// viper.SetDefault("author", "NAME HERE <EMAIL ADDRESS>")
-	// viper.SetDefault("license", "apache")
+	// FLAGS GO HERE
+
+	// FIXME does not consider envs set via .bash_profile
+	viper.SetEnvPrefix("dockma")
+	viper.BindEnv("home")
+
+	if homeDir := viper.GetString("home"); homeDir == "" {
+		userHome, err := homedir.Dir()
+		if err != nil {
+			fmt.Printf("%sCould not detect home dir: %s%s\n", chalk.Red, err, chalk.ResetColor)
+		}
+
+		viper.SetDefault("home", path.Join(userHome, ".dockma"))
+	}
+
+	viper.SetDefault("username", "User")
+	viper.SetDefault("activeEnvironment", "-")
+	viper.SetDefault("environments", map[string]interface{}{})
 }
 
 func initConfig() {
-	viper.SetConfigName(".dockma")
+	viper.SetConfigName("config")
+	viper.SetConfigType("json")
 
-	home, err := homedir.Dir()
-	if err != nil {
-		fmt.Println("An error occured.")
+	dockmaConfig := viper.GetString("home")
+
+	viper.AddConfigPath(dockmaConfig)
+
+	viper.ReadInConfig()
+}
+
+func rootPreRunHook(cmd *cobra.Command, args []string) {
+	if init := viper.GetTime("init"); init.IsZero() {
+		if user, err := user.Current(); err == nil {
+			fmt.Printf("Come on, %s! Run %sdockma init%s first to initialize the Dockma CLI.\n", strings.Title(user.Username), chalk.Cyan, chalk.ResetColor)
+		} else {
+			fmt.Printf("Please run %sdockma init%s first to initialize the Dockma CLI.\n", chalk.Cyan, chalk.ResetColor)
+		}
+
+		os.Exit(0)
 	}
+}
 
-	viper.AddConfigPath(".")
-	viper.AddConfigPath(home)
-
-	// TODO enable use of --config-path flag or $DOCKMA_CONFIG_PATH environment variable
-	// DISCUSS dockma init asks where to place config path and sets env var accordingly !?
-	// viper.SetDefault("CONFIG_PATH", homedir.Dir())
-	// check also BindEnv
-	// viper.SetEnvPrefix("DOCKMA_")
-	// viper.AutomaticEnv()
-
-	if err := viper.ReadInConfig(); err == nil {
-		// TODO log config file used depending on flag
-
-		// fmt.Println("Using config file: ", viper.ConfigFileUsed())
+// Execute starts cobra command execution
+func Execute() {
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
 	}
 }
