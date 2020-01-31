@@ -1,4 +1,4 @@
-package commands
+package initcommand
 
 import (
 	"errors"
@@ -15,16 +15,12 @@ import (
 	"github.com/ttacon/chalk"
 )
 
-var initCmd = &cobra.Command{
+var InitCommand = &cobra.Command{
 	Use:              "init",
 	Short:            "Initialize the Dockma CLI",
 	Long:             "-",
 	PersistentPreRun: initPreRunHook, // used to override root PreRun func
 	Run:              initCommandHandler,
-}
-
-func init() {
-	rootCmd.AddCommand(initCmd)
 }
 
 func initPreRunHook(cmd *cobra.Command, args []string) {

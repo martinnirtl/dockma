@@ -7,13 +7,20 @@ import (
 	"path"
 	"strings"
 
+	"github.com/martinnirtl/dockma/internal/commands/configcommand"
+	"github.com/martinnirtl/dockma/internal/commands/initcommand"
+	"github.com/martinnirtl/dockma/internal/commands/inspectcommand"
+	"github.com/martinnirtl/dockma/internal/commands/testcommand"
+	"github.com/martinnirtl/dockma/internal/commands/upcommand"
+	"github.com/martinnirtl/dockma/internal/commands/versioncommand"
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/ttacon/chalk"
 )
 
-var rootCmd = &cobra.Command{
+// RootCommand is the root command of dockma
+var RootCommand = &cobra.Command{
 	Use:              "dockma",
 	Short:            "Dockma is bringing your docker-compose game to the next level.",
 	Long:             `A fast and flexible CLI tool to boost your productivity during development with docker containers built with Go. Full documentation is available at https://dockma.dev`,
@@ -21,6 +28,13 @@ var rootCmd = &cobra.Command{
 }
 
 func init() {
+	RootCommand.AddCommand(configcommand.ConfigCommand)
+	RootCommand.AddCommand(initcommand.InitCommand)
+	RootCommand.AddCommand(inspectcommand.InspectCommand)
+	RootCommand.AddCommand(testcommand.TestCommand)
+	RootCommand.AddCommand(upcommand.UpCommand)
+	RootCommand.AddCommand(versioncommand.VersionCommand)
+
 	cobra.OnInitialize(initConfig)
 
 	// FLAGS GO HERE
@@ -38,6 +52,7 @@ func init() {
 		viper.SetDefault("home", path.Join(userHome, ".dockma"))
 	}
 
+	viper.SetDefault("logfile", "log.txt")
 	viper.SetDefault("username", "User")
 	viper.SetDefault("activeEnvironment", "-")
 	viper.SetDefault("environments", map[string]interface{}{})
@@ -68,7 +83,7 @@ func rootPreRunHook(cmd *cobra.Command, args []string) {
 
 // Execute starts cobra command execution
 func Execute() {
-	if err := rootCmd.Execute(); err != nil {
+	if err := RootCommand.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
