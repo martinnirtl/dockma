@@ -3,6 +3,7 @@ package utils
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"sort"
 
 	"github.com/AlecAivazis/survey/v2"
@@ -15,6 +16,13 @@ func Abort() {
 	fmt.Printf("%sAborted.%s\n", chalk.Cyan, chalk.ResetColor)
 
 	os.Exit(0)
+}
+
+// GetLogFilepath returns the absolute path of the logfile location in dockma home dir
+func GetFullLogfilePath(filename string) string {
+	path := viper.GetString("home")
+
+	return filepath.Join(path, filename)
 }
 
 // GetEnvironments returns configured environments
