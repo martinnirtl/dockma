@@ -30,3 +30,13 @@ Level up your docker-compose game during development!
 
 - write unit tests
 - use Bats for system tests (https://github.com/sstephenson/bats)
+- build "assessment" tool for docker-compose files
+
+- on init
+  - ask for main color (default cyan)
+  - ask for spinner/game/output
+- on envs init
+  - ask for dynamic generation of .env (maybe append to exiting file if there)
+  - ask for automatic git pull if git repository
+- on up
+  - remind user of overriden services
