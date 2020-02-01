@@ -84,9 +84,9 @@ var initCmd = &cobra.Command{
 		viper.Set(fmt.Sprintf("environments.%s.home", env), workingDir)
 		viper.Set(fmt.Sprintf("environments.%s.services", env), services)
 
-		oldEnv := viper.GetString("activeEnvironment")
+		oldEnv := viper.GetString("active")
 
-		viper.Set("activeEnvironment", env)
+		viper.Set("active", env)
 
 		if err := viper.WriteConfig(); err != nil {
 			fmt.Printf("%sError on initializing environment: %s (old: %s)%s\n", chalk.Red, env, oldEnv, chalk.ResetColor)

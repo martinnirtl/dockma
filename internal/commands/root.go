@@ -54,9 +54,10 @@ func init() {
 		viper.SetDefault("home", path.Join(userHome, ".dockma"))
 	}
 
-	viper.SetDefault("logfile", "log.txt")
 	viper.SetDefault("username", "User")
-	viper.SetDefault("activeEnvironment", "-")
+	viper.SetDefault("logSubcommandOutput", false)
+	viper.SetDefault("logfile", "log.txt")
+	viper.SetDefault("active", "-")
 	viper.SetDefault("environments", map[string]interface{}{})
 }
 

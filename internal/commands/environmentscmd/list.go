@@ -18,7 +18,7 @@ var listCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		envs := utils.GetEnvironments()
 
-		activeEnv := viper.GetString("activeEnvironment")
+		activeEnv := viper.GetString("active")
 
 		if len(envs) > 0 {
 			for _, env := range envs {

@@ -42,12 +42,12 @@ var removeCmd = &cobra.Command{
 			os.Exit(0)
 		}
 
-		activeEnv := viper.GetString("activeEnvironment")
+		activeEnv := viper.GetString("active")
 
 		if env == activeEnv {
 			fmt.Printf("%sRemoved active environment: %s%s\n\n", chalk.Yellow, env, chalk.ResetColor)
 
-			viper.Set("activeEnvironment", nil)
+			viper.Set("active", "-")
 
 			fmt.Printf("%sUnset active environment%s\n", chalk.Cyan, chalk.ResetColor)
 		} else {

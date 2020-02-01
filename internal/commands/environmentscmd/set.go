@@ -30,7 +30,7 @@ var setCmd = &cobra.Command{
 			env = utils.GetEnvironment(args[0])
 		}
 
-		activeEnv := viper.GetString("activeEnvironment")
+		activeEnv := viper.GetString("active")
 
 		if env == activeEnv {
 			fmt.Printf("%sActive environment already set: %s%s\n", chalk.Yellow, activeEnv, chalk.ResetColor)
@@ -40,7 +40,7 @@ var setCmd = &cobra.Command{
 
 		fmt.Printf("%sNew active environment: %s%s (old: %s)\n", chalk.Green, env, chalk.ResetColor, activeEnv)
 
-		viper.Set("activeEnvironment", env)
+		viper.Set("active", env)
 
 		if err := viper.WriteConfig(); err != nil {
 			fmt.Printf("%sError setting active environment: %s%s\n", chalk.Red, env, chalk.ResetColor)

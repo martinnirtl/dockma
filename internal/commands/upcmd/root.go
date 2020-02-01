@@ -17,7 +17,7 @@ var UpCommand = &cobra.Command{
 		// logfileName := viper.GetString("logfile")
 		// filepath := utils.GetFullLogfilePath(logfileName)
 
-		activeEnv := viper.GetString("activeEnvironment")
+		activeEnv := viper.GetString("active")
 		envHomeDir := viper.GetString(fmt.Sprintf("environments.%s.home", activeEnv))
 		os.Chdir(envHomeDir)
 
