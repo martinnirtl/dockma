@@ -18,7 +18,7 @@ func Abort() {
 	os.Exit(0)
 }
 
-// GetLogFilepath returns the absolute path of the logfile location in dockma home dir
+// GetFullLogfilePath returns the absolute path of the logfile location in dockma home dir
 func GetFullLogfilePath(filename string) string {
 	path := viper.GetString("home")
 
@@ -62,4 +62,13 @@ func GetEnvironment(env string) string {
 	}
 
 	return env
+}
+
+// Fallback returns fallback if val is nil
+func Fallback(val string, fallback string) string {
+	if val == "" {
+		return fallback
+	}
+
+	return val
 }

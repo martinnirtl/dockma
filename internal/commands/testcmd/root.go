@@ -1,4 +1,4 @@
-package testcommand
+package testcmd
 
 import (
 	"fmt"
@@ -10,15 +10,14 @@ import (
 )
 
 var TestCommand = &cobra.Command{
-	Use:              "test",
-	Short:            "Just for testing.",
-	Long:             "-",
-	PersistentPreRun: func(cmd *cobra.Command, args []string) {},
+	Use:   "test",
+	Short: "Just for testing.",
+	Long:  "-",
 	Run: func(cmd *cobra.Command, args []string) {
 		logfileName := viper.GetString("logfile")
 		filepath := utils.GetFullLogfilePath(logfileName)
 
-		err := externalcommand.Execute("ls -la", filepath)
+		err := externalcommand.Execute("docker-compose up -d pg", filepath)
 
 		if err != nil {
 			fmt.Println(err)

@@ -1,9 +1,10 @@
-package initcommand
+package initcmd
 
 import (
 	"errors"
 	"fmt"
 	"os"
+	"os/user"
 	"path"
 	"strings"
 	"time"
@@ -52,10 +53,14 @@ func initPreRunHook(cmd *cobra.Command, args []string) {
 }
 
 func initCommandHandler(cmd *cobra.Command, args []string) {
-	var username string
+	username := "User"
+	if sysUser, err := user.Current(); err == nil {
+		username = sysUser.Username
+	}
+
 	survey.AskOne(&survey.Input{
 		Message: "What is your name",
-		Default: "User",
+		Default: strings.Title(username),
 	}, &username, survey.WithValidator(func(val interface{}) error {
 		switch text := val.(type) {
 		case string:
@@ -69,7 +74,7 @@ func initCommandHandler(cmd *cobra.Command, args []string) {
 		return nil
 	}))
 
-	viper.Set("username", strings.Title(username))
+	viper.Set("username", username)
 	viper.Set("init", time.Now())
 
 	home := viper.GetString("home")

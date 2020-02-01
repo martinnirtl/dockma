@@ -1,4 +1,4 @@
-package inspectcommand
+package inspectcmd
 
 import (
 	"errors"
@@ -13,10 +13,9 @@ import (
 )
 
 var InspectCommand = &cobra.Command{
-	Use:              "inspect",
-	Short:            "Print detailed output of previously executed command",
-	Long:             "-",
-	PersistentPreRun: func(cmd *cobra.Command, args []string) {},
+	Use:   "inspect",
+	Short: "Print detailed output of previously executed command",
+	Long:  "-",
 	Run: func(cmd *cobra.Command, args []string) {
 		filename := viper.GetString("logfile")
 		filepath := utils.GetFullLogfilePath(filename)

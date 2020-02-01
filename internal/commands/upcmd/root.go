@@ -1,4 +1,4 @@
-package upcommand
+package upcmd
 
 import (
 	"fmt"
@@ -10,10 +10,9 @@ import (
 )
 
 var UpCommand = &cobra.Command{
-	Use:              "up",
-	Short:            "Runs active environment with service selection",
-	Long:             "-",
-	PersistentPreRun: func(cmd *cobra.Command, args []string) {},
+	Use:   "up",
+	Short: "Runs active environment with service selection",
+	Long:  "-",
 	Run: func(cmd *cobra.Command, args []string) {
 		// logfileName := viper.GetString("logfile")
 		// filepath := utils.GetFullLogfilePath(logfileName)
