@@ -11,6 +11,11 @@ import (
 	"github.com/ttacon/chalk"
 )
 
+// Println works as custom fmt.Printf with chalk.ResetColor and \n automattically attached
+func Println(text string) {
+	fmt.Printf("%s%s\n", text, chalk.ResetColor)
+}
+
 // Abort prints 'Aborted.' to std out and exits process with 0
 func Abort() {
 	fmt.Printf("%sAborted.%s\n", chalk.Cyan, chalk.ResetColor)
