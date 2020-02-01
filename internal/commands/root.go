@@ -90,8 +90,5 @@ func rootPreRunHook(cmd *cobra.Command, args []string) {
 
 // Execute starts cobra command execution
 func Execute() {
-	if err := RootCommand.Execute(); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
+	RootCommand.Execute()
 }
