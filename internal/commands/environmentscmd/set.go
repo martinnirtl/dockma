@@ -12,7 +12,7 @@ import (
 
 var setCmd = &cobra.Command{
 	Use:     "set [environment]",
-	Short:   "Set active environment",
+	Short:   "Set active environment.",
 	Long:    `-`,
 	Example: "dockma envs set",
 	Args: func(cmd *cobra.Command, args []string) error {

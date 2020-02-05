@@ -8,10 +8,12 @@ import (
 	"strings"
 
 	"github.com/martinnirtl/dockma/internal/commands/configcmd"
+	"github.com/martinnirtl/dockma/internal/commands/downcmd"
 	"github.com/martinnirtl/dockma/internal/commands/environmentscmd"
 	"github.com/martinnirtl/dockma/internal/commands/initcmd"
 	"github.com/martinnirtl/dockma/internal/commands/inspectcmd"
-	"github.com/martinnirtl/dockma/internal/commands/testcmd"
+	"github.com/martinnirtl/dockma/internal/commands/logscmd"
+	"github.com/martinnirtl/dockma/internal/commands/pscmd"
 	"github.com/martinnirtl/dockma/internal/commands/upcmd"
 	"github.com/martinnirtl/dockma/internal/commands/versioncmd"
 	"github.com/mitchellh/go-homedir"
@@ -30,10 +32,12 @@ var RootCommand = &cobra.Command{
 
 func init() {
 	RootCommand.AddCommand(configcmd.ConfigCommand)
+	RootCommand.AddCommand(downcmd.DownCommand)
 	RootCommand.AddCommand(environmentscmd.EnvironmentsCommand)
 	RootCommand.AddCommand(initcmd.InitCommand)
 	RootCommand.AddCommand(inspectcmd.InspectCommand)
-	RootCommand.AddCommand(testcmd.TestCommand)
+	RootCommand.AddCommand(logscmd.LogsCommand)
+	RootCommand.AddCommand(pscmd.PSCommand)
 	RootCommand.AddCommand(upcmd.UpCommand)
 	RootCommand.AddCommand(versioncmd.VersionCommand)
 
@@ -55,7 +59,7 @@ func init() {
 	}
 
 	viper.SetDefault("username", "User")
-	viper.SetDefault("logSubcommandOutput", false)
+	viper.SetDefault("hidesubcommandoutput", false)
 	viper.SetDefault("logfile", "log.txt")
 	viper.SetDefault("active", "-")
 	viper.SetDefault("environments", map[string]interface{}{})
@@ -69,6 +73,7 @@ func initConfig() {
 
 	viper.AddConfigPath(dockmaConfig)
 
+	// FIXME check error and rethink init process
 	viper.ReadInConfig()
 }
 

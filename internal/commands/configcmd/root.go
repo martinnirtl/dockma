@@ -6,5 +6,7 @@ import (
 
 // ConfigCommand is the top level config command
 var ConfigCommand = &cobra.Command{
-	Use: "config",
+	Use:   "config",
+	Short: "Dockma configuration details.",
+	Long:  "-",
 }

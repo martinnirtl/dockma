@@ -6,6 +6,7 @@ import (
 
 // EnvironmentsCommand is the top level environments command
 var EnvironmentsCommand = &cobra.Command{
-	Use:     "environments",
-	Aliases: []string{"envs"},
+	Use:   "envs",
+	Short: "Environments reflect docker-compose based projects.",
+	Long:  "-",
 }

@@ -1,62 +1,59 @@
 package externalcommand
 
 import (
+	"bytes"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"strings"
-	"time"
-
-	"github.com/briandowns/spinner"
-	"github.com/ttacon/chalk"
 )
 
-func startSpinner(cmd string) func() {
-	s := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
-	s.Suffix = fmt.Sprintf(" Running '%s' (print output: %sdockma inspect%s)", cmd, chalk.Cyan, chalk.ResetColor)
-	s.Color("cyan", "bold")
-	s.Start()
-
-	return func() {
-		s.Stop()
+// JoinCommandSlices joins all command slices with spaces
+func JoinCommandSlices(base string, arguments ...string) string {
+	if len(arguments) > 0 {
+		return fmt.Sprintf("%s ", base) + strings.Join(arguments, " ")
+	} else {
+		return base
 	}
 }
 
-// Execute executes an external command string and optionally pipes the output to stdout or stderr
-func Execute(cmd string, filename string) (err error) {
-	splittedCmd := strings.Split(cmd, " ")
+// Execute runs an external command string and automatically provides some output via console or logfile
+func Execute(command string, timebridger Timebridger, logfile string) ([]byte, error) {
+	splittedCmd := strings.Split(command, " ")
 
-	command := exec.Command(splittedCmd[0], splittedCmd[1:]...)
+	cmd := exec.Command(splittedCmd[0], splittedCmd[1:]...)
 
-	if filename == "" {
-		command.Stdout = os.Stdout
-		command.Stderr = os.Stderr
+	var output []byte
+	var commandError error
+	if timebridger == nil {
+		var buffer bytes.Buffer
 
-		err = command.Run()
+		cmd.Stdout = io.MultiWriter(os.Stdout, &buffer)
+		cmd.Stderr = io.MultiWriter(os.Stderr, &buffer)
+
+		commandError = cmd.Run()
+
+		output = buffer.Bytes()
 	} else {
-		var output []byte
+		timebridger.Start(command)
+		defer timebridger.Stop()
 
-		stopSpinner := startSpinner(cmd)
-		defer stopSpinner()
-
-		output, err = command.CombinedOutput()
-
-		if err != nil {
-			fmt.Printf("%sError: Could not run command '%s'%s\n\t%s\n", chalk.Red, cmd, err, chalk.ResetColor)
-
-			return
-		}
-
-		ioutil.WriteFile(filename, output, 0644)
-
-		if err != nil {
-			fmt.Printf("%sError: Could not save output!%s\n\t%s\n", chalk.Red, err, chalk.ResetColor)
-
-			return
-		}
-
+		output, commandError = cmd.CombinedOutput()
 	}
 
-	return
+	if logfile != "" {
+		fileError := ioutil.WriteFile(logfile, output, 0644)
+
+		if fileError != nil {
+			return output, fmt.Errorf("could not save output to logfile")
+		}
+	}
+
+	if commandError != nil {
+		return output, fmt.Errorf("could not run command '%s'", command)
+	}
+
+	return output, nil
 }

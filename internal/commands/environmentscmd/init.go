@@ -15,7 +15,7 @@ import (
 
 var initCmd = &cobra.Command{
 	Use:     "init [path-to-environment]",
-	Short:   "Initialize environment",
+	Short:   "Initialize new environment.",
 	Long:    `-`,
 	Example: "dockma envs init path/to/env",
 	// TODO add flag to prevent setting active
@@ -45,9 +45,7 @@ var initCmd = &cobra.Command{
 		}, &env)
 
 		if err != nil {
-			fmt.Printf("%sAborted.%s\n", chalk.Cyan, chalk.ResetColor)
-
-			os.Exit(0)
+			utils.Abort()
 		}
 
 		workingDir, err := os.Getwd()
@@ -59,7 +57,7 @@ var initCmd = &cobra.Command{
 		}
 
 		// TODO read docker-compose.yaml
-		services, err := dockercompose.ReadServices(workingDir)
+		services, err := dockercompose.GetServices(workingDir)
 
 		if err != nil {
 			fmt.Print(err)
@@ -82,7 +80,7 @@ var initCmd = &cobra.Command{
 		}
 
 		viper.Set(fmt.Sprintf("environments.%s.home", env), workingDir)
-		viper.Set(fmt.Sprintf("environments.%s.services", env), services)
+		viper.Set(fmt.Sprintf("environments.%s.services", env), services.All)
 
 		oldEnv := viper.GetString("active")
 

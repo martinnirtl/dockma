@@ -18,7 +18,7 @@ import (
 
 var InitCommand = &cobra.Command{
 	Use:              "init",
-	Short:            "Initialize the Dockma CLI",
+	Short:            "Initialize the Dockma CLI.",
 	Long:             "-",
 	PersistentPreRun: initPreRunHook, // used to override root PreRun func
 	Run:              initCommandHandler,
@@ -45,7 +45,7 @@ func initPreRunHook(cmd *cobra.Command, args []string) {
 		if err != nil {
 			utils.Abort()
 		} else if !accept {
-			fmt.Printf("Ok, you can set the config location via %sDOCKMA_HOME%s environment variable.\n", chalk.Cyan, chalk.ResetColor)
+			fmt.Printf("Ok, you can change the config default location by setting %sDOCKMA_HOME%s environment variable.\n", chalk.Cyan, chalk.ResetColor)
 
 			os.Exit(0)
 		}

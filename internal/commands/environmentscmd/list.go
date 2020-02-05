@@ -12,7 +12,7 @@ import (
 // TODO could be table with props from envs
 var listCmd = &cobra.Command{
 	Use:     "list",
-	Short:   "List all configured environments",
+	Short:   "List all configured environments.",
 	Long:    `-`,
 	Example: "dockma envs list",
 	Run: func(cmd *cobra.Command, args []string) {

@@ -23,6 +23,20 @@ func Abort() {
 	os.Exit(0)
 }
 
+// Error prints 'Error: <message>' to std out and exits process with 0
+func Error(err error) {
+	fmt.Printf("%sError: %s%s\n", chalk.Red, err, chalk.ResetColor)
+
+	os.Exit(0)
+}
+
+// NoEnvs prints no envs configured and exits
+func NoEnvs() {
+	fmt.Printf("No environments configured. Add new environment with %sdockma envs init%s.\n", chalk.Cyan, chalk.ResetColor)
+
+	os.Exit(0)
+}
+
 // GetFullLogfilePath returns the absolute path of the logfile location in dockma home dir
 func GetFullLogfilePath(filename string) string {
 	path := viper.GetString("home")

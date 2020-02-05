@@ -14,7 +14,7 @@ import (
 
 var InspectCommand = &cobra.Command{
 	Use:   "inspect",
-	Short: "Print detailed output of previously executed command",
+	Short: "Print detailed output of previously executed command [up|down].",
 	Long:  "-",
 	Run: func(cmd *cobra.Command, args []string) {
 		filename := viper.GetString("logfile")

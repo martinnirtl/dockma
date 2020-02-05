@@ -15,7 +15,7 @@ import (
 var removeCmd = &cobra.Command{
 	Use:     "remove [environment]",
 	Aliases: []string{"rm"},
-	Short:   "Remove environment",
+	Short:   "Remove environment.",
 	Long:    `-`,
 	Example: "dockma envs remove my-env",
 	Args: func(cmd *cobra.Command, args []string) error {

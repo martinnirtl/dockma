@@ -13,6 +13,6 @@ var VersionCommand = &cobra.Command{
 	Long:             "Print the version number of Dockma.",
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {},
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Dockma v1.0.0")
+		fmt.Println("🐳 Dockma v0.0.0")
 	},
 }
