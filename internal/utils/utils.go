@@ -3,11 +3,9 @@ package utils
 import (
 	"fmt"
 	"os"
-	"path/filepath"
-	"sort"
 
-	"github.com/AlecAivazis/survey/v2"
-	"github.com/spf13/viper"
+	"github.com/martinnirtl/dockma/internal/config"
+	"github.com/martinnirtl/dockma/internal/survey"
 	"github.com/ttacon/chalk"
 )
 
@@ -37,31 +35,9 @@ func NoEnvs() {
 	os.Exit(0)
 }
 
-// GetFullLogfilePath returns the absolute path of the logfile location in dockma home dir
-func GetFullLogfilePath(filename string) string {
-	path := viper.GetString("home")
-
-	return filepath.Join(path, filename)
-}
-
-// GetEnvironments returns configured environments
-func GetEnvironments() (envs []string) {
-	envsMap := viper.GetStringMap("environments")
-
-	envs = make([]string, 0, len(envsMap))
-
-	for env := range envsMap {
-		envs = append(envs, env)
-	}
-
-	sort.Strings(envs)
-
-	return
-}
-
 // GetEnvironment returns one environment
 func GetEnvironment(env string) string {
-	envs := GetEnvironments()
+	envs := config.GetEnvs()
 
 	for _, envName := range envs {
 		if env == envName {
@@ -69,15 +45,12 @@ func GetEnvironment(env string) string {
 		}
 	}
 
-	survey.AskOne(&survey.Select{
-		Message: "Choose an environment:",
-		Options: envs,
-	}, &env)
+	fmt.Printf("%sNo such environment: %s%s\n", chalk.Yellow, env, chalk.ResetColor)
 
-	if env == "" {
-		fmt.Printf("%sAborted.%s\n", chalk.Cyan, chalk.ResetColor)
+	env, err := survey.Select("Choose an environment", envs)
 
-		os.Exit(0)
+	if err != nil || env == "" {
+		Abort()
 	}
 
 	return env
@@ -90,4 +63,15 @@ func Fallback(val string, fallback string) string {
 	}
 
 	return val
+}
+
+// Includes checks if string slice includes string
+func Includes(slice []string, s string) bool {
+	for _, val := range slice {
+		if val == s {
+			return true
+		}
+	}
+
+	return false
 }

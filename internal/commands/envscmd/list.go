@@ -1,9 +1,9 @@
-package environmentscmd
+package envscmd
 
 import (
 	"fmt"
 
-	"github.com/martinnirtl/dockma/internal/utils"
+	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/ttacon/chalk"
@@ -16,7 +16,7 @@ var listCmd = &cobra.Command{
 	Long:    `-`,
 	Example: "dockma envs list",
 	Run: func(cmd *cobra.Command, args []string) {
-		envs := utils.GetEnvironments()
+		envs := config.GetEnvs()
 
 		activeEnv := viper.GetString("active")
 
@@ -35,5 +35,5 @@ var listCmd = &cobra.Command{
 }
 
 func init() {
-	EnvironmentsCommand.AddCommand(listCmd)
+	EnvsCommand.AddCommand(listCmd)
 }

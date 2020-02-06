@@ -24,7 +24,6 @@ func mergeServiceSlices(primary []string, secondary []string) []string {
 		for _, priService := range primary {
 			if priService == secService {
 				add = false
-
 				break
 			}
 		}
@@ -33,6 +32,8 @@ func mergeServiceSlices(primary []string, secondary []string) []string {
 			services = append(services, secService)
 		}
 	}
+
+	sort.Strings(services)
 
 	return services
 }

@@ -3,31 +3,48 @@ package upcmd
 import (
 	"fmt"
 	"os"
+	"strings"
 
-	"github.com/AlecAivazis/survey/v2"
+	"github.com/martinnirtl/dockma/internal/commands/pullcmd"
+	"github.com/martinnirtl/dockma/internal/config"
+	"github.com/martinnirtl/dockma/internal/envvars"
+	"github.com/martinnirtl/dockma/internal/survey"
 	"github.com/martinnirtl/dockma/internal/utils"
 	"github.com/martinnirtl/dockma/pkg/dockercompose"
 	"github.com/martinnirtl/dockma/pkg/externalcommand"
 	"github.com/martinnirtl/dockma/pkg/externalcommand/spinnertimebridger"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/ttacon/chalk"
 )
 
+// UpCommand implements the top level dockma command up
 var UpCommand = &cobra.Command{
 	Use:   "up",
 	Short: "Runs active environment with service selection.",
 	Long:  "-",
 	Run: func(cmd *cobra.Command, args []string) {
-		logfileName := viper.GetString("logfile")
-		filepath := utils.GetFullLogfilePath(logfileName)
+		filepath := config.GetLogfile()
 
-		activeEnv := viper.GetString("active")
+		activeEnv := config.GetActiveEnv()
 
 		if activeEnv == "-" {
 			utils.NoEnvs()
 		}
 
-		envHomeDir := viper.GetString(fmt.Sprintf("environments.%s.home", activeEnv))
+		envHomeDir := viper.GetString(fmt.Sprintf("envs.%s.home", activeEnv))
+
+		autoPull := config.IsAutoPullSet(activeEnv)
+
+		if autoPull {
+			err := pullcmd.Pull(envHomeDir, false)
+
+			if err != nil {
+				fmt.Printf("%sCould not execute git pull.%s\n", chalk.Yellow, chalk.ResetColor)
+			}
+		} else {
+			fmt.Println("no auto pull")
+		}
 
 		services, err := dockercompose.GetServices(envHomeDir)
 
@@ -35,13 +52,37 @@ var UpCommand = &cobra.Command{
 			utils.Error(err)
 		}
 
-		var selection []string
-		survey.AskOne(&survey.MultiSelect{
-			Message:  "What days do you prefer:",
-			Options:  services.All,
-			Default:  services.All,
-			PageSize: len(services.All),
-		}, &selection)
+		if len(services.Override) > 0 {
+			fmt.Printf("%sFound %d services in docker-compose.override.y(a)ml: %s%s\n\n", chalk.Yellow, len(services.Override), strings.Join(services.Override, ", "), chalk.ResetColor)
+		}
+
+		selectedServices, err := survey.MultiSelect("Select services to start", services.All, services.All)
+
+		if err != nil {
+			utils.Abort()
+		}
+
+		saveProfile, err := survey.Confirm("Save as profile", false)
+
+		if err != nil {
+			utils.Abort()
+		}
+
+		if saveProfile {
+			profileName, err := survey.Input("Enter profile name", "")
+
+			if err != nil {
+				utils.Abort()
+			}
+
+			viper.Set(fmt.Sprintf("envs.%s.profiles.%s", activeEnv, profileName), selectedServices)
+		}
+
+		err = envvars.SetEnvVars(services.All, selectedServices)
+
+		if err != nil {
+			utils.Error(err)
+		}
 
 		err = os.Chdir(envHomeDir)
 
@@ -50,11 +91,11 @@ var UpCommand = &cobra.Command{
 		}
 
 		var timebridger externalcommand.Timebridger
-		if hideCmdOutput := viper.GetBool("hidesubcommandoutput"); hideCmdOutput {
-			timebridger = spinnertimebridger.New("Running command '%s'", "", 14, "cyan")
+		if hideCmdOutput := viper.GetBool("hidesubcommandoutput"); !hideCmdOutput {
+			timebridger = spinnertimebridger.New("Running 'docker-compose up'", fmt.Sprintf("%sSuccessfully executed 'docker-compose up'%s", chalk.Green, chalk.ResetColor), 14, "cyan")
 		}
 
-		command := externalcommand.JoinCommandSlices("docker-compose up -d", selection...)
+		command := externalcommand.JoinCommandSlices("docker-compose up -d", selectedServices...)
 
 		_, err = externalcommand.Execute(command, timebridger, filepath)
 

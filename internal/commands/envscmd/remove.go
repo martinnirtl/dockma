@@ -1,11 +1,10 @@
-package environmentscmd
+package envscmd
 
 import (
 	"errors"
 	"fmt"
-	"os"
 
-	"github.com/AlecAivazis/survey/v2"
+	"github.com/martinnirtl/dockma/internal/survey"
 	"github.com/martinnirtl/dockma/internal/utils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -33,13 +32,10 @@ var removeCmd = &cobra.Command{
 			env = utils.GetEnvironment(args[0])
 		}
 
-		sure := false
-		if err := survey.AskOne(&survey.Confirm{
-			Message: fmt.Sprintf("Are you sure to remove '%s'", env),
-		}, &sure); err != nil || !sure {
-			fmt.Printf("%sAborted.%s\n", chalk.Cyan, chalk.ResetColor)
+		sure, err := survey.Confirm(fmt.Sprintf("Are you sure to remove '%s'", env), false)
 
-			os.Exit(0)
+		if err != nil || !sure {
+			utils.Abort()
 		}
 
 		activeEnv := viper.GetString("active")
@@ -54,11 +50,11 @@ var removeCmd = &cobra.Command{
 			fmt.Printf("%sRemoved environment: %s%s\n", chalk.Cyan, env, chalk.ResetColor)
 		}
 
-		envs := viper.GetStringMap("environments")
+		envs := viper.GetStringMap("envs")
 
 		delete(envs, env)
 
-		viper.Set("environments", envs)
+		viper.Set("envs", envs)
 
 		if err := viper.WriteConfig(); err != nil {
 			fmt.Printf("%sError removing environment: %s%s\n", chalk.Red, env, chalk.ResetColor)
@@ -67,5 +63,5 @@ var removeCmd = &cobra.Command{
 }
 
 func init() {
-	EnvironmentsCommand.AddCommand(removeCmd)
+	EnvsCommand.AddCommand(removeCmd)
 }

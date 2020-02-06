@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/martinnirtl/dockma/internal/utils"
+	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/spf13/cobra"
 	"github.com/ttacon/chalk"
 )
@@ -15,7 +15,7 @@ var catCmd = &cobra.Command{
 	Long:    `-`,
 	Example: "dockma config cat",
 	Run: func(cmd *cobra.Command, args []string) {
-		filepath := utils.GetFullLogfilePath("config.json")
+		filepath := config.GetDockmaFilepath(("config.json"))
 
 		content, err := ioutil.ReadFile(filepath)
 

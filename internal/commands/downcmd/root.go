@@ -4,11 +4,13 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/utils"
 	"github.com/martinnirtl/dockma/pkg/externalcommand"
 	"github.com/martinnirtl/dockma/pkg/externalcommand/spinnertimebridger"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/ttacon/chalk"
 )
 
 var DownCommand = &cobra.Command{
@@ -16,8 +18,7 @@ var DownCommand = &cobra.Command{
 	Short: "Stops active environment.",
 	Long:  "-",
 	Run: func(cmd *cobra.Command, args []string) {
-		logfileName := viper.GetString("logfile")
-		filepath := utils.GetFullLogfilePath(logfileName)
+		filepath := config.GetLogfile()
 
 		activeEnv := viper.GetString("active")
 
@@ -25,7 +26,7 @@ var DownCommand = &cobra.Command{
 			utils.NoEnvs()
 		}
 
-		envHomeDir := viper.GetString(fmt.Sprintf("environments.%s.home", activeEnv))
+		envHomeDir := viper.GetString(fmt.Sprintf("envs.%s.home", activeEnv))
 
 		err := os.Chdir(envHomeDir)
 
@@ -35,7 +36,7 @@ var DownCommand = &cobra.Command{
 
 		var timebridger externalcommand.Timebridger
 		if hideCmdOutput := viper.GetBool("hidesubcommandoutput"); !hideCmdOutput {
-			timebridger = spinnertimebridger.New("Running command '%s'", "", 14, "cyan")
+			timebridger = spinnertimebridger.New("Running 'docker-compose down'", fmt.Sprintf("%sSuccessfully executed 'docker-compose down'%s", chalk.Green, chalk.ResetColor), 14, "cyan")
 		}
 
 		_, err = externalcommand.Execute("docker-compose down", timebridger, filepath)

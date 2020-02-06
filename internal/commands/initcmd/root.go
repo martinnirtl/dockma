@@ -1,7 +1,6 @@
 package initcmd
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"os/user"
@@ -9,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/AlecAivazis/survey/v2"
+	"github.com/martinnirtl/dockma/internal/survey"
 	"github.com/martinnirtl/dockma/internal/utils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -26,21 +25,13 @@ var InitCommand = &cobra.Command{
 
 func initPreRunHook(cmd *cobra.Command, args []string) {
 	if init := viper.GetTime("init"); !init.IsZero() {
-		proceed := false
-		err := survey.AskOne(&survey.Confirm{
-			Message: fmt.Sprintf("%sDockma CLI has already been initialized!%s Do you want to proceed", chalk.Yellow, chalk.ResetColor),
-			Default: false,
-		}, &proceed, survey.WithValidator(survey.Required))
+		proceed, err := survey.Confirm(fmt.Sprintf("%sDockma CLI has already been initialized!%s Do you want to proceed", chalk.Yellow, chalk.ResetColor), false)
 
 		if err != nil || !proceed {
 			utils.Abort()
 		}
 	} else {
-		accept := false
-		err := survey.AskOne(&survey.Confirm{
-			Message: fmt.Sprintf("Dockma CLI config will be stored at: %s", viper.GetString("home")),
-			Default: true,
-		}, &accept, survey.WithValidator(survey.Required))
+		accept, err := survey.Confirm(fmt.Sprintf("Dockma CLI config will be stored at: %s", viper.GetString("home")), true)
 
 		if err != nil {
 			utils.Abort()
@@ -58,21 +49,11 @@ func initCommandHandler(cmd *cobra.Command, args []string) {
 		username = sysUser.Username
 	}
 
-	survey.AskOne(&survey.Input{
-		Message: "What is your name",
-		Default: strings.Title(username),
-	}, &username, survey.WithValidator(func(val interface{}) error {
-		switch text := val.(type) {
-		case string:
-			if len(text) > 0 {
-				return nil
-			}
-		default:
-			return errors.New("invalid input for username")
-		}
+	username, err := survey.Input("What is your name", strings.Title(username))
 
-		return nil
-	}))
+	if err != nil {
+		utils.Abort()
+	}
 
 	viper.Set("username", username)
 	viper.Set("init", time.Now())

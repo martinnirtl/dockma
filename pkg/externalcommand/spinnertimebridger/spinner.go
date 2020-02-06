@@ -1,7 +1,6 @@
 package spinnertimebridger
 
 import (
-	"fmt"
 	"time"
 
 	spinnerlib "github.com/briandowns/spinner"
@@ -9,18 +8,18 @@ import (
 
 // SpinnerTimebridger implements timebridger interface
 type SpinnerTimebridger struct {
-	command          string
-	templateRunning  string
-	templateFinished string
-	spinner          *spinnerlib.Spinner
+	command         string
+	messageRunning  string
+	messageFinished string
+	spinner         *spinnerlib.Spinner
 }
 
 // Start should get called after external command execution starts
 func (otb *SpinnerTimebridger) Start(command string) error {
 	otb.command = command
 
-	if otb.templateRunning != "" {
-		otb.spinner.Suffix = " " + fmt.Sprintf(otb.templateRunning, command)
+	if otb.messageRunning != "" {
+		otb.spinner.Suffix = " " + otb.messageRunning
 	} else {
 		otb.spinner.Suffix = " " + command
 	}
@@ -34,8 +33,8 @@ func (otb *SpinnerTimebridger) Start(command string) error {
 func (otb *SpinnerTimebridger) Update(update string) error {
 	otb.command = update
 
-	if otb.templateRunning != "" {
-		otb.spinner.Suffix = " " + fmt.Sprintf(otb.templateRunning, update)
+	if otb.messageRunning != "" {
+		otb.spinner.Suffix = " " + otb.messageRunning
 	} else {
 		otb.spinner.Suffix = " " + update
 	}
@@ -45,8 +44,8 @@ func (otb *SpinnerTimebridger) Update(update string) error {
 
 // Stop should get called after external command execution finishes
 func (otb *SpinnerTimebridger) Stop() error {
-	if otb.templateFinished != "" {
-		otb.spinner.FinalMSG = fmt.Sprintf(otb.templateFinished+"\n", otb.command)
+	if otb.messageFinished != "" {
+		otb.spinner.FinalMSG = otb.messageFinished + "\n"
 	}
 
 	otb.spinner.Stop()
@@ -55,13 +54,13 @@ func (otb *SpinnerTimebridger) Stop() error {
 }
 
 // New creates a new OutputTimebidger
-func New(templateRunning string, templateFinished string, spinner int, color string) *SpinnerTimebridger {
+func New(messageRunning string, messageFinished string, spinner int, color string) *SpinnerTimebridger {
 	s := spinnerlib.New(spinnerlib.CharSets[spinner], 100*time.Millisecond)
 	s.Color(color, "bold")
 
 	return &SpinnerTimebridger{
-		templateRunning:  templateRunning,
-		templateFinished: templateFinished,
-		spinner:          s,
+		messageRunning:  messageRunning,
+		messageFinished: messageFinished,
+		spinner:         s,
 	}
 }

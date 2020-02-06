@@ -9,11 +9,13 @@ import (
 
 	"github.com/martinnirtl/dockma/internal/commands/configcmd"
 	"github.com/martinnirtl/dockma/internal/commands/downcmd"
-	"github.com/martinnirtl/dockma/internal/commands/environmentscmd"
+	"github.com/martinnirtl/dockma/internal/commands/envscmd"
 	"github.com/martinnirtl/dockma/internal/commands/initcmd"
 	"github.com/martinnirtl/dockma/internal/commands/inspectcmd"
 	"github.com/martinnirtl/dockma/internal/commands/logscmd"
+	"github.com/martinnirtl/dockma/internal/commands/profilecmd"
 	"github.com/martinnirtl/dockma/internal/commands/pscmd"
+	"github.com/martinnirtl/dockma/internal/commands/pullcmd"
 	"github.com/martinnirtl/dockma/internal/commands/upcmd"
 	"github.com/martinnirtl/dockma/internal/commands/versioncmd"
 	"github.com/mitchellh/go-homedir"
@@ -33,11 +35,13 @@ var RootCommand = &cobra.Command{
 func init() {
 	RootCommand.AddCommand(configcmd.ConfigCommand)
 	RootCommand.AddCommand(downcmd.DownCommand)
-	RootCommand.AddCommand(environmentscmd.EnvironmentsCommand)
+	RootCommand.AddCommand(envscmd.EnvsCommand)
 	RootCommand.AddCommand(initcmd.InitCommand)
 	RootCommand.AddCommand(inspectcmd.InspectCommand)
 	RootCommand.AddCommand(logscmd.LogsCommand)
+	RootCommand.AddCommand(profilecmd.ProfileCommand)
 	RootCommand.AddCommand(pscmd.PSCommand)
+	RootCommand.AddCommand(pullcmd.PullCommand)
 	RootCommand.AddCommand(upcmd.UpCommand)
 	RootCommand.AddCommand(versioncmd.VersionCommand)
 
@@ -62,7 +66,7 @@ func init() {
 	viper.SetDefault("hidesubcommandoutput", false)
 	viper.SetDefault("logfile", "log.txt")
 	viper.SetDefault("active", "-")
-	viper.SetDefault("environments", map[string]interface{}{})
+	viper.SetDefault("envs", map[string]interface{}{})
 }
 
 func initConfig() {

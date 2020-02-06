@@ -1,4 +1,4 @@
-package environmentscmd
+package envscmd
 
 import (
 	"errors"
@@ -49,5 +49,5 @@ var setCmd = &cobra.Command{
 }
 
 func init() {
-	EnvironmentsCommand.AddCommand(setCmd)
+	EnvsCommand.AddCommand(setCmd)
 }

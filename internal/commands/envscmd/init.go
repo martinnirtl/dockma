@@ -1,13 +1,12 @@
-package environmentscmd
+package envscmd
 
 import (
 	"errors"
 	"fmt"
 	"os"
 
-	"github.com/AlecAivazis/survey/v2"
+	"github.com/martinnirtl/dockma/internal/survey"
 	"github.com/martinnirtl/dockma/internal/utils"
-	"github.com/martinnirtl/dockma/pkg/dockercompose"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/ttacon/chalk"
@@ -40,12 +39,16 @@ var initCmd = &cobra.Command{
 			}
 		}
 
-		err := survey.AskOne(&survey.Input{
-			Message: "Enter a name for the new environment (has to be unique)",
-		}, &env)
+		env, err := survey.Input("Enter a name for the new environment (has to be unique)", "")
 
 		if err != nil {
 			utils.Abort()
+		}
+
+		if env == "" {
+			utils.Error(errors.New("Got empty string for environment name"))
+		} else if env == "-" {
+			utils.Error(errors.New("Invalid environment name '-'"))
 		}
 
 		workingDir, err := os.Getwd()
@@ -56,20 +59,13 @@ var initCmd = &cobra.Command{
 			os.Exit(0)
 		}
 
-		// TODO read docker-compose.yaml
-		services, err := dockercompose.GetServices(workingDir)
+		autoPull, err := survey.Confirm(fmt.Sprintf("Run %sgit pull%s before %sdockma up%s", chalk.Cyan, chalk.Reset, chalk.Cyan, chalk.ResetColor), false)
 
 		if err != nil {
-			fmt.Print(err)
-
-			os.Exit(1)
+			utils.Abort()
 		}
 
-		proceed := false
-		err = survey.AskOne(&survey.Confirm{
-			Message: fmt.Sprintf("Add new environment %s%s%s (location: %s)", chalk.Cyan, env, chalk.ResetColor, workingDir),
-			Default: true,
-		}, &proceed)
+		proceed, err := survey.Confirm(fmt.Sprintf("Add new environment %s%s%s (location: %s)", chalk.Cyan, env, chalk.ResetColor, workingDir), true)
 
 		if !proceed {
 			utils.Abort()
@@ -79,8 +75,8 @@ var initCmd = &cobra.Command{
 			os.Exit(0)
 		}
 
-		viper.Set(fmt.Sprintf("environments.%s.home", env), workingDir)
-		viper.Set(fmt.Sprintf("environments.%s.services", env), services.All)
+		viper.Set(fmt.Sprintf("envs.%s.home", env), workingDir)
+		viper.Set(fmt.Sprintf("envs.%s.autopull", env), autoPull)
 
 		oldEnv := viper.GetString("active")
 
@@ -97,5 +93,5 @@ var initCmd = &cobra.Command{
 }
 
 func init() {
-	EnvironmentsCommand.AddCommand(initCmd)
+	EnvsCommand.AddCommand(initCmd)
 }

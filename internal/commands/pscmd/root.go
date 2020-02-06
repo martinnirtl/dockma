@@ -21,7 +21,7 @@ var PSCommand = &cobra.Command{
 			utils.NoEnvs()
 		}
 
-		envHomeDir := viper.GetString(fmt.Sprintf("environments.%s.home", activeEnv))
+		envHomeDir := viper.GetString(fmt.Sprintf("envs.%s.home", activeEnv))
 
 		err := os.Chdir(envHomeDir)
 

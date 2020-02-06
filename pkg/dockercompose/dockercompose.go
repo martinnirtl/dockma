@@ -13,20 +13,20 @@ type Services struct {
 }
 
 func GetDockerCompose(filepath string, override bool) (*viper.Viper, error) {
-	configName := "docker-compose"
+	fileName := "docker-compose"
 	if override {
-		configName = "docker-compose.override"
+		fileName = "docker-compose.override"
 	}
 
 	temp := viper.New()
-	temp.SetConfigName(configName)
+	temp.SetConfigName(fileName)
 	temp.SetConfigType("yaml")
 	temp.AddConfigPath(filepath)
 
 	readError := temp.ReadInConfig()
 
 	if readError != nil {
-		return nil, fmt.Errorf("could not read docker-compose?.override file")
+		return nil, fmt.Errorf("Could not read %s file", fileName)
 	}
 
 	return temp, nil

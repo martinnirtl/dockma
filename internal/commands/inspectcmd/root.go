@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/martinnirtl/dockma/internal/utils"
+	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/ttacon/chalk"
@@ -17,8 +17,7 @@ var InspectCommand = &cobra.Command{
 	Short: "Print detailed output of previously executed command [up|down].",
 	Long:  "-",
 	Run: func(cmd *cobra.Command, args []string) {
-		filename := viper.GetString("logfile")
-		filepath := utils.GetFullLogfilePath(filename)
+		filepath := config.GetLogfile()
 
 		content, err := ioutil.ReadFile(filepath)
 
