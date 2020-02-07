@@ -42,8 +42,6 @@ var UpCommand = &cobra.Command{
 			if err != nil {
 				fmt.Printf("%sCould not execute git pull.%s\n", chalk.Yellow, chalk.ResetColor)
 			}
-		} else {
-			fmt.Println("no auto pull")
 		}
 
 		services, err := dockercompose.GetServices(envHomeDir)
