@@ -44,7 +44,36 @@ var UpCommand = &cobra.Command{
 			}
 		}
 
+		profileNames := config.GetProfilesNames(activeEnv)
+
+		var preselected []string
+
+		// default
+		profileName := "CUSTOM"
+
+		if len(profileNames) > 0 {
+			profileNames = append(profileNames, "CUSTOM")
+
+			profileName, err := survey.Select("Select profile to run or CUSTOM", profileNames)
+
+			if err != nil {
+				utils.Abort()
+			}
+
+			profile, err := config.GetProfile(activeEnv, profileName)
+
+			if err != nil {
+				utils.Error(err)
+			}
+
+			preselected = profile.Selected
+		}
+
 		services, err := dockercompose.GetServices(envHomeDir)
+
+		if len(preselected) == 0 {
+			preselected = services.All
+		}
 
 		if err != nil {
 			utils.Error(err)
@@ -54,26 +83,28 @@ var UpCommand = &cobra.Command{
 			fmt.Printf("%sFound %d services in docker-compose.override.y(a)ml: %s%s\n\n", chalk.Yellow, len(services.Override), strings.Join(services.Override, ", "), chalk.ResetColor)
 		}
 
-		selectedServices, err := survey.MultiSelect("Select services to start", services.All, services.All)
+		selectedServices, err := survey.MultiSelect("Select services to start", services.All, preselected)
 
 		if err != nil {
 			utils.Abort()
 		}
 
-		saveProfile, err := survey.Confirm("Save as profile", false)
-
-		if err != nil {
-			utils.Abort()
-		}
-
-		if saveProfile {
-			profileName, err := survey.Input("Enter profile name", "")
+		if profileName == "CUSTOM" {
+			saveProfile, err := survey.Confirm("Save as profile", false)
 
 			if err != nil {
 				utils.Abort()
 			}
 
-			viper.Set(fmt.Sprintf("envs.%s.profiles.%s", activeEnv, profileName), selectedServices)
+			if saveProfile {
+				profileName, err := survey.Input("Enter profile name", "")
+
+				if err != nil {
+					utils.Abort()
+				}
+
+				viper.Set(fmt.Sprintf("envs.%s.profiles.%s", activeEnv, profileName), selectedServices)
+			}
 		}
 
 		err = envvars.SetEnvVars(services.All, selectedServices)
@@ -89,7 +120,7 @@ var UpCommand = &cobra.Command{
 		}
 
 		var timebridger externalcommand.Timebridger
-		if hideCmdOutput := viper.GetBool("hidesubcommandoutput"); !hideCmdOutput {
+		if hideCmdOutput := viper.GetBool("hidesubcommandoutput"); hideCmdOutput {
 			timebridger = spinnertimebridger.New("Running 'docker-compose up'", fmt.Sprintf("%sSuccessfully executed 'docker-compose up'%s", chalk.Green, chalk.ResetColor), 14, "cyan")
 		}
 
