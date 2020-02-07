@@ -14,7 +14,7 @@ import (
 
 var InspectCommand = &cobra.Command{
 	Use:   "inspect",
-	Short: "Print detailed output of previously executed command [up|down].",
+	Short: "Print detailed output of previously executed command [up|down|pull].",
 	Long:  "-",
 	Run: func(cmd *cobra.Command, args []string) {
 		filepath := config.GetLogfile()

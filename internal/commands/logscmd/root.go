@@ -17,7 +17,7 @@ var tailFlag int
 
 var LogsCommand = &cobra.Command{
 	Use:   "logs [service...]",
-	Short: "Logs output of either all or only selected services.",
+	Short: "Logs output of all or only selected services.",
 	Long:  "-",
 	Run: func(cmd *cobra.Command, args []string) {
 		activeEnv := viper.GetString("active")
