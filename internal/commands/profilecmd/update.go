@@ -3,6 +3,7 @@ package profilecmd
 import (
 	"errors"
 	"fmt"
+	"os"
 
 	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/survey"
@@ -13,28 +14,27 @@ import (
 	"github.com/ttacon/chalk"
 )
 
-var createCmd = &cobra.Command{
-	Use:     "create",
-	Short:   "Create named service selection.",
+var updateCmd = &cobra.Command{
+	Use:     "update",
+	Short:   "Update profile's service selection.",
 	Long:    `-`,
-	Example: "dockma profile create",
+	Example: "dockma profile update",
 	Run: func(cmd *cobra.Command, args []string) {
 		activeEnv := config.GetActiveEnv()
 		envHomeDir := config.GetEnvHomeDir(activeEnv)
 
-		profileName, err := survey.Input("Enter name for profile", "")
+		profileNames := config.GetProfilesNames(activeEnv)
+
+		if len(profileNames) == 0 {
+			fmt.Printf("%sNo profiles created in environment: %s%s\n", chalk.Cyan, activeEnv, chalk.ResetColor)
+
+			os.Exit(0)
+		}
+
+		profileName, err := survey.Select("Select profile to update", profileNames)
 
 		if err != nil {
 			utils.Abort()
-		}
-
-		if config.HasProfileName(activeEnv, profileName) {
-			utils.Error(errors.New("Profile name already taken. Use 'update' to reselect services"))
-		}
-
-		// FIXME use regex
-		if profileName == "" || profileName == "-" {
-			utils.Error(errors.New("Invalid profile name"))
 		}
 
 		services, err := dockercompose.GetServices(envHomeDir)
@@ -43,7 +43,13 @@ var createCmd = &cobra.Command{
 			utils.Error(errors.New("Could not read services"))
 		}
 
-		selected, err := survey.MultiSelect(fmt.Sprintf("Select services for profile %s%s%s", chalk.Cyan, profileName, chalk.ResetColor), services.All, nil)
+		profile, err := config.GetProfile(activeEnv, profileName)
+
+		if err != nil {
+			utils.Error(err)
+		}
+
+		selected, err := survey.MultiSelect(fmt.Sprintf("Select services for profile %s%s%s", chalk.Cyan, profileName, chalk.ResetColor), services.All, profile.Selected)
 
 		if err != nil {
 			utils.Abort()
@@ -61,10 +67,10 @@ var createCmd = &cobra.Command{
 			utils.Error(err)
 		}
 
-		utils.Success(fmt.Sprintf("Successfully saved profile: %s [%s]", profileName, activeEnv))
+		utils.Success(fmt.Sprintf("Successfully updated profile: %s [%s]", profileName, activeEnv))
 	},
 }
 
 func init() {
-	ProfileCommand.AddCommand(createCmd)
+	ProfileCommand.AddCommand(updateCmd)
 }
