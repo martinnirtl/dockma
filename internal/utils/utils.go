@@ -21,6 +21,13 @@ func Abort() {
 	os.Exit(0)
 }
 
+// Success prints green colored text to std out and exits process with 0
+func Success(text string) {
+	fmt.Printf("%s%s%s\n", chalk.Green, text, chalk.ResetColor)
+
+	os.Exit(0)
+}
+
 // Error prints 'Error: <message>' to std out and exits process with 0
 func Error(err error) {
 	fmt.Printf("%sError: %s%s\n", chalk.Red, err, chalk.ResetColor)

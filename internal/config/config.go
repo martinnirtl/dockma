@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"sort"
 
+	"github.com/martinnirtl/dockma/pkg/dockercompose"
 	"github.com/spf13/viper"
 )
 
@@ -81,6 +82,29 @@ func GetProfilesNames(env string) (profiles []string) {
 	for profile := range viper.GetStringMap(fmt.Sprintf("envs.%s.profiles", env)) {
 		profiles = append(profiles, profile)
 	}
+
+	return
+}
+
+// Profile consists of selected and all services of env
+type Profile struct {
+	Services []string
+	Selected []string
+}
+
+// GetProfile returns services for given profile
+func GetProfile(env string, profileName string) (profile Profile, err error) {
+	profile = Profile{}
+
+	services, err := dockercompose.GetServices(GetEnvHomeDir(env))
+
+	if err != nil {
+		return
+	}
+
+	profile.Services = services.All
+
+	profile.Selected = viper.GetStringSlice(fmt.Sprintf("envs.%s.profiles.%s", env, profileName))
 
 	return
 }
