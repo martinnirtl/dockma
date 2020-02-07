@@ -92,6 +92,23 @@ type Profile struct {
 	Selected []string
 }
 
+// GetLatest returns special profile with latest chosen services
+func GetLatest(env string) (profile Profile, err error) {
+	profile = Profile{}
+
+	services, err := dockercompose.GetServices(GetEnvHomeDir(env))
+
+	if err != nil {
+		return
+	}
+
+	profile.Services = services.All
+
+	profile.Selected = viper.GetStringSlice(fmt.Sprintf("envs.%s.latest", env))
+
+	return
+}
+
 // GetProfile returns services for given profile
 func GetProfile(env string, profileName string) (profile Profile, err error) {
 	profile = Profile{}

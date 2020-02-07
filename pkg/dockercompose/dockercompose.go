@@ -12,6 +12,16 @@ type Services struct {
 	Override []string
 }
 
+var servicesChache map[string]Services = make(map[string]Services)
+
+func isEmpty(services Services) bool {
+	if len(services.All) == 0 || len(services.Base) == 0 || len(services.Override) == 0 {
+		return true
+	}
+
+	return false
+}
+
 func GetDockerCompose(filepath string, override bool) (*viper.Viper, error) {
 	fileName := "docker-compose"
 	if override {
@@ -43,6 +53,12 @@ func GetVersion(filepath string) string {
 }
 
 func GetServices(filepath string) (services Services, err error) {
+	services = servicesChache[filepath]
+
+	if !isEmpty(services) {
+		return
+	}
+
 	dockercompose, err := GetDockerCompose(filepath, false)
 
 	services = Services{}
@@ -62,6 +78,8 @@ func GetServices(filepath string) (services Services, err error) {
 		services.Base = getServicesFromStringMap(dockercompose.GetStringMap("services"))
 		services.All = services.Base
 	}
+
+	servicesChache[filepath] = services
 
 	return services, nil
 }

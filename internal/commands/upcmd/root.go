@@ -49,24 +49,33 @@ var UpCommand = &cobra.Command{
 		var preselected []string
 
 		// default
-		profileName := "CUSTOM"
-
+		profileName := "latest"
 		if len(profileNames) > 0 {
-			profileNames = append(profileNames, "CUSTOM")
+			profileNames = append(profileNames, "latest")
 
-			profileName, err := survey.Select("Select profile to run or CUSTOM", profileNames)
+			profileName, err := survey.Select(fmt.Sprintf("Select profile to run or %slatest%s", chalk.Cyan, chalk.ResetColor), profileNames)
 
 			if err != nil {
 				utils.Abort()
 			}
 
-			profile, err := config.GetProfile(activeEnv, profileName)
+			if profileName != "latest" {
+				profile, err := config.GetProfile(activeEnv, profileName)
 
-			if err != nil {
-				utils.Error(err)
+				if err != nil {
+					utils.Error(err)
+				}
+
+				preselected = profile.Selected
+			} else {
+				profile, err := config.GetLatest(activeEnv)
+
+				if err != nil {
+					utils.Error(err)
+				}
+
+				preselected = profile.Selected
 			}
-
-			preselected = profile.Selected
 		}
 
 		services, err := dockercompose.GetServices(envHomeDir)
@@ -89,7 +98,7 @@ var UpCommand = &cobra.Command{
 			utils.Abort()
 		}
 
-		if profileName == "CUSTOM" {
+		if profileName == "latest" {
 			saveProfile, err := survey.Confirm("Save as profile", false)
 
 			if err != nil {
@@ -104,6 +113,14 @@ var UpCommand = &cobra.Command{
 				}
 
 				viper.Set(fmt.Sprintf("envs.%s.profiles.%s", activeEnv, profileName), selectedServices)
+			} else {
+				viper.Set(fmt.Sprintf("envs.%s.latest", activeEnv), selectedServices)
+			}
+
+			err = config.Save()
+
+			if err != nil {
+				fmt.Printf("%sSome problem ocurred: Could not save profile/latest selection%s\n")
 			}
 		}
 
