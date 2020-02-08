@@ -77,8 +77,8 @@ func initConfig() {
 
 	viper.AddConfigPath(dockmaConfig)
 
-	// FIXME check error and rethink init process
-	viper.ReadInConfig()
+	// NOTE read errors get ignored and execution is mainly prevented by rootPreRunHook func
+	_ = viper.ReadInConfig()
 }
 
 func rootPreRunHook(cmd *cobra.Command, args []string) {
