@@ -14,6 +14,11 @@ func Println(text string) {
 	fmt.Printf("%s%s\n", text, chalk.ResetColor)
 }
 
+// PrintCyan colors text in cyan
+func PrintCyan(text string) {
+	fmt.Printf("%s%s%s", chalk.Cyan, text, chalk.ResetColor)
+}
+
 // Abort prints 'Aborted.' to std out and exits process with 0
 func Abort() {
 	fmt.Printf("%sAborted.%s\n", chalk.Cyan, chalk.ResetColor)
