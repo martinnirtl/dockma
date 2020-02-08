@@ -57,9 +57,7 @@ var createCmd = &cobra.Command{
 
 		err = config.Save()
 
-		if err != nil {
-			utils.Error(err)
-		}
+		utils.Error(err)
 
 		utils.Success(fmt.Sprintf("Successfully saved profile: %s [%s]", profileName, activeEnv))
 	},

@@ -45,9 +45,7 @@ var updateCmd = &cobra.Command{
 
 		profile, err := config.GetProfile(activeEnv, profileName)
 
-		if err != nil {
-			utils.Error(err)
-		}
+		utils.Error(err)
 
 		selected, err := survey.MultiSelect(fmt.Sprintf("Select services for profile %s%s%s", chalk.Cyan, profileName, chalk.ResetColor), services.All, profile.Selected)
 
@@ -63,9 +61,7 @@ var updateCmd = &cobra.Command{
 
 		err = config.Save()
 
-		if err != nil {
-			utils.Error(err)
-		}
+		utils.Error(err)
 
 		utils.Success(fmt.Sprintf("Successfully updated profile: %s [%s]", profileName, activeEnv))
 	},

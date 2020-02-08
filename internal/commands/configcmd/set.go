@@ -73,9 +73,7 @@ func setConfigVar(varname string) error {
 
 	err := config.Save()
 
-	if err != nil {
-		utils.Error(err)
-	}
+	utils.Error(err)
 
 	return nil
 }

@@ -58,8 +58,6 @@ var PullCommand = &cobra.Command{
 
 		err := Pull(envHomeDir, true)
 
-		if err != nil {
-			utils.Error(err)
-		}
+		utils.Error(err)
 	},
 }

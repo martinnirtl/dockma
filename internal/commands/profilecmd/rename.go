@@ -62,9 +62,7 @@ var renameCmd = &cobra.Command{
 
 		err = config.Save()
 
-		if err != nil {
-			utils.Error(err)
-		}
+		utils.Error(err)
 
 		utils.Success(fmt.Sprintf("Successfully renamed profile from %s to %s [%s]", renameProfile, profileName, activeEnv))
 	},

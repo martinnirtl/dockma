@@ -30,9 +30,7 @@ var deleteCmd = &cobra.Command{
 
 		profileName, err := survey.Select("Select profile to be deleted", profileNames)
 
-		if err != nil {
-			utils.Error(err)
-		}
+		utils.Error(err)
 
 		profileMap := viper.GetStringMap(fmt.Sprintf("envs.%s.profiles", activeEnv))
 
@@ -42,9 +40,7 @@ var deleteCmd = &cobra.Command{
 
 		err = config.Save()
 
-		if err != nil {
-			utils.Error(err)
-		}
+		utils.Error(err)
 
 		utils.Success(fmt.Sprintf("Successfully deleted profile: %s [%s]", profileName, activeEnv))
 	},

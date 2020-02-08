@@ -30,9 +30,7 @@ var LogsCommand = &cobra.Command{
 
 		err := os.Chdir(envHomeDir)
 
-		if err != nil {
-			utils.Error(err)
-		}
+		utils.Error(err)
 
 		args = addFlagsToArgs(args)
 
@@ -40,9 +38,7 @@ var LogsCommand = &cobra.Command{
 
 		_, err = externalcommand.Execute(command, nil, "")
 
-		if err != nil {
-			utils.Error(err)
-		}
+		utils.Error(err)
 	},
 }
 

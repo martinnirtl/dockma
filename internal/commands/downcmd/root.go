@@ -30,9 +30,7 @@ var DownCommand = &cobra.Command{
 
 		err := os.Chdir(envHomeDir)
 
-		if err != nil {
-			utils.Error(err)
-		}
+		utils.Error(err)
 
 		var timebridger externalcommand.Timebridger
 		if hideCmdOutput := viper.GetBool("hidesubcommandoutput"); hideCmdOutput {
@@ -41,8 +39,6 @@ var DownCommand = &cobra.Command{
 
 		_, err = externalcommand.Execute("docker-compose down", timebridger, filepath)
 
-		if err != nil {
-			utils.Error(err)
-		}
+		utils.Error(err)
 	},
 }

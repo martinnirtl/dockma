@@ -62,17 +62,13 @@ var UpCommand = &cobra.Command{
 			if profileName != "latest" {
 				profile, err := config.GetProfile(activeEnv, profileName)
 
-				if err != nil {
-					utils.Error(err)
-				}
+				utils.Error(err)
 
 				preselected = profile.Selected
 			} else {
 				profile, err := config.GetLatest(activeEnv)
 
-				if err != nil {
-					utils.Error(err)
-				}
+				utils.Error(err)
 
 				preselected = profile.Selected
 			}
@@ -84,9 +80,7 @@ var UpCommand = &cobra.Command{
 			preselected = services.All
 		}
 
-		if err != nil {
-			utils.Error(err)
-		}
+		utils.Error(err)
 
 		if len(services.Override) > 0 {
 			fmt.Printf("%sFound %d services in docker-compose.override.y(a)ml: %s%s\n\n", chalk.Yellow, len(services.Override), strings.Join(services.Override, ", "), chalk.ResetColor)
@@ -119,22 +113,16 @@ var UpCommand = &cobra.Command{
 
 			err = config.Save()
 
-			if err != nil {
-				fmt.Printf("%sSome problem ocurred: Could not save profile/latest selection%s\n")
-			}
+			utils.Error(err)
 		}
 
 		err = envvars.SetEnvVars(services.All, selectedServices)
 
-		if err != nil {
-			utils.Error(err)
-		}
+		utils.Error(err)
 
 		err = os.Chdir(envHomeDir)
 
-		if err != nil {
-			utils.Error(err)
-		}
+		utils.Error(err)
 
 		var timebridger externalcommand.Timebridger
 		if hideCmdOutput := viper.GetBool("hidesubcommandoutput"); hideCmdOutput {
@@ -145,8 +133,6 @@ var UpCommand = &cobra.Command{
 
 		_, err = externalcommand.Execute(command, timebridger, filepath)
 
-		if err != nil {
-			utils.Error(err)
-		}
+		utils.Error(err)
 	},
 }

@@ -25,14 +25,10 @@ var PSCommand = &cobra.Command{
 
 		err := os.Chdir(envHomeDir)
 
-		if err != nil {
-			utils.Error(err)
-		}
+		utils.Error(err)
 
 		_, err = externalcommand.Execute("docker-compose ps", nil, "")
 
-		if err != nil {
-			utils.Error(err)
-		}
+		utils.Error(err)
 	},
 }
