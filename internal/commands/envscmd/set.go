@@ -1,7 +1,6 @@
 package envscmd
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/martinnirtl/dockma/internal/utils"
@@ -13,15 +12,9 @@ import (
 var setCmd = &cobra.Command{
 	Use:     "set [environment]",
 	Short:   "Set active environment.",
-	Long:    `-`,
+	Long:    "Set active environment.",
+	Args:    cobra.RangeArgs(0, 1),
 	Example: "dockma envs set",
-	Args: func(cmd *cobra.Command, args []string) error {
-		if len(args) > 1 {
-			return errors.New("Too many arguments")
-		}
-
-		return nil
-	},
 	Run: func(cmd *cobra.Command, args []string) {
 		env := ""
 		if len(args) == 0 {

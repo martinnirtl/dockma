@@ -2,9 +2,9 @@ package profilecmd
 
 import "github.com/spf13/cobra"
 
-// ProfileCommand is the top level config command
+// ProfileCommand implements the top level profile command
 var ProfileCommand = &cobra.Command{
 	Use:   "profile",
 	Short: "Manage profiles (predefined service selections).",
-	Long:  "-",
+	Long:  "Manage profiles (predefined service selections).",
 }

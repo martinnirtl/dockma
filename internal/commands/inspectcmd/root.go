@@ -12,10 +12,12 @@ import (
 	"github.com/ttacon/chalk"
 )
 
+// InspectCommand implements the top level inspect command
 var InspectCommand = &cobra.Command{
 	Use:   "inspect",
 	Short: "Print detailed output of previously executed command [up|down|pull].",
-	Long:  "-",
+	Long:  "Print detailed output of previously executed command [up|down|pull].",
+	Args:  cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		filepath := config.GetLogfile()
 

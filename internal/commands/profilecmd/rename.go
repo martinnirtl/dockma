@@ -16,7 +16,8 @@ import (
 var renameCmd = &cobra.Command{
 	Use:     "rename",
 	Short:   "Rename profile.",
-	Long:    `-`,
+	Long:    "Rename profile.",
+	Args:    cobra.NoArgs,
 	Example: "dockma profile rename",
 	Run: func(cmd *cobra.Command, args []string) {
 		activeEnv := config.GetActiveEnv()

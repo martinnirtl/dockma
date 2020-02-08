@@ -1,7 +1,6 @@
 package envscmd
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/martinnirtl/dockma/internal/survey"
@@ -15,15 +14,9 @@ var removeCmd = &cobra.Command{
 	Use:     "remove [environment]",
 	Aliases: []string{"rm"},
 	Short:   "Remove environment.",
-	Long:    `-`,
+	Long:    "Remove environment.",
+	Args:    cobra.RangeArgs(0, 1),
 	Example: "dockma envs remove my-env",
-	Args: func(cmd *cobra.Command, args []string) error {
-		if len(args) > 1 {
-			return errors.New("Too many arguments")
-		}
-
-		return nil
-	},
 	Run: func(cmd *cobra.Command, args []string) {
 		env := ""
 		if len(args) == 0 {

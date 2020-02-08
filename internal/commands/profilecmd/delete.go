@@ -15,7 +15,8 @@ import (
 var deleteCmd = &cobra.Command{
 	Use:     "delete",
 	Short:   "Delete a profile of active environment.",
-	Long:    `-`,
+	Long:    "Delete a profile of active environment.",
+	Args:    cobra.NoArgs,
 	Aliases: []string{"del"},
 	Example: "dockma profile delete",
 	Run: func(cmd *cobra.Command, args []string) {

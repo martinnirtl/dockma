@@ -16,7 +16,9 @@ import (
 var updateCmd = &cobra.Command{
 	Use:     "update",
 	Short:   "Update profile's service selection.",
-	Long:    `-`,
+	Long:    "Update profile's service selection.",
+	Aliases: []string{"upd"},
+	Args:    cobra.NoArgs,
 	Example: "dockma profile update",
 	Run: func(cmd *cobra.Command, args []string) {
 		activeEnv := config.GetActiveEnv()

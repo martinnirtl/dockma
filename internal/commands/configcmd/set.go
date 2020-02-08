@@ -13,9 +13,10 @@ import (
 
 var setCmd = &cobra.Command{
 	Use:     "set",
-	Short:   "Set dockma config vars in an interactive walkthrough.",
-	Long:    `-`,
+	Short:   "Set Dockma config vars in an interactive walkthrough.",
+	Long:    "Set Dockma config vars in an interactive walkthrough.",
 	Example: "dockma config set",
+	Args:    cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		options := []string{
 			fmt.Sprintf("hidesubcommandoutput: %t", viper.GetBool("hidesubcommandoutput")),

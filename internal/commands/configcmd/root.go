@@ -4,9 +4,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// ConfigCommand is the top level config command
+// ConfigCommand implements the top level config command
 var ConfigCommand = &cobra.Command{
-	Use:   "config",
-	Short: "Dockma configuration details.",
-	Long:  "-",
+	Use:     "config",
+	Short:   "Dockma configuration details.",
+	Long:    "Dockma configuration details.",
+	Aliases: []string{"cfg"},
 }

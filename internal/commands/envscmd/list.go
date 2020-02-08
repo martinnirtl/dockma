@@ -13,7 +13,8 @@ import (
 var listCmd = &cobra.Command{
 	Use:     "list",
 	Short:   "List all configured environments.",
-	Long:    `-`,
+	Long:    "List all configured environments.",
+	Args:    cobra.NoArgs,
 	Example: "dockma envs list",
 	Run: func(cmd *cobra.Command, args []string) {
 		envs := config.GetEnvs()

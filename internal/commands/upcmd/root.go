@@ -18,11 +18,12 @@ import (
 	"github.com/ttacon/chalk"
 )
 
-// UpCommand implements the top level dockma command up
+// UpCommand implements the top level up command
 var UpCommand = &cobra.Command{
 	Use:   "up",
 	Short: "Runs active environment with service selection.",
-	Long:  "-",
+	Long:  "Runs active environment with service selection.",
+	Args:  cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		filepath := config.GetLogfile()
 

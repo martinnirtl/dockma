@@ -15,16 +15,9 @@ import (
 var initCmd = &cobra.Command{
 	Use:     "init [path-to-environment]",
 	Short:   "Initialize new environment.",
-	Long:    `-`,
+	Long:    "Initialize new environment.",
+	Args:    cobra.RangeArgs(0, 1),
 	Example: "dockma envs init path/to/env",
-	// TODO add flag to prevent setting active
-	Args: func(cmd *cobra.Command, args []string) error {
-		if len(args) > 1 {
-			return errors.New("Too many arguments")
-		}
-
-		return nil
-	},
 	Run: func(cmd *cobra.Command, args []string) {
 		var env string
 
@@ -33,7 +26,7 @@ var initCmd = &cobra.Command{
 			path = args[0]
 
 			if err := os.Chdir(path); err != nil {
-				fmt.Printf("%sError. Could not change directory to: %s%s\n", chalk.Red, path, chalk.ResetColor)
+				fmt.Printf("%sError: Could not find directory: %s%s\n", chalk.Red, path, chalk.ResetColor)
 
 				os.Exit(0)
 			}

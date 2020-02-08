@@ -41,11 +41,12 @@ func Pull(path string, log bool) error {
 	return nil
 }
 
-// PullCommand is a top level dockma command
+// PullCommand implements the top level pull command
 var PullCommand = &cobra.Command{
 	Use:   "pull",
 	Short: "Run 'git pull' in active environment home dir.",
-	Long:  "-",
+	Long:  "Run 'git pull' in active environment home dir.",
+	Args:  cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		activeEnv := config.GetActiveEnv()

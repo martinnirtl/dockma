@@ -14,7 +14,8 @@ var servicesFlag bool
 var listCmd = &cobra.Command{
 	Use:     "list",
 	Short:   "List profiles of active environment.",
-	Long:    `-`,
+	Long:    "List profiles of active environment.",
+	Args:    cobra.NoArgs,
 	Example: "dockma profile list",
 	Run: func(cmd *cobra.Command, args []string) {
 		activeEnv := config.GetActiveEnv()

@@ -15,10 +15,12 @@ import (
 	"github.com/ttacon/chalk"
 )
 
+// InitCommand implements the top level init command
 var InitCommand = &cobra.Command{
 	Use:              "init",
 	Short:            "Initialize the Dockma CLI.",
-	Long:             "-",
+	Long:             "Initialize the Dockma CLI.",
+	Args:             cobra.NoArgs,
 	PersistentPreRun: initPreRunHook, // used to override root PreRun func
 	Run:              initCommandHandler,
 }
