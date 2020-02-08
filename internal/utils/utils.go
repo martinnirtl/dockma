@@ -33,11 +33,13 @@ func Success(text string) {
 	os.Exit(0)
 }
 
-// Error prints 'Error: <message>' to std out and exits process with 0
+// Error checks if err is not nil, prints 'Error: <message>' to std out and exits process with 0
 func Error(err error) {
-	fmt.Printf("%sError: %s%s\n", chalk.Red, err, chalk.ResetColor)
+	if err != nil {
+		fmt.Printf("%sError: %s%s\n", chalk.Red, err, chalk.ResetColor)
 
-	os.Exit(0)
+		os.Exit(0)
+	}
 }
 
 // NoEnvs prints no envs configured and exits
