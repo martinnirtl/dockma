@@ -14,8 +14,8 @@ type Services struct {
 
 var servicesChache map[string]Services = make(map[string]Services)
 
-func isEmpty(services Services) bool {
-	if len(services.All) == 0 || len(services.Base) == 0 || len(services.Override) == 0 {
+func (s *Services) IsEmpty() bool {
+	if len(s.All) == 0 || len(s.Base) == 0 || len(s.Override) == 0 {
 		return true
 	}
 
@@ -55,7 +55,7 @@ func GetVersion(filepath string) string {
 func GetServices(filepath string) (services Services, err error) {
 	services = servicesChache[filepath]
 
-	if !isEmpty(services) {
+	if services.IsEmpty() {
 		return
 	}
 
