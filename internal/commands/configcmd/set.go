@@ -23,11 +23,7 @@ var setCmd = &cobra.Command{
 			fmt.Sprintf("username: %s", viper.GetString("username")),
 		}
 
-		selected, err := survey.MultiSelect("Select config items to change", options, nil)
-
-		if err != nil {
-			utils.Abort()
-		}
+		selected := survey.MultiSelect("Select config items to change", options, nil)
 
 		for _, varnameRaw := range selected {
 			varname := strings.Split(varnameRaw, ":")
@@ -44,29 +40,17 @@ func init() {
 func setConfigVar(varname string) error {
 	switch varname {
 	case "hidesubcommandoutput":
-		hide, err := survey.Confirm("Hide output of external commands [true: show output only on error, false: always pipe output]", viper.GetBool("hidesubcommandoutput"))
-
-		if err != nil {
-			utils.Abort()
-		}
+		hide := survey.Confirm("Hide output of external commands [true: show output only on error, false: always pipe output]", viper.GetBool("hidesubcommandoutput"))
 
 		viper.Set("hidesubcommandoutput", hide)
 
 	case "logfile":
-		logfile, err := survey.Input("Enter name of logfile [stored in dockma home dir]", viper.GetString("logfile"))
-
-		if err != nil {
-			utils.Abort()
-		}
+		logfile := survey.Input("Enter name of logfile [stored in dockma home dir]", viper.GetString("logfile"))
 
 		viper.Set("logfile", logfile)
 
 	case "username":
-		username, err := survey.Input("Enter new username", viper.GetString("username"))
-
-		if err != nil {
-			utils.Abort()
-		}
+		username := survey.Input("Enter new username", viper.GetString("username"))
 
 		viper.Set("username", username)
 	}

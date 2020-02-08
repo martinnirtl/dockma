@@ -22,11 +22,7 @@ var createCmd = &cobra.Command{
 		activeEnv := config.GetActiveEnv()
 		envHomeDir := config.GetEnvHomeDir(activeEnv)
 
-		profileName, err := survey.Input("Enter name for profile", "")
-
-		if err != nil {
-			utils.Abort()
-		}
+		profileName := survey.Input("Enter name for profile", "")
 
 		if config.HasProfileName(activeEnv, profileName) {
 			utils.Error(errors.New("Profile name already taken. Use 'update' to reselect services"))
@@ -43,11 +39,7 @@ var createCmd = &cobra.Command{
 			utils.Error(errors.New("Could not read services"))
 		}
 
-		selected, err := survey.MultiSelect(fmt.Sprintf("Select services for profile %s%s%s", chalk.Cyan, profileName, chalk.ResetColor), services.All, nil)
-
-		if err != nil {
-			utils.Abort()
-		}
+		selected := survey.MultiSelect(fmt.Sprintf("Select services for profile %s%s%s", chalk.Cyan, profileName, chalk.ResetColor), services.All, nil)
 
 		if len(selected) == 0 {
 			fmt.Printf("%sNo services selected%s\n\n", chalk.Yellow, chalk.ResetColor)

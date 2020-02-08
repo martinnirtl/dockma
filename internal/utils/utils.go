@@ -61,11 +61,7 @@ func GetEnvironment(env string) string {
 
 	fmt.Printf("%sNo such environment: %s%s\n", chalk.Yellow, env, chalk.ResetColor)
 
-	env, err := survey.Select("Choose an environment", envs)
-
-	if err != nil || env == "" {
-		Abort()
-	}
+	env = survey.Select("Choose an environment", envs)
 
 	return env
 }

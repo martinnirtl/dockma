@@ -39,11 +39,7 @@ var initCmd = &cobra.Command{
 			}
 		}
 
-		env, err := survey.Input("Enter a name for the new environment (has to be unique)", "")
-
-		if err != nil {
-			utils.Abort()
-		}
+		env = survey.Input("Enter a name for the new environment (has to be unique)", "")
 
 		if env == "" {
 			utils.Error(errors.New("Got empty string for environment name"))
@@ -59,20 +55,12 @@ var initCmd = &cobra.Command{
 			os.Exit(0)
 		}
 
-		autoPull, err := survey.Confirm(fmt.Sprintf("Run %sgit pull%s before %sdockma up%s", chalk.Cyan, chalk.Reset, chalk.Cyan, chalk.ResetColor), false)
+		autoPull := survey.Confirm(fmt.Sprintf("Run %sgit pull%s before %sdockma up%s", chalk.Cyan, chalk.Reset, chalk.Cyan, chalk.ResetColor), false)
 
-		if err != nil {
-			utils.Abort()
-		}
-
-		proceed, err := survey.Confirm(fmt.Sprintf("Add new environment %s%s%s (location: %s)", chalk.Cyan, env, chalk.ResetColor, workingDir), true)
+		proceed := survey.Confirm(fmt.Sprintf("Add new environment %s%s%s (location: %s)", chalk.Cyan, env, chalk.ResetColor, workingDir), true)
 
 		if !proceed {
 			utils.Abort()
-		} else if err != nil {
-			fmt.Printf("%sError. %s%s\n", chalk.Red, err, chalk.ResetColor)
-
-			os.Exit(0)
 		}
 
 		viper.Set(fmt.Sprintf("envs.%s.home", env), workingDir)

@@ -29,17 +29,9 @@ var renameCmd = &cobra.Command{
 			os.Exit(0)
 		}
 
-		renameProfile, err := survey.Select("Select profile to update", profileNames)
+		renameProfile := survey.Select("Select profile to update", profileNames)
 
-		if err != nil {
-			utils.Abort()
-		}
-
-		profileName, err := survey.Input("Enter name for profile", renameProfile)
-
-		if err != nil {
-			utils.Abort()
-		}
+		profileName := survey.Input("Enter name for profile", renameProfile)
 
 		// FIXME use regex
 		if profileName == "" || profileName == "-" {
@@ -60,7 +52,7 @@ var renameCmd = &cobra.Command{
 
 		viper.Set(fmt.Sprintf("envs.%s.profiles", activeEnv), profileMap)
 
-		err = config.Save()
+		err := config.Save()
 
 		utils.Error(err)
 

@@ -32,9 +32,9 @@ var removeCmd = &cobra.Command{
 			env = utils.GetEnvironment(args[0])
 		}
 
-		sure, err := survey.Confirm(fmt.Sprintf("Are you sure to remove '%s'", env), false)
+		sure := survey.Confirm(fmt.Sprintf("Are you sure to remove '%s'", env), false)
 
-		if err != nil || !sure {
+		if !sure {
 			utils.Abort()
 		}
 

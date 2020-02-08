@@ -1,7 +1,6 @@
 package profilecmd
 
 import (
-	"errors"
 	"fmt"
 	"os"
 
@@ -31,27 +30,15 @@ var updateCmd = &cobra.Command{
 			os.Exit(0)
 		}
 
-		profileName, err := survey.Select("Select profile to update", profileNames)
-
-		if err != nil {
-			utils.Abort()
-		}
+		profileName := survey.Select("Select profile to update", profileNames)
 
 		services, err := dockercompose.GetServices(envHomeDir)
-
-		if err != nil {
-			utils.Error(errors.New("Could not read services"))
-		}
-
-		profile, err := config.GetProfile(activeEnv, profileName)
-
 		utils.Error(err)
 
-		selected, err := survey.MultiSelect(fmt.Sprintf("Select services for profile %s%s%s", chalk.Cyan, profileName, chalk.ResetColor), services.All, profile.Selected)
+		profile, err := config.GetProfile(activeEnv, profileName)
+		utils.Error(err)
 
-		if err != nil {
-			utils.Abort()
-		}
+		selected := survey.MultiSelect(fmt.Sprintf("Select services for profile %s%s%s", chalk.Cyan, profileName, chalk.ResetColor), services.All, profile.Selected)
 
 		if len(selected) == 0 {
 			fmt.Printf("%sNo services selected%s\n\n", chalk.Yellow, chalk.ResetColor)

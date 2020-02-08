@@ -25,17 +25,15 @@ var InitCommand = &cobra.Command{
 
 func initPreRunHook(cmd *cobra.Command, args []string) {
 	if init := viper.GetTime("init"); !init.IsZero() {
-		proceed, err := survey.Confirm(fmt.Sprintf("%sDockma CLI has already been initialized!%s Do you want to proceed", chalk.Yellow, chalk.ResetColor), false)
+		proceed := survey.Confirm(fmt.Sprintf("%sDockma CLI has already been initialized!%s Do you want to proceed", chalk.Yellow, chalk.ResetColor), false)
 
-		if err != nil || !proceed {
+		if !proceed {
 			utils.Abort()
 		}
 	} else {
-		accept, err := survey.Confirm(fmt.Sprintf("Dockma CLI config will be stored at: %s", viper.GetString("home")), true)
+		accept := survey.Confirm(fmt.Sprintf("Dockma CLI config will be stored at: %s", viper.GetString("home")), true)
 
-		if err != nil {
-			utils.Abort()
-		} else if !accept {
+		if !accept {
 			fmt.Printf("Ok, you can change the config default location by setting %sDOCKMA_HOME%s environment variable.\n", chalk.Cyan, chalk.ResetColor)
 
 			os.Exit(0)
@@ -49,11 +47,7 @@ func initCommandHandler(cmd *cobra.Command, args []string) {
 		username = sysUser.Username
 	}
 
-	username, err := survey.Input("What is your name", strings.Title(username))
-
-	if err != nil {
-		utils.Abort()
-	}
+	username = survey.Input("What is your name", strings.Title(username))
 
 	viper.Set("username", username)
 	viper.Set("init", time.Now())

@@ -53,11 +53,7 @@ var UpCommand = &cobra.Command{
 		if len(profileNames) > 0 {
 			profileNames = append(profileNames, "latest")
 
-			profileName, err := survey.Select(fmt.Sprintf("Select profile to run or %slatest%s", chalk.Cyan, chalk.ResetColor), profileNames)
-
-			if err != nil {
-				utils.Abort()
-			}
+			profileName := survey.Select(fmt.Sprintf("Select profile to run or %slatest%s", chalk.Cyan, chalk.ResetColor), profileNames)
 
 			if profileName != "latest" {
 				profile, err := config.GetProfile(activeEnv, profileName)
@@ -86,25 +82,13 @@ var UpCommand = &cobra.Command{
 			fmt.Printf("%sFound %d services in docker-compose.override.y(a)ml: %s%s\n\n", chalk.Yellow, len(services.Override), strings.Join(services.Override, ", "), chalk.ResetColor)
 		}
 
-		selectedServices, err := survey.MultiSelect("Select services to start", services.All, preselected)
-
-		if err != nil {
-			utils.Abort()
-		}
+		selectedServices := survey.MultiSelect("Select services to start", services.All, preselected)
 
 		if profileName == "latest" {
-			saveProfile, err := survey.Confirm("Save as profile", false)
-
-			if err != nil {
-				utils.Abort()
-			}
+			saveProfile := survey.Confirm("Save as profile", false)
 
 			if saveProfile {
-				profileName, err := survey.Input("Enter profile name", "")
-
-				if err != nil {
-					utils.Abort()
-				}
+				profileName = survey.Input("Enter profile name", "")
 
 				viper.Set(fmt.Sprintf("envs.%s.profiles.%s", activeEnv, profileName), selectedServices)
 			} else {
