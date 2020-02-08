@@ -22,7 +22,7 @@ func isEmpty(services Services) bool {
 	return false
 }
 
-func GetDockerCompose(filepath string, override bool) (*viper.Viper, error) {
+func getDockerCompose(filepath string, override bool) (*viper.Viper, error) {
 	fileName := "docker-compose"
 	if override {
 		fileName = "docker-compose.override"
@@ -43,7 +43,7 @@ func GetDockerCompose(filepath string, override bool) (*viper.Viper, error) {
 }
 
 func GetVersion(filepath string) string {
-	dockercompose, err := GetDockerCompose(filepath, false)
+	dockercompose, err := getDockerCompose(filepath, false)
 
 	if err != nil {
 		return ""
@@ -59,7 +59,7 @@ func GetServices(filepath string) (services Services, err error) {
 		return
 	}
 
-	dockercompose, err := GetDockerCompose(filepath, false)
+	dockercompose, err := getDockerCompose(filepath, false)
 
 	services = Services{}
 
@@ -67,7 +67,7 @@ func GetServices(filepath string) (services Services, err error) {
 		return services, err
 	}
 
-	dockercomposeOverride, err := GetDockerCompose(filepath, true)
+	dockercomposeOverride, err := getDockerCompose(filepath, true)
 
 	if err == nil {
 		services.Base = getServicesFromStringMap(dockercompose.GetStringMap("services"))
