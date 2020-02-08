@@ -33,9 +33,7 @@ func (otb *SpinnerTimebridger) Start(command string) error {
 func (otb *SpinnerTimebridger) Update(update string) error {
 	otb.command = update
 
-	if otb.messageRunning != "" {
-		otb.spinner.Suffix = " " + otb.messageRunning
-	} else {
+	if otb.messageRunning == "" {
 		otb.spinner.Suffix = " " + update
 	}
 
@@ -57,6 +55,18 @@ func (otb *SpinnerTimebridger) Stop() error {
 func New(messageRunning string, messageFinished string, spinner int, color string) *SpinnerTimebridger {
 	s := spinnerlib.New(spinnerlib.CharSets[spinner], 100*time.Millisecond)
 	s.Color(color, "bold")
+
+	return &SpinnerTimebridger{
+		messageRunning:  messageRunning,
+		messageFinished: messageFinished,
+		spinner:         s,
+	}
+}
+
+// Default creates the default OutputTimebidger
+func Default(messageRunning string, messageFinished string) *SpinnerTimebridger {
+	s := spinnerlib.New(spinnerlib.CharSets[14], 100*time.Millisecond)
+	s.Color("cyan", "bold")
 
 	return &SpinnerTimebridger{
 		messageRunning:  messageRunning,
