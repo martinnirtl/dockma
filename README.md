@@ -31,12 +31,8 @@ Level up your docker-compose game during development!
 - add license
 - build "assessment" tool for docker-compose files
 - write unit tests
-- use Bats for system tests (https://github.com/sstephenson/bats)
+- on init: ask for spinner/game/output
+- on envs init: ask for automatic/optional git pull if git repository
+- unify printing errors
 
-* on init
-  - ask for spinner/game/output
-* on envs init
-  - ask for dynamic generation of .env (maybe append to exiting file if there)
-  - ask for automatic git pull if git repository
-* on up
-  - remind user of overriden services
+- use Bats for system tests (https://github.com/sstephenson/bats)
