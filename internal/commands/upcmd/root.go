@@ -141,7 +141,7 @@ var UpCommand = &cobra.Command{
 			timebridger = spinnertimebridger.New("Running 'docker-compose up'", fmt.Sprintf("%sSuccessfully executed 'docker-compose up'%s", chalk.Green, chalk.ResetColor), 14, "cyan")
 		}
 
-		command := externalcommand.JoinCommandSlices("docker-compose up -d", selectedServices...)
+		command := externalcommand.JoinCommand("docker-compose up -d", selectedServices...)
 
 		_, err = externalcommand.Execute(command, timebridger, filepath)
 

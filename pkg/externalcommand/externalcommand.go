@@ -10,12 +10,12 @@ import (
 	"strings"
 )
 
-// JoinCommandSlices joins all command slices with spaces
-func JoinCommandSlices(base string, arguments ...string) string {
+// JoinCommand joins all command slices with spaces
+func JoinCommand(command string, arguments ...string) string {
 	if len(arguments) > 0 {
-		return fmt.Sprintf("%s ", base) + strings.Join(arguments, " ")
+		return fmt.Sprintf("%s ", command) + strings.Join(arguments, " ")
 	} else {
-		return base
+		return command
 	}
 }
 

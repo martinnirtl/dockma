@@ -36,7 +36,7 @@ var LogsCommand = &cobra.Command{
 
 		args = addFlagsToArgs(args)
 
-		command := externalcommand.JoinCommandSlices("docker-compose logs", args...)
+		command := externalcommand.JoinCommand("docker-compose logs", args...)
 
 		_, err = externalcommand.Execute(command, nil, "")
 
