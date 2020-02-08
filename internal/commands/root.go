@@ -47,9 +47,11 @@ func init() {
 
 	cobra.OnInitialize(initConfig)
 
-	// FLAGS GO HERE
+	// TODO FLAGS GO HERE
+	// author flag
+	// version flag
 
-	// FIXME does not consider envs set via .bash_profile
+	// TODO behavior not clear. no consideration of envs set via .bash_profile !?
 	viper.SetEnvPrefix("dockma")
 	viper.BindEnv("home")
 
