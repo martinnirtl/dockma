@@ -93,7 +93,7 @@ func GetDurationPassedSinceLastUpdate(envName string) (time.Duration, error) {
 
 // GetAutoPullSetting returns wether to run git pull or not.
 func GetAutoPullSetting(envName string) string {
-	return viper.GetString(fmt.Sprintf("envs.%s.autopull", envName))
+	return viper.GetString(fmt.Sprintf("envs.%s.pull", envName))
 }
 
 // GetProfilesNames returns profile names for given env.

@@ -35,29 +35,29 @@ var UpCommand = &cobra.Command{
 
 		envHomeDir := viper.GetString(fmt.Sprintf("envs.%s.home", activeEnv))
 
-		autoPull := config.GetAutoPullSetting(activeEnv)
+		pull := config.GetAutoPullSetting(activeEnv)
 
-		var pull bool
-		switch autoPull {
+		var doPull bool
+		switch pull {
 		case "auto":
-			pull = true
+			doPull = true
 		case "optional":
-			pull = survey.Confirm("Pull changes from git", false)
+			doPull = survey.Confirm("Pull changes from git", false)
 		case "manual":
 			timePassed, err := config.GetDurationPassedSinceLastUpdate(activeEnv)
 
 			if err != nil {
-				pull = survey.Confirm(fmt.Sprintf("Environment never got updated (%s). Wanna pull now", utils.PrintCyan("dockma env pull")), true)
+				doPull = survey.Confirm(fmt.Sprintf("Environment never got updated (%s). Wanna pull now", utils.PrintCyan("dockma env pull")), true)
 			} else if timePassed.Hours() > 24*7 {
-				pull = survey.Confirm("Some time has passed since last git pull. Wanna pull now", true)
+				doPull = survey.Confirm("Some time has passed since last git pull. Wanna pull now", true)
 			}
 		case "off":
-			pull = false
+			doPull = false
 		default:
-			pull = false
+			doPull = false
 		}
 
-		if pull {
+		if doPull {
 			err := envcmd.Pull(envHomeDir, false)
 
 			if err != nil {

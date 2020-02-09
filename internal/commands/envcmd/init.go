@@ -48,9 +48,9 @@ var initCmd = &cobra.Command{
 			os.Exit(0)
 		}
 
-		autoPull := "off"
+		pull := "off"
 		if _, err := os.Stat(".git"); os.IsExist(err) {
-			autoPull = survey.Select(fmt.Sprintf("Run %sgit pull%s before %sdockma up%s", chalk.Cyan, chalk.Reset, chalk.Cyan, chalk.ResetColor), []string{"auto", "optional", "manual", "off"})
+			pull = survey.Select(fmt.Sprintf("Run %sgit pull%s before %sdockma up%s", chalk.Cyan, chalk.Reset, chalk.Cyan, chalk.ResetColor), []string{"auto", "optional", "manual", "off"})
 		}
 
 		proceed := survey.Confirm(fmt.Sprintf("Add new environment %s%s%s (location: %s)", chalk.Cyan, env, chalk.ResetColor, workingDir), true)
@@ -60,7 +60,7 @@ var initCmd = &cobra.Command{
 		}
 
 		viper.Set(fmt.Sprintf("envs.%s.home", env), workingDir)
-		viper.Set(fmt.Sprintf("envs.%s.autopull", env), autoPull)
+		viper.Set(fmt.Sprintf("envs.%s.pull", env), pull)
 
 		oldEnv := viper.GetString("active")
 
