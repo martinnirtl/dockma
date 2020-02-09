@@ -1,4 +1,4 @@
-package envscmd
+package envcmd
 
 import (
 	"errors"
@@ -48,7 +48,10 @@ var initCmd = &cobra.Command{
 			os.Exit(0)
 		}
 
-		autoPull := survey.Confirm(fmt.Sprintf("Run %sgit pull%s before %sdockma up%s", chalk.Cyan, chalk.Reset, chalk.Cyan, chalk.ResetColor), false)
+		autoPull := "off"
+		if _, err := os.Stat(".git"); os.IsExist(err) {
+			autoPull = survey.Select(fmt.Sprintf("Run %sgit pull%s before %sdockma up%s", chalk.Cyan, chalk.Reset, chalk.Cyan, chalk.ResetColor), []string{"auto", "optional", "manual", "off"})
+		}
 
 		proceed := survey.Confirm(fmt.Sprintf("Add new environment %s%s%s (location: %s)", chalk.Cyan, env, chalk.ResetColor, workingDir), true)
 
@@ -74,5 +77,5 @@ var initCmd = &cobra.Command{
 }
 
 func init() {
-	EnvsCommand.AddCommand(initCmd)
+	EnvCommand.AddCommand(initCmd)
 }

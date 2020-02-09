@@ -1,4 +1,4 @@
-package pullcmd
+package envcmd
 
 import (
 	"errors"
@@ -13,6 +13,33 @@ import (
 	"github.com/spf13/viper"
 	"github.com/ttacon/chalk"
 )
+
+var pullCommand = &cobra.Command{
+	Use:   "pull",
+	Short: "Run 'git pull' in active environment home dir.",
+	Long:  "Run 'git pull' in active environment home dir.",
+	Args:  cobra.NoArgs,
+	Run: func(cmd *cobra.Command, args []string) {
+
+		activeEnv := config.GetActiveEnv()
+
+		if activeEnv == "-" {
+			utils.NoEnvs()
+		}
+
+		envHomeDir := config.GetEnvHomeDir(activeEnv)
+
+		err := Pull(envHomeDir, true)
+
+		utils.Error(err)
+
+		utils.Success(fmt.Sprintf("Successfully pulled env: %s", activeEnv))
+	},
+}
+
+func init() {
+	EnvCommand.AddCommand(pullCommand)
+}
 
 // Pull runs git pull in given path and optionally logs output
 func Pull(path string, log bool) error {
@@ -38,27 +65,7 @@ func Pull(path string, log bool) error {
 		return errors.New("Could not execute 'git pull' in active environment home dir")
 	}
 
+	// config.SetEnvUpdated() // TODO make config to object
+
 	return nil
-}
-
-// PullCommand implements the top level pull command
-var PullCommand = &cobra.Command{
-	Use:   "pull",
-	Short: "Run 'git pull' in active environment home dir.",
-	Long:  "Run 'git pull' in active environment home dir.",
-	Args:  cobra.NoArgs,
-	Run: func(cmd *cobra.Command, args []string) {
-
-		activeEnv := config.GetActiveEnv()
-
-		if activeEnv == "-" {
-			utils.NoEnvs()
-		}
-
-		envHomeDir := config.GetEnvHomeDir(activeEnv)
-
-		err := Pull(envHomeDir, true)
-
-		utils.Error(err)
-	},
 }

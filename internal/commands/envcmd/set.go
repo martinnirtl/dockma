@@ -1,4 +1,4 @@
-package envscmd
+package envcmd
 
 import (
 	"fmt"
@@ -42,5 +42,5 @@ var setCmd = &cobra.Command{
 }
 
 func init() {
-	EnvsCommand.AddCommand(setCmd)
+	EnvCommand.AddCommand(setCmd)
 }

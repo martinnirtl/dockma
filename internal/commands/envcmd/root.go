@@ -1,11 +1,11 @@
-package envscmd
+package envcmd
 
 import (
 	"github.com/spf13/cobra"
 )
 
-// EnvsCommand implements the top level envs command
-var EnvsCommand = &cobra.Command{
+// EnvCommand implements the top level envs command
+var EnvCommand = &cobra.Command{
 	Use:     "env",
 	Aliases: []string{"environment"},
 	Short:   "Environments reflect docker-compose based projects.",
