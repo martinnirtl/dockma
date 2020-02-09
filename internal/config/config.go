@@ -5,14 +5,15 @@ import (
 	"fmt"
 	"path/filepath"
 	"sort"
+	"time"
 
 	"github.com/martinnirtl/dockma/pkg/dockercompose"
 	"github.com/spf13/viper"
 )
 
-// NOTE viper gets initialized in commands/root.go and is
+// NOTE viper gets initialized in commands/root.go.
 
-// Save saves the config
+// Save saves the config.
 func Save() error {
 	err := viper.WriteConfig()
 
@@ -23,36 +24,36 @@ func Save() error {
 	return nil
 }
 
-// GetUsername returns the user's name
+// GetUsername returns the user's name.
 func GetUsername() string {
 	return viper.GetString("username")
 }
 
-// GetHomeDir returns the full path to dockma home dir
+// GetHomeDir returns the full path to dockma home dir.
 func GetHomeDir() string {
 	return viper.GetString("home")
 }
 
-// GetActiveEnv returns the name of the active environment
+// GetActiveEnv returns the name of the active environment.
 func GetActiveEnv() string {
 	return viper.GetString("active")
 }
 
-// GetDockmaFilepath returns full path of the given filename joined with dockma home dir
+// GetDockmaFilepath returns full path of the given filename joined with dockma home dir.
 func GetDockmaFilepath(filename string) string {
 	path := viper.GetString("home")
 
 	return filepath.Join(path, filename)
 }
 
-// GetLogfile returns full path to std dockma logfile
+// GetLogfile returns full path to std dockma logfile.
 func GetLogfile() string {
 	filename := viper.GetString("logfile")
 
 	return GetDockmaFilepath(filename)
 }
 
-// GetEnvs returns configured envs
+// GetEnvs returns configured envs.
 func GetEnvs() (envs []string) {
 	envsMap := viper.GetStringMap("envs")
 
@@ -67,17 +68,35 @@ func GetEnvs() (envs []string) {
 	return
 }
 
-// GetEnvHomeDir returns the full path to dockma home dir
+// GetEnvHomeDir returns the full path to dockma home dir.
 func GetEnvHomeDir(envName string) string {
 	return viper.GetString(fmt.Sprintf("envs.%s.home", envName))
 }
 
-// IsAutoPullSet returns wether to run git pull or not
-func IsAutoPullSet(envName string) bool {
-	return viper.GetBool(fmt.Sprintf("envs.%s.autopull", envName))
+// SetEnvUpdated updates update timestamp of env. Should be used when running git pull.
+func SetEnvUpdated(envName string) {
+	viper.Set(fmt.Sprintf("envs.%s.home", envName), time.Now())
 }
 
-// GetProfilesNames returns profile names for given env
+// GetDurationPassedSinceLastUpdate returns duration passed since last git pull exec in given env.
+func GetDurationPassedSinceLastUpdate(envName string) (time.Duration, error) {
+	update := viper.GetTime(fmt.Sprintf("envs.%s.home", envName))
+
+	if update.IsZero() {
+		return time.Duration(0), fmt.Errorf("No update done yet")
+	}
+
+	now := time.Now()
+
+	return now.Sub(update), nil
+}
+
+// GetAutoPullSetting returns wether to run git pull or not.
+func GetAutoPullSetting(envName string) string {
+	return viper.GetString(fmt.Sprintf("envs.%s.autopull", envName))
+}
+
+// GetProfilesNames returns profile names for given env.
 func GetProfilesNames(env string) (profiles []string) {
 	for profile := range viper.GetStringMap(fmt.Sprintf("envs.%s.profiles", env)) {
 		profiles = append(profiles, profile)
@@ -86,13 +105,13 @@ func GetProfilesNames(env string) (profiles []string) {
 	return
 }
 
-// Profile consists of selected and all services of env
+// Profile consists of selected and all services of env.
 type Profile struct {
 	Services []string
 	Selected []string
 }
 
-// GetLatest returns special profile with latest chosen services
+// GetLatest returns special profile with latest chosen services.
 func GetLatest(env string) (profile Profile, err error) {
 	profile = Profile{}
 
@@ -109,7 +128,7 @@ func GetLatest(env string) (profile Profile, err error) {
 	return
 }
 
-// GetProfile returns services for given profile
+// GetProfile returns services for given profile.
 func GetProfile(env string, profileName string) (profile Profile, err error) {
 	profile = Profile{}
 
@@ -126,7 +145,7 @@ func GetProfile(env string, profileName string) (profile Profile, err error) {
 	return
 }
 
-// HasProfileName tells if profile with name exists in env
+// HasProfileName tells if profile with name exists in env.
 func HasProfileName(env string, name string) bool {
 	profile := viper.GetStringSlice(fmt.Sprintf("envs.%s.profiles.%s", env, name))
 

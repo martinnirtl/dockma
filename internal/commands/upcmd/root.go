@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/martinnirtl/dockma/internal/commands/pullcmd"
+	"github.com/martinnirtl/dockma/internal/commands/envcmd"
 	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/envvars"
 	"github.com/martinnirtl/dockma/internal/survey"
@@ -35,10 +35,30 @@ var UpCommand = &cobra.Command{
 
 		envHomeDir := viper.GetString(fmt.Sprintf("envs.%s.home", activeEnv))
 
-		autoPull := config.IsAutoPullSet(activeEnv)
+		autoPull := config.GetAutoPullSetting(activeEnv)
 
-		if autoPull {
-			err := pullcmd.Pull(envHomeDir, false)
+		var pull bool
+		switch autoPull {
+		case "auto":
+			pull = true
+		case "optional":
+			pull = survey.Confirm("Pull changes from git", false)
+		case "manual":
+			timePassed, err := config.GetDurationPassedSinceLastUpdate(activeEnv)
+
+			if err != nil {
+				pull = survey.Confirm(fmt.Sprintf("Environment never got updated (%s). Wanna pull now", utils.PrintCyan("dockma env pull")), true)
+			} else if timePassed.Hours() > 24*7 {
+				pull = survey.Confirm("Some time has passed since last git pull. Wanna pull now", true)
+			}
+		case "off":
+			pull = false
+		default:
+			pull = false
+		}
+
+		if pull {
+			err := envcmd.Pull(envHomeDir, false)
 
 			if err != nil {
 				fmt.Printf("%sCould not execute git pull.%s\n", chalk.Yellow, chalk.ResetColor)
