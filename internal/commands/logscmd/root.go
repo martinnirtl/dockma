@@ -5,9 +5,7 @@ import (
 	"os"
 	"sort"
 
-	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/utils"
-	"github.com/martinnirtl/dockma/pkg/dockercompose"
 	"github.com/martinnirtl/dockma/pkg/externalcommand"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -19,11 +17,12 @@ var tailFlag int
 
 // LogsCommand implements the top level logs command
 var LogsCommand = &cobra.Command{
-	Use:       "logs [service...]",
-	Short:     "Logs output of all or only selected services.",
-	Long:      "Logs output of all or only selected services.",
-	Args:      cobra.OnlyValidArgs,
-	ValidArgs: getValidArgs(),
+	Use:   "logs [service...]",
+	Short: "Logs output of all or only selected services.",
+	Long:  "Logs output of all or only selected services.",
+	Args:  cobra.ArbitraryArgs,
+	// Args:      cobra.OnlyValidArgs, // TODO investigate
+	// ValidArgs: getValidArgs(),
 	Run: func(cmd *cobra.Command, args []string) {
 		activeEnv := viper.GetString("active")
 
@@ -73,17 +72,17 @@ func addFlagsToArgs(args []string) []string {
 	return args
 }
 
-func getValidArgs() []string {
-	activeEnv := config.GetActiveEnv()
+// func getValidArgs() []string {
+// 	activeEnv := config.GetActiveEnv()
 
-	if activeEnv == "-" {
-		utils.NoEnvs()
-	}
+// 	if activeEnv == "-" {
+// 		return []string{}
+// 	}
 
-	envHomeDir := config.GetEnvHomeDir(activeEnv)
+// 	envHomeDir := config.GetEnvHomeDir(activeEnv)
 
-	services, err := dockercompose.GetServices(envHomeDir)
-	utils.Error(err)
+// 	services, err := dockercompose.GetServices(envHomeDir)
+// 	utils.Error(err)
 
-	return services.All
-}
+// 	return services.All
+// }
