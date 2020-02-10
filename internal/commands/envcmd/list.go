@@ -17,7 +17,7 @@ var listCmd = &cobra.Command{
 	Args:    cobra.NoArgs,
 	Example: "dockma envs list",
 	Run: func(cmd *cobra.Command, args []string) {
-		envs := config.GetEnvs()
+		envs := config.GetEnvNames()
 
 		activeEnv := viper.GetString("active")
 

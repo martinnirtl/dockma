@@ -13,6 +13,22 @@ import (
 
 // NOTE viper gets initialized in commands/root.go.
 
+type env struct {
+	name string
+}
+
+type Env interface {
+	GetName() string
+	GetHomeDir() string
+	SetUpdated() (time.Time, error)
+	LastUpdate() (time.Duration, error)
+	GetPullSetting() string
+	GetProfileNames() []string
+	HasProfile(name string) bool
+	GetProfile(name string) (Profile, error)
+	GetLatest() (Profile, error)
+}
+
 // Save saves the config.
 func Save() error {
 	err := viper.WriteConfig()
@@ -35,12 +51,14 @@ func GetHomeDir() string {
 }
 
 // GetActiveEnv returns the name of the active environment.
-func GetActiveEnv() string {
-	return viper.GetString("active")
+func GetActiveEnv() Env {
+	return &env{
+		name: viper.GetString("active"),
+	}
 }
 
-// GetDockmaFilepath returns full path of the given filename joined with dockma home dir.
-func GetDockmaFilepath(filename string) string {
+// GetFile returns full path of the given filename joined with dockma home dir.
+func GetFile(filename string) string {
 	path := viper.GetString("home")
 
 	return filepath.Join(path, filename)
@@ -50,11 +68,11 @@ func GetDockmaFilepath(filename string) string {
 func GetLogfile() string {
 	filename := viper.GetString("logfile")
 
-	return GetDockmaFilepath(filename)
+	return GetFile(filename)
 }
 
 // GetEnvs returns configured envs.
-func GetEnvs() (envs []string) {
+func GetEnvNames() (envs []string) {
 	envsMap := viper.GetStringMap("envs")
 
 	envs = make([]string, 0, len(envsMap))
@@ -68,19 +86,28 @@ func GetEnvs() (envs []string) {
 	return
 }
 
+// GetName returns the name of env.
+func (e *env) GetName() string {
+	return e.name
+}
+
 // GetEnvHomeDir returns the full path to dockma home dir.
-func GetEnvHomeDir(envName string) string {
-	return viper.GetString(fmt.Sprintf("envs.%s.home", envName))
+func (e *env) GetHomeDir() string {
+	return viper.GetString(fmt.Sprintf("envs.%s.home", e.name))
 }
 
 // SetEnvUpdated updates update timestamp of env. Should be used when running git pull.
-func SetEnvUpdated(envName string) {
-	viper.Set(fmt.Sprintf("envs.%s.home", envName), time.Now())
+func (e *env) SetUpdated() (time.Time, error) {
+	now := time.Now()
+
+	viper.Set(fmt.Sprintf("envs.%s.home", e.name), now)
+
+	return now, nil
 }
 
 // GetDurationPassedSinceLastUpdate returns duration passed since last git pull exec in given env.
-func GetDurationPassedSinceLastUpdate(envName string) (time.Duration, error) {
-	update := viper.GetTime(fmt.Sprintf("envs.%s.home", envName))
+func (e *env) LastUpdate() (time.Duration, error) {
+	update := viper.GetTime(fmt.Sprintf("envs.%s.home", e.name))
 
 	if update.IsZero() {
 		return time.Duration(0), fmt.Errorf("No update done yet")
@@ -92,13 +119,13 @@ func GetDurationPassedSinceLastUpdate(envName string) (time.Duration, error) {
 }
 
 // GetAutoPullSetting returns wether to run git pull or not.
-func GetAutoPullSetting(envName string) string {
-	return viper.GetString(fmt.Sprintf("envs.%s.pull", envName))
+func (e *env) GetPullSetting() string {
+	return viper.GetString(fmt.Sprintf("envs.%s.pull", e.name))
 }
 
 // GetProfilesNames returns profile names for given env.
-func GetProfilesNames(env string) (profiles []string) {
-	for profile := range viper.GetStringMap(fmt.Sprintf("envs.%s.profiles", env)) {
+func (e *env) GetProfileNames() (profiles []string) {
+	for profile := range viper.GetStringMap(fmt.Sprintf("envs.%s.profiles", e.name)) {
 		profiles = append(profiles, profile)
 	}
 
@@ -112,10 +139,10 @@ type Profile struct {
 }
 
 // GetLatest returns special profile with latest chosen services.
-func GetLatest(env string) (profile Profile, err error) {
+func (e *env) GetLatest() (profile Profile, err error) {
 	profile = Profile{}
 
-	services, err := dockercompose.GetServices(GetEnvHomeDir(env))
+	services, err := dockercompose.GetServices(e.GetHomeDir())
 
 	if err != nil {
 		return
@@ -123,16 +150,16 @@ func GetLatest(env string) (profile Profile, err error) {
 
 	profile.Services = services.All
 
-	profile.Selected = viper.GetStringSlice(fmt.Sprintf("envs.%s.latest", env))
+	profile.Selected = viper.GetStringSlice(fmt.Sprintf("envs.%s.latest", e.name))
 
 	return
 }
 
 // GetProfile returns services for given profile.
-func GetProfile(env string, profileName string) (profile Profile, err error) {
+func (e *env) GetProfile(profileName string) (profile Profile, err error) {
 	profile = Profile{}
 
-	services, err := dockercompose.GetServices(GetEnvHomeDir(env))
+	services, err := dockercompose.GetServices(e.GetHomeDir())
 
 	if err != nil {
 		return
@@ -140,14 +167,14 @@ func GetProfile(env string, profileName string) (profile Profile, err error) {
 
 	profile.Services = services.All
 
-	profile.Selected = viper.GetStringSlice(fmt.Sprintf("envs.%s.profiles.%s", env, profileName))
+	profile.Selected = viper.GetStringSlice(fmt.Sprintf("envs.%s.profiles.%s", e.name, profileName))
 
 	return
 }
 
 // HasProfileName tells if profile with name exists in env.
-func HasProfileName(env string, name string) bool {
-	profile := viper.GetStringSlice(fmt.Sprintf("envs.%s.profiles.%s", env, name))
+func (e *env) HasProfile(name string) bool {
+	profile := viper.GetStringSlice(fmt.Sprintf("envs.%s.profiles.%s", e.name, name))
 
 	if profile != nil {
 		return true

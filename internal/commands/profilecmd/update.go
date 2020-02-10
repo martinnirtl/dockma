@@ -22,12 +22,12 @@ var updateCmd = &cobra.Command{
 	Example: "dockma profile update",
 	Run: func(cmd *cobra.Command, args []string) {
 		activeEnv := config.GetActiveEnv()
-		envHomeDir := config.GetEnvHomeDir(activeEnv)
+		envHomeDir := activeEnv.GetHomeDir()
 
-		profileNames := config.GetProfilesNames(activeEnv)
+		profileNames := activeEnv.GetProfileNames()
 
 		if len(profileNames) == 0 {
-			fmt.Printf("%sNo profiles created in environment: %s%s\n", chalk.Cyan, activeEnv, chalk.ResetColor)
+			fmt.Printf("%sNo profiles created in environment: %s%s\n", chalk.Cyan, activeEnv.GetName(), chalk.ResetColor)
 
 			os.Exit(0)
 		}
@@ -37,7 +37,7 @@ var updateCmd = &cobra.Command{
 		services, err := dockercompose.GetServices(envHomeDir)
 		utils.Error(err)
 
-		profile, err := config.GetProfile(activeEnv, profileName)
+		profile, err := activeEnv.GetProfile(profileName)
 		utils.Error(err)
 
 		selected := survey.MultiSelect(fmt.Sprintf("Select services for profile %s%s%s", chalk.Cyan, profileName, chalk.ResetColor), services.All, profile.Selected)
@@ -46,13 +46,13 @@ var updateCmd = &cobra.Command{
 			fmt.Printf("%sNo services selected%s\n\n", chalk.Yellow, chalk.ResetColor)
 		}
 
-		viper.Set(fmt.Sprintf("envs.%s.profiles.%s", activeEnv, profileName), selected)
+		viper.Set(fmt.Sprintf("envs.%s.profiles.%s", activeEnv.GetName(), profileName), selected)
 
 		err = config.Save()
 
 		utils.Error(err)
 
-		utils.Success(fmt.Sprintf("Successfully updated profile: %s [%s]", profileName, activeEnv))
+		utils.Success(fmt.Sprintf("Successfully updated profile: %s [%s]", profileName, activeEnv.GetName()))
 	},
 }
 

@@ -51,7 +51,7 @@ func NoEnvs() {
 
 // GetEnvironment returns one environment
 func GetEnvironment(env string) string {
-	envs := config.GetEnvs()
+	envs := config.GetEnvNames()
 
 	for _, envName := range envs {
 		if env == envName {

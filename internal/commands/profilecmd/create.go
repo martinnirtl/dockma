@@ -21,11 +21,11 @@ var createCmd = &cobra.Command{
 	Example: "dockma profile create",
 	Run: func(cmd *cobra.Command, args []string) {
 		activeEnv := config.GetActiveEnv()
-		envHomeDir := config.GetEnvHomeDir(activeEnv)
+		envHomeDir := activeEnv.GetHomeDir()
 
 		profileName := survey.Input("Enter name for profile", "")
 
-		if config.HasProfileName(activeEnv, profileName) {
+		if activeEnv.HasProfile(profileName) {
 			utils.Error(errors.New("Profile name already taken. Use 'update' to reselect services"))
 		}
 
@@ -46,13 +46,13 @@ var createCmd = &cobra.Command{
 			fmt.Printf("%sNo services selected%s\n\n", chalk.Yellow, chalk.ResetColor)
 		}
 
-		viper.Set(fmt.Sprintf("envs.%s.profiles.%s", activeEnv, profileName), selected)
+		viper.Set(fmt.Sprintf("envs.%s.profiles.%s", activeEnv.GetName(), profileName), selected)
 
 		err = config.Save()
 
 		utils.Error(err)
 
-		utils.Success(fmt.Sprintf("Successfully saved profile: %s [%s]", profileName, activeEnv))
+		utils.Success(fmt.Sprintf("Successfully saved profile: %s [%s]", profileName, activeEnv.GetName()))
 	},
 }
 

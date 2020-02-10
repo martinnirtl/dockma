@@ -19,17 +19,17 @@ var listCmd = &cobra.Command{
 	Example: "dockma profile list",
 	Run: func(cmd *cobra.Command, args []string) {
 		activeEnv := config.GetActiveEnv()
-		profileNames := config.GetProfilesNames(activeEnv)
+		profileNames := activeEnv.GetProfileNames()
 
 		if len(profileNames) == 0 {
-			fmt.Printf("No profiles in %s. Create one with %s.\n", utils.PrintCyan(activeEnv), utils.PrintCyan("dockma profile create"))
+			fmt.Printf("No profiles in %s. Create one with %s.\n", utils.PrintCyan(activeEnv.GetName()), utils.PrintCyan("dockma profile create"))
 		}
 
 		for _, profileName := range profileNames {
 			fmt.Printf("%s%s%s\n", chalk.Cyan, profileName, chalk.ResetColor)
 
 			if servicesFlag {
-				profile, err := config.GetProfile(activeEnv, profileName)
+				profile, err := activeEnv.GetProfile(profileName)
 
 				utils.Error(err)
 

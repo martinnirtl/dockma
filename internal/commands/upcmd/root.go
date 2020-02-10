@@ -29,13 +29,13 @@ var UpCommand = &cobra.Command{
 
 		activeEnv := config.GetActiveEnv()
 
-		if activeEnv == "-" {
+		if activeEnv.GetName() == "-" {
 			utils.NoEnvs()
 		}
 
-		envHomeDir := viper.GetString(fmt.Sprintf("envs.%s.home", activeEnv))
+		envHomeDir := activeEnv.GetHomeDir()
 
-		pull := config.GetAutoPullSetting(activeEnv)
+		pull := activeEnv.GetPullSetting()
 
 		var doPull bool
 		switch pull {
@@ -44,7 +44,7 @@ var UpCommand = &cobra.Command{
 		case "optional":
 			doPull = survey.Confirm("Pull changes from git", false)
 		case "manual":
-			timePassed, err := config.GetDurationPassedSinceLastUpdate(activeEnv)
+			timePassed, err := activeEnv.LastUpdate()
 
 			if err != nil {
 				doPull = survey.Confirm(fmt.Sprintf("Environment never got updated (%s). Wanna pull now", utils.PrintCyan("dockma env pull")), true)
@@ -65,7 +65,7 @@ var UpCommand = &cobra.Command{
 			}
 		}
 
-		profileNames := config.GetProfilesNames(activeEnv)
+		profileNames := activeEnv.GetProfileNames()
 
 		var preselected []string
 
@@ -77,13 +77,13 @@ var UpCommand = &cobra.Command{
 			profileName = survey.Select(fmt.Sprintf("Select profile to run"), profileNames)
 
 			if profileName != "latest" {
-				profile, err := config.GetProfile(activeEnv, profileName)
+				profile, err := activeEnv.GetProfile(profileName)
 
 				utils.Error(err)
 
 				preselected = profile.Selected
 			} else {
-				profile, err := config.GetLatest(activeEnv)
+				profile, err := activeEnv.GetLatest()
 
 				utils.Error(err)
 
@@ -110,9 +110,9 @@ var UpCommand = &cobra.Command{
 			if saveProfile {
 				profileName = survey.Input("Enter profile name", "")
 
-				viper.Set(fmt.Sprintf("envs.%s.profiles.%s", activeEnv, profileName), selectedServices)
+				viper.Set(fmt.Sprintf("envs.%s.profiles.%s", activeEnv.GetName(), profileName), selectedServices)
 			} else {
-				viper.Set(fmt.Sprintf("envs.%s.latest", activeEnv), selectedServices)
+				viper.Set(fmt.Sprintf("envs.%s.latest", activeEnv.GetName()), selectedServices)
 			}
 
 			err = config.Save()

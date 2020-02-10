@@ -22,10 +22,10 @@ var renameCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		activeEnv := config.GetActiveEnv()
 
-		profileNames := config.GetProfilesNames(activeEnv)
+		profileNames := activeEnv.GetProfileNames()
 
 		if len(profileNames) == 0 {
-			fmt.Printf("%sNo profiles created in environment: %s%s\n", chalk.Cyan, activeEnv, chalk.ResetColor)
+			fmt.Printf("%sNo profiles created in environment: %s%s\n", chalk.Cyan, activeEnv.GetName(), chalk.ResetColor)
 
 			os.Exit(0)
 		}
@@ -39,11 +39,11 @@ var renameCmd = &cobra.Command{
 			utils.Error(errors.New("Invalid profile name"))
 		}
 
-		if config.HasProfileName(activeEnv, profileName) {
+		if activeEnv.HasProfile(profileName) {
 			utils.Error(errors.New("Profile name already taken. Use 'update' to reselect services"))
 		}
 
-		profileMap := viper.GetStringMap(fmt.Sprintf("envs.%s.profiles", activeEnv))
+		profileMap := viper.GetStringMap(fmt.Sprintf("envs.%s.profiles", activeEnv.GetName()))
 
 		profile := profileMap[renameProfile]
 
@@ -51,13 +51,13 @@ var renameCmd = &cobra.Command{
 
 		profileMap[profileName] = profile
 
-		viper.Set(fmt.Sprintf("envs.%s.profiles", activeEnv), profileMap)
+		viper.Set(fmt.Sprintf("envs.%s.profiles", activeEnv.GetName()), profileMap)
 
 		err := config.Save()
 
 		utils.Error(err)
 
-		utils.Success(fmt.Sprintf("Successfully renamed profile from %s to %s [%s]", renameProfile, profileName, activeEnv))
+		utils.Success(fmt.Sprintf("Successfully renamed profile from %s to %s [%s]", renameProfile, profileName, activeEnv.GetName()))
 	},
 }
 

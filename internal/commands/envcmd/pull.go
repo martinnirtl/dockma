@@ -23,17 +23,17 @@ var pullCommand = &cobra.Command{
 
 		activeEnv := config.GetActiveEnv()
 
-		if activeEnv == "-" {
+		if activeEnv.GetName() == "-" {
 			utils.NoEnvs()
 		}
 
-		envHomeDir := config.GetEnvHomeDir(activeEnv)
+		envHomeDir := activeEnv.GetHomeDir()
 
 		err := Pull(envHomeDir, true)
 
 		utils.Error(err)
 
-		utils.Success(fmt.Sprintf("Successfully pulled env: %s", activeEnv))
+		utils.Success(fmt.Sprintf("Successfully pulled env: %s", activeEnv.GetName()))
 	},
 }
 
@@ -65,7 +65,7 @@ func Pull(path string, log bool) error {
 		return errors.New("Could not execute 'git pull' in active environment home dir")
 	}
 
-	// config.SetEnvUpdated() // TODO make config to object
+	// activeEnv.SetUpdated() // TODO make config to object
 
 	return nil
 }

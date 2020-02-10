@@ -16,7 +16,7 @@ var catCmd = &cobra.Command{
 	Example: "dockma config cat",
 	Args:    cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
-		filepath := config.GetDockmaFilepath(("config.json"))
+		filepath := config.GetFile(("config.json"))
 
 		content, err := ioutil.ReadFile(filepath)
 

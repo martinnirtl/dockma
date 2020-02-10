@@ -21,7 +21,7 @@ var deleteCmd = &cobra.Command{
 	Example: "dockma profile delete",
 	Run: func(cmd *cobra.Command, args []string) {
 		activeEnv := config.GetActiveEnv()
-		profileNames := config.GetProfilesNames(activeEnv)
+		profileNames := activeEnv.GetProfileNames()
 
 		if len(profileNames) == 0 {
 			fmt.Printf("%sNo profiles created in environment: %s%s\n", chalk.Cyan, activeEnv, chalk.ResetColor)
@@ -31,17 +31,17 @@ var deleteCmd = &cobra.Command{
 
 		profileName := survey.Select("Select profile to be deleted", profileNames)
 
-		profileMap := viper.GetStringMap(fmt.Sprintf("envs.%s.profiles", activeEnv))
+		profileMap := viper.GetStringMap(fmt.Sprintf("envs.%s.profiles", activeEnv.GetName()))
 
 		profileMap[profileName] = nil
 
-		viper.Set(fmt.Sprintf("envs.%s.profiles", activeEnv), profileMap)
+		viper.Set(fmt.Sprintf("envs.%s.profiles", activeEnv.GetName()), profileMap)
 
 		err := config.Save()
 
 		utils.Error(err)
 
-		utils.Success(fmt.Sprintf("Successfully deleted profile: %s [%s]", profileName, activeEnv))
+		utils.Success(fmt.Sprintf("Successfully deleted profile: %s [%s]", profileName, activeEnv.GetName()))
 	},
 }
 
