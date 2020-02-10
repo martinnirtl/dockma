@@ -32,8 +32,8 @@ func TestSetEnvVars(t *testing.T) {
 				t.Errorf("%s set to %s instead of %s", envName, envVal, service)
 			}
 		} else {
-			if envVal != "docker.host.internal" {
-				t.Errorf("%s set to %s instead of %s", envName, envVal, "docker.host.internal")
+			if envVal != "host.docker.internal" {
+				t.Errorf("%s set to %s instead of %s", envName, envVal, "host.docker.internal")
 			}
 		}
 	}

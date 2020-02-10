@@ -22,7 +22,7 @@ func SetEnvVars(services []string, selected []string) error {
 		}
 
 		if val == "" {
-			val = "docker.host.internal"
+			val = "host.docker.internal"
 		}
 
 		err := os.Setenv(key, val)
