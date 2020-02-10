@@ -55,7 +55,7 @@ func GetVersion(filepath string) string {
 func GetServices(filepath string) (services Services, err error) {
 	services = servicesChache[filepath]
 
-	if services.IsEmpty() {
+	if !services.IsEmpty() {
 		return
 	}
 
