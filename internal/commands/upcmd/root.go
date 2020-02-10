@@ -74,7 +74,7 @@ var UpCommand = &cobra.Command{
 		if len(profileNames) > 0 {
 			profileNames = append(profileNames, "latest")
 
-			profileName := survey.Select(fmt.Sprintf("Select profile to run or %slatest%s", chalk.Cyan, chalk.ResetColor), profileNames)
+			profileName = survey.Select(fmt.Sprintf("Select profile to run"), profileNames)
 
 			if profileName != "latest" {
 				profile, err := config.GetProfile(activeEnv, profileName)
@@ -92,12 +92,11 @@ var UpCommand = &cobra.Command{
 		}
 
 		services, err := dockercompose.GetServices(envHomeDir)
+		utils.Error(err)
 
 		if len(preselected) == 0 {
 			preselected = services.All
 		}
-
-		utils.Error(err)
 
 		if len(services.Override) > 0 {
 			fmt.Printf("%sFound %d services in docker-compose.override.y(a)ml: %s%s\n\n", chalk.Yellow, len(services.Override), strings.Join(services.Override, ", "), chalk.ResetColor)
