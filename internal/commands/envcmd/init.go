@@ -49,8 +49,10 @@ var initCmd = &cobra.Command{
 		}
 
 		pull := "off"
-		if _, err := os.Stat(".git"); os.IsExist(err) {
+		if _, err := os.Stat(".git"); !os.IsNotExist(err) {
 			pull = survey.Select(fmt.Sprintf("Run %sgit pull%s before %sdockma up%s", chalk.Cyan, chalk.Reset, chalk.Cyan, chalk.ResetColor), []string{"auto", "optional", "manual", "off"})
+		} else {
+			pull = "no-git"
 		}
 
 		proceed := survey.Confirm(fmt.Sprintf("Add new environment %s%s%s (location: %s)", chalk.Cyan, env, chalk.ResetColor, workingDir), true)
