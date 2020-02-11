@@ -28,11 +28,9 @@ Level up your docker-compose game during development!
 
 ## TODOs
 
-- add license
 - build "assessment" tool for docker-compose files
 - write unit tests
 - on init: ask for spinner/game/output
-- on envs init: ask for automatic/optional git pull if git repository
 - unify printing errors
 
 - use Bats for system tests (https://github.com/sstephenson/bats)
