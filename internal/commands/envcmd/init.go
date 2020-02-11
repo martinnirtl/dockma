@@ -32,7 +32,7 @@ var initCmd = &cobra.Command{
 			}
 		}
 
-		env = survey.Input("Enter a name for the new environment (has to be unique)", "")
+		env = survey.InputName("Enter a name for the new environment (has to be unique)", "")
 
 		if env == "" {
 			utils.Error(errors.New("Got empty string for environment name"))

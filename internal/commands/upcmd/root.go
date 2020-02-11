@@ -35,6 +35,13 @@ var UpCommand = &cobra.Command{
 
 		envHomeDir := activeEnv.GetHomeDir()
 
+		services, err := dockercompose.GetServices(envHomeDir)
+		utils.Error(err)
+
+		if len(services.Override) > 0 {
+			fmt.Printf("%sFound %d services in docker-compose override file: %s%s\n", chalk.Yellow, len(services.Override), strings.Join(services.Override, ", "), chalk.ResetColor)
+		}
+
 		pull := activeEnv.GetPullSetting()
 
 		var doPull bool
@@ -62,6 +69,8 @@ var UpCommand = &cobra.Command{
 
 			if err != nil {
 				fmt.Printf("%sCould not execute git pull.%s\n", chalk.Yellow, chalk.ResetColor)
+			} else {
+				fmt.Printf("%sSuccessfully pulled environment.%s\n", chalk.Green, chalk.ResetColor)
 			}
 		}
 
@@ -91,15 +100,8 @@ var UpCommand = &cobra.Command{
 			}
 		}
 
-		services, err := dockercompose.GetServices(envHomeDir)
-		utils.Error(err)
-
 		if len(preselected) == 0 {
 			preselected = services.All
-		}
-
-		if len(services.Override) > 0 {
-			fmt.Printf("%sFound %d services in docker-compose.override.y(a)ml: %s%s\n\n", chalk.Yellow, len(services.Override), strings.Join(services.Override, ", "), chalk.ResetColor)
 		}
 
 		selectedServices := survey.MultiSelect("Select services to start", services.All, preselected)
@@ -108,7 +110,7 @@ var UpCommand = &cobra.Command{
 			saveProfile := survey.Confirm("Save as profile", false)
 
 			if saveProfile {
-				profileName = survey.Input("Enter profile name", "")
+				profileName = survey.InputName("Enter profile name", "")
 
 				viper.Set(fmt.Sprintf("envs.%s.profiles.%s", activeEnv.GetName(), profileName), selectedServices)
 			} else {

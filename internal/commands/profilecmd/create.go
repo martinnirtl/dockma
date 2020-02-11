@@ -23,7 +23,7 @@ var createCmd = &cobra.Command{
 		activeEnv := config.GetActiveEnv()
 		envHomeDir := activeEnv.GetHomeDir()
 
-		profileName := survey.Input("Enter name for profile", "")
+		profileName := survey.InputName("Enter name for profile", "")
 
 		if activeEnv.HasProfile(profileName) {
 			utils.Error(errors.New("Profile name already taken. Use 'update' to reselect services"))

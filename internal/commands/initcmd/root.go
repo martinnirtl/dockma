@@ -49,7 +49,7 @@ func initCommandHandler(cmd *cobra.Command, args []string) {
 		username = sysUser.Username
 	}
 
-	username = survey.Input("What is your name", strings.Title(username))
+	username = survey.InputName("What is your name", strings.Title(username))
 
 	viper.Set("username", username)
 	viper.Set("init", time.Now())

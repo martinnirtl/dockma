@@ -32,7 +32,7 @@ var renameCmd = &cobra.Command{
 
 		renameProfile := survey.Select("Select profile to update", profileNames)
 
-		profileName := survey.Input("Enter name for profile", renameProfile)
+		profileName := survey.InputName("Enter name for profile", renameProfile)
 
 		// FIXME use regex
 		if profileName == "" || profileName == "-" {
