@@ -3,19 +3,44 @@ package survey
 import (
 	"fmt"
 	"os"
+	"regexp"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/AlecAivazis/survey/v2/terminal"
 )
 
-func checkError(err error) {
-	if err == terminal.InterruptErr {
-		fmt.Println("Interrupted.")
+// NameRegex should be used to verify all names
+var NameRegex string = "^[a-zA-Z].[-.a-zA-Z0-9]*[a-zA-Z0-9]$"
 
-		os.Exit(0)
-	} else if err != nil {
-		panic(err)
+// ValidateName implements the validate func type
+func ValidateName(val interface{}) error {
+	switch name := val.(type) {
+	case string:
+		match, err := CheckName(name)
+
+		if err != nil {
+			return err
+		}
+
+		if !match {
+			return fmt.Errorf("'%s' has to comply with regex /%s/", name, NameRegex)
+		}
+
+		return nil
+	default:
+		return fmt.Errorf("Input is not a string")
 	}
+}
+
+// CheckName verifies the name against utils.NameRegex
+func CheckName(name string) (match bool, err error) {
+	match, err = regexp.MatchString(NameRegex, name)
+
+	if err != nil {
+		return false, fmt.Errorf("Matching string with regex failed")
+	}
+
+	return
 }
 
 // Confirm abstracts survey's confirm and adds styling
@@ -36,6 +61,19 @@ func Input(message string, suggestion string) (response string) {
 		Message: message,
 		Default: suggestion,
 	}, &response)
+
+	checkError(err)
+
+	return
+}
+
+// InputName abstracts survey's input and validates input
+func InputName(message string, suggestion string) (response string) {
+	err := survey.AskOne(&survey.Input{
+		Message: message,
+		Default: suggestion,
+		Help:    fmt.Sprintf("Name has to comply with regex: %s", NameRegex),
+	}, &response, survey.WithValidator(ValidateName))
 
 	checkError(err)
 
@@ -77,4 +115,14 @@ func MultiSelect(message string, options []string, preselected []string) (select
 	checkError(err)
 
 	return
+}
+
+func checkError(err error) {
+	if err == terminal.InterruptErr {
+		fmt.Println("Interrupted.")
+
+		os.Exit(0)
+	} else if err != nil {
+		panic(err)
+	}
 }
