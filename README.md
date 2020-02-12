@@ -32,5 +32,6 @@ Level up your docker-compose game during development!
 - write unit tests
 - on init: ask for spinner/game/output
 - unify printing errors
+- add state to env (up|down)
 
 - use Bats for system tests (https://github.com/sstephenson/bats)

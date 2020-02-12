@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  frontend:
+    image: test/frontend:1M4G31D
+  backend:
+    image: test/backend:1M4G31D
+  user-service:
+    image: test/user-service:1M4G31D
+  database:
+    image: test/database:1M4G31D
