@@ -46,7 +46,7 @@ func Pull(path string, log bool) error {
 	err := os.Chdir(path)
 
 	if err != nil {
-		return errors.New("could not change working dir")
+		return errors.New("Could not change working dir")
 	}
 
 	var timebridger externalcommand.Timebridger

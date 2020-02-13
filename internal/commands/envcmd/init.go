@@ -70,7 +70,7 @@ var initCmd = &cobra.Command{
 			utils.ErrorAndExit(fmt.Errorf("Initializing environment failed: %s", env))
 		}
 
-		fmt.Printf("%sSet active environment: %s%s\n", chalk.Cyan, env, chalk.ResetColor)
+		fmt.Printf("%sSet active environment: %s%s(old: %s)\n", chalk.Cyan, env, chalk.ResetColor, oldEnv)
 	},
 }
 
