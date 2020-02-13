@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/martinnirtl/dockma/internal/config"
+	"github.com/martinnirtl/dockma/internal/utils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/ttacon/chalk"
@@ -27,7 +28,7 @@ var InspectCommand = &cobra.Command{
 			if errors.Is(err, os.ErrNotExist) {
 				fmt.Printf("%sNothing to output yet. Sry, %s!%s\n", chalk.Cyan, viper.GetString("username"), chalk.ResetColor)
 			} else {
-				fmt.Printf("%sError: %s%s\n", chalk.Red, viper.GetString("username"), chalk.ResetColor)
+				utils.ErrorAndExit(fmt.Errorf("Could not read logfile: %s", viper.GetString("logfile")))
 			}
 		} else {
 			fmt.Printf("%sHere come the logs:%s\n", chalk.Cyan, chalk.ResetColor)

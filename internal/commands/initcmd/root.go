@@ -57,16 +57,12 @@ func initCommandHandler(cmd *cobra.Command, args []string) {
 	home := viper.GetString("home")
 
 	if err := os.MkdirAll(home, os.FileMode(0755)); err != nil {
-		fmt.Printf("%sCould not create config dir: %s%s\n", chalk.Red, err, chalk.ResetColor)
-
-		os.Exit(1)
+		utils.ErrorAndExit(fmt.Errorf("Could not create config dir: %s", err))
 	}
 
 	filepath := path.Join(home, "config.json")
 
 	if err := viper.WriteConfigAs(filepath); err != nil {
-		fmt.Printf("%sCould not save config.json at: %s%s\n", chalk.Red, home, chalk.ResetColor)
-
-		os.Exit(1)
+		utils.ErrorAndExit(fmt.Errorf("Could not save config.json at: %s", home))
 	}
 }

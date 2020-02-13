@@ -17,6 +17,7 @@ import (
 	"github.com/martinnirtl/dockma/internal/commands/pscmd"
 	"github.com/martinnirtl/dockma/internal/commands/upcmd"
 	"github.com/martinnirtl/dockma/internal/commands/versioncmd"
+	"github.com/martinnirtl/dockma/internal/utils"
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -56,7 +57,7 @@ func init() {
 	if homeDir := viper.GetString("home"); homeDir == "" {
 		userHome, err := homedir.Dir()
 		if err != nil {
-			fmt.Printf("%sCould not detect home dir: %s%s\n", chalk.Red, err, chalk.ResetColor)
+			utils.Error(fmt.Errorf("Could not detect home dir: %s", err))
 		}
 
 		viper.SetDefault("home", path.Join(userHome, ".dockma"))

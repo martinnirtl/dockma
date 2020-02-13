@@ -50,7 +50,7 @@ var removeCmd = &cobra.Command{
 		viper.Set("envs", envs)
 
 		if err := viper.WriteConfig(); err != nil {
-			fmt.Printf("%sError removing environment: %s%s\n", chalk.Red, env, chalk.ResetColor)
+			utils.ErrorAndExit(fmt.Errorf("Removing environment failed: %s", env))
 		}
 	},
 }

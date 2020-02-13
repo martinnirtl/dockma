@@ -25,10 +25,10 @@ var initCmd = &cobra.Command{
 		if len(args) == 1 {
 			path = args[0]
 
-			if err := os.Chdir(path); err != nil {
-				fmt.Printf("%sError: Could not find directory: %s%s\n", chalk.Red, path, chalk.ResetColor)
+			err := os.Chdir(path)
 
-				os.Exit(0)
+			if err != nil {
+				utils.ErrorAndExit(fmt.Errorf("Could not find directory: %s", path))
 			}
 		}
 
@@ -43,9 +43,7 @@ var initCmd = &cobra.Command{
 		workingDir, err := os.Getwd()
 
 		if err != nil {
-			fmt.Printf("%sError. Could not read current working directory%s\n", chalk.Red, chalk.ResetColor)
-
-			os.Exit(0)
+			utils.ErrorAndExit(errors.New("Could not read current working directory"))
 		}
 
 		pull := "off"
@@ -69,9 +67,7 @@ var initCmd = &cobra.Command{
 		viper.Set("active", env)
 
 		if err := viper.WriteConfig(); err != nil {
-			fmt.Printf("%sError on initializing environment: %s (old: %s)%s\n", chalk.Red, env, oldEnv, chalk.ResetColor)
-
-			os.Exit(1)
+			utils.ErrorAndExit(fmt.Errorf("Initializing environment failed: %s", env))
 		}
 
 		fmt.Printf("%sSet active environment: %s%s\n", chalk.Cyan, env, chalk.ResetColor)

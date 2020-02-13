@@ -36,7 +36,7 @@ var setCmd = &cobra.Command{
 		viper.Set("active", env)
 
 		if err := viper.WriteConfig(); err != nil {
-			fmt.Printf("%sError setting active environment: %s%s\n", chalk.Red, env, chalk.ResetColor)
+			utils.ErrorAndExit(fmt.Errorf("Setting active environment failed: %s", env))
 		}
 	},
 }

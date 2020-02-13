@@ -141,7 +141,7 @@ var UpCommand = &cobra.Command{
 
 		utils.Error(err)
 		if err != nil {
-			fmt.Println(string(output))
+			fmt.Print(string(output))
 
 			os.Exit(0)
 		}

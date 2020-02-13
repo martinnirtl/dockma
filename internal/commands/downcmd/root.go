@@ -43,7 +43,7 @@ var DownCommand = &cobra.Command{
 
 		utils.Error(err)
 		if err != nil {
-			fmt.Println(output)
+			fmt.Print(string(output))
 
 			os.Exit(0)
 		}
