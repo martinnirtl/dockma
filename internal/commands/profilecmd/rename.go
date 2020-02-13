@@ -36,11 +36,11 @@ var renameCmd = &cobra.Command{
 
 		// FIXME use regex
 		if profileName == "" || profileName == "-" {
-			utils.Error(errors.New("Invalid profile name"))
+			utils.ErrorAndExit(errors.New("Invalid profile name"))
 		}
 
 		if activeEnv.HasProfile(profileName) {
-			utils.Error(errors.New("Profile name already taken. Use 'update' to reselect services"))
+			utils.ErrorAndExit(errors.New("Profile name already taken. Use 'update' to reselect services"))
 		}
 
 		profileMap := viper.GetStringMap(fmt.Sprintf("envs.%s.profiles", activeEnv.GetName()))
@@ -55,7 +55,7 @@ var renameCmd = &cobra.Command{
 
 		err := config.Save()
 
-		utils.Error(err)
+		utils.ErrorAndExit(err)
 
 		utils.Success(fmt.Sprintf("Successfully renamed profile from %s to %s [%s]", renameProfile, profileName, activeEnv.GetName()))
 	},

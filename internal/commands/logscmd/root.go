@@ -34,7 +34,7 @@ var LogsCommand = &cobra.Command{
 
 		err := os.Chdir(envHomeDir)
 
-		utils.Error(err)
+		utils.ErrorAndExit(err)
 
 		args = addFlagsToArgs(args)
 
@@ -42,7 +42,7 @@ var LogsCommand = &cobra.Command{
 
 		_, err = externalcommand.Execute(command, nil, "")
 
-		utils.Error(err)
+		utils.ErrorAndExit(err)
 	},
 }
 
@@ -82,7 +82,7 @@ func addFlagsToArgs(args []string) []string {
 // 	envHomeDir := config.GetEnvHomeDir(activeEnv)
 
 // 	services, err := dockercompose.GetServices(envHomeDir)
-// 	utils.Error(err)
+// 	utils.ErrorAndExit(err)
 
 // 	return services.All
 // }

@@ -39,7 +39,7 @@ var deleteCmd = &cobra.Command{
 
 		err := config.Save()
 
-		utils.Error(err)
+		utils.ErrorAndExit(err)
 
 		utils.Success(fmt.Sprintf("Successfully deleted profile: %s [%s]", profileName, activeEnv.GetName()))
 	},

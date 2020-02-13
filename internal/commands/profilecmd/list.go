@@ -31,7 +31,7 @@ var listCmd = &cobra.Command{
 			if servicesFlag {
 				profile, err := activeEnv.GetProfile(profileName)
 
-				utils.Error(err)
+				utils.ErrorAndExit(err)
 
 				for _, service := range profile.Services {
 					if utils.Includes(profile.Selected, service) {

@@ -26,15 +26,20 @@ func Abort() {
 	os.Exit(0)
 }
 
-// Success prints green colored text to std out and exits process with 0
+// Success prints green colored text to std out
 func Success(text string) {
 	fmt.Printf("%s%s%s\n", chalk.Green, text, chalk.ResetColor)
-
-	os.Exit(0)
 }
 
-// Error checks if err is not nil, prints 'Error: <message>' to std out and exits process with 0
+// Error checks if err is not nil, prints 'Error: <message>' to std out
 func Error(err error) {
+	if err != nil {
+		fmt.Printf("%sError: %s%s\n", chalk.Red, err, chalk.ResetColor)
+	}
+}
+
+// ErrorAndExit checks if err is not nil, prints 'Error: <message>' to std out and exits process with 0
+func ErrorAndExit(err error) {
 	if err != nil {
 		fmt.Printf("%sError: %s%s\n", chalk.Red, err, chalk.ResetColor)
 

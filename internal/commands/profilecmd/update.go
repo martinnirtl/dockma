@@ -35,10 +35,10 @@ var updateCmd = &cobra.Command{
 		profileName := survey.Select("Select profile to update", profileNames)
 
 		services, err := dockercompose.GetServices(envHomeDir)
-		utils.Error(err)
+		utils.ErrorAndExit(err)
 
 		profile, err := activeEnv.GetProfile(profileName)
-		utils.Error(err)
+		utils.ErrorAndExit(err)
 
 		selected := survey.MultiSelect(fmt.Sprintf("Select services for profile %s%s%s", chalk.Cyan, profileName, chalk.ResetColor), services.All, profile.Selected)
 
@@ -50,7 +50,7 @@ var updateCmd = &cobra.Command{
 
 		err = config.Save()
 
-		utils.Error(err)
+		utils.ErrorAndExit(err)
 
 		utils.Success(fmt.Sprintf("Successfully updated profile: %s [%s]", profileName, activeEnv.GetName()))
 	},

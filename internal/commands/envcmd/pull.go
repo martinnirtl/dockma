@@ -31,7 +31,7 @@ var pullCommand = &cobra.Command{
 
 		err := Pull(envHomeDir, true)
 
-		utils.Error(err)
+		utils.ErrorAndExit(err)
 
 		utils.Success(fmt.Sprintf("Successfully pulled env: %s", activeEnv.GetName()))
 	},
@@ -51,7 +51,7 @@ func Pull(path string, log bool) error {
 
 	var timebridger externalcommand.Timebridger
 	if hideCmdOutput := viper.GetBool("hidesubcommandoutput"); hideCmdOutput {
-		timebridger = spinnertimebridger.New(fmt.Sprintf("Running %sgit pull%s", chalk.Cyan, chalk.ResetColor), "", 14, "cyan")
+		timebridger = spinnertimebridger.New(fmt.Sprintf("Running %sgit pull%s", chalk.Cyan, chalk.ResetColor), 14, "cyan")
 	}
 
 	var logfile string

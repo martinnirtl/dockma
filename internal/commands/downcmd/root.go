@@ -10,7 +10,6 @@ import (
 	"github.com/martinnirtl/dockma/pkg/externalcommand/spinnertimebridger"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/ttacon/chalk"
 )
 
 // DownCommand implements the top level down command
@@ -33,15 +32,22 @@ var DownCommand = &cobra.Command{
 
 		err := os.Chdir(envHomeDir)
 
-		utils.Error(err)
+		utils.ErrorAndExit(err)
 
 		var timebridger externalcommand.Timebridger
 		if hideCmdOutput := viper.GetBool("hidesubcommandoutput"); hideCmdOutput {
 			timebridger = spinnertimebridger.New("Running 'docker-compose down'", 14, "cyan")
 		}
 
-		_, err = externalcommand.Execute("docker-compose down", timebridger, filepath)
+		output, err := externalcommand.Execute("docker-compose down", timebridger, filepath)
 
 		utils.Error(err)
+		if err != nil {
+			fmt.Println(output)
+
+			os.Exit(0)
+		}
+
+		utils.Success("Successfully executed 'docker-compose down'")
 	},
 }

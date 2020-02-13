@@ -26,18 +26,18 @@ var createCmd = &cobra.Command{
 		profileName := survey.InputName("Enter name for profile", "")
 
 		if activeEnv.HasProfile(profileName) {
-			utils.Error(errors.New("Profile name already taken. Use 'update' to reselect services"))
+			utils.ErrorAndExit(errors.New("Profile name already taken. Use 'update' to reselect services"))
 		}
 
 		// FIXME use regex
 		if profileName == "" || profileName == "-" {
-			utils.Error(errors.New("Invalid profile name"))
+			utils.ErrorAndExit(errors.New("Invalid profile name"))
 		}
 
 		services, err := dockercompose.GetServices(envHomeDir)
 
 		if err != nil {
-			utils.Error(errors.New("Could not read services"))
+			utils.ErrorAndExit(errors.New("Could not read services"))
 		}
 
 		selected := survey.MultiSelect(fmt.Sprintf("Select services for profile %s%s%s", chalk.Cyan, profileName, chalk.ResetColor), services.All, nil)
@@ -50,7 +50,7 @@ var createCmd = &cobra.Command{
 
 		err = config.Save()
 
-		utils.Error(err)
+		utils.ErrorAndExit(err)
 
 		utils.Success(fmt.Sprintf("Successfully saved profile: %s [%s]", profileName, activeEnv.GetName()))
 	},

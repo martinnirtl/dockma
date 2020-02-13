@@ -36,7 +36,7 @@ var UpCommand = &cobra.Command{
 		envHomeDir := activeEnv.GetHomeDir()
 
 		services, err := dockercompose.GetServices(envHomeDir)
-		utils.Error(err)
+		utils.ErrorAndExit(err)
 
 		if len(services.Override) > 0 {
 			fmt.Printf("%sFound %d services in docker-compose override file: %s%s\n", chalk.Yellow, len(services.Override), strings.Join(services.Override, ", "), chalk.ResetColor)
@@ -70,7 +70,7 @@ var UpCommand = &cobra.Command{
 			if err != nil {
 				fmt.Printf("%sCould not execute git pull.%s\n", chalk.Yellow, chalk.ResetColor)
 			} else {
-				fmt.Printf("%sSuccessfully pulled environment.%s\n", chalk.Green, chalk.ResetColor)
+				utils.Success("Successfully pulled environment.")
 			}
 		}
 
@@ -88,13 +88,13 @@ var UpCommand = &cobra.Command{
 			if profileName != "latest" {
 				profile, err := activeEnv.GetProfile(profileName)
 
-				utils.Error(err)
+				utils.ErrorAndExit(err)
 
 				preselected = profile.Selected
 			} else {
 				profile, err := activeEnv.GetLatest()
 
-				utils.Error(err)
+				utils.ErrorAndExit(err)
 
 				preselected = profile.Selected
 			}
@@ -119,16 +119,16 @@ var UpCommand = &cobra.Command{
 
 			err = config.Save()
 
-			utils.Error(err)
+			utils.ErrorAndExit(err)
 		}
 
 		err = envvars.SetEnvVars(services.All, selectedServices)
 
-		utils.Error(err)
+		utils.ErrorAndExit(err)
 
 		err = os.Chdir(envHomeDir)
 
-		utils.Error(err)
+		utils.ErrorAndExit(err)
 
 		var timebridger externalcommand.Timebridger
 		if hideCmdOutput := viper.GetBool("hidesubcommandoutput"); hideCmdOutput {
@@ -137,8 +137,15 @@ var UpCommand = &cobra.Command{
 
 		command := externalcommand.JoinCommand("docker-compose up -d", selectedServices...)
 
-		_, err = externalcommand.Execute(command, timebridger, filepath)
+		output, err := externalcommand.Execute(command, timebridger, filepath)
 
 		utils.Error(err)
+		if err != nil {
+			fmt.Println(string(output))
+
+			os.Exit(0)
+		}
+
+		utils.Success("Successfully executed 'docker-compose up'")
 	},
 }
