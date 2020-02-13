@@ -37,7 +37,7 @@ var DownCommand = &cobra.Command{
 
 		var timebridger externalcommand.Timebridger
 		if hideCmdOutput := viper.GetBool("hidesubcommandoutput"); hideCmdOutput {
-			timebridger = spinnertimebridger.New("Running 'docker-compose down'", fmt.Sprintf("%sSuccessfully executed 'docker-compose down'%s", chalk.Green, chalk.ResetColor), 14, "cyan")
+			timebridger = spinnertimebridger.New("Running 'docker-compose down'", 14, "cyan")
 		}
 
 		_, err = externalcommand.Execute("docker-compose down", timebridger, filepath)

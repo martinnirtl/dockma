@@ -132,7 +132,7 @@ var UpCommand = &cobra.Command{
 
 		var timebridger externalcommand.Timebridger
 		if hideCmdOutput := viper.GetBool("hidesubcommandoutput"); hideCmdOutput {
-			timebridger = spinnertimebridger.New("Running 'docker-compose up'", fmt.Sprintf("%sSuccessfully executed 'docker-compose up'%s", chalk.Green, chalk.ResetColor), 14, "cyan")
+			timebridger = spinnertimebridger.New("Running 'docker-compose up'", 14, "cyan")
 		}
 
 		command := externalcommand.JoinCommand("docker-compose up -d", selectedServices...)
