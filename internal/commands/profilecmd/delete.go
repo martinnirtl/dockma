@@ -37,8 +37,7 @@ var deleteCmd = &cobra.Command{
 
 		viper.Set(fmt.Sprintf("envs.%s.profiles", activeEnv.GetName()), profileMap)
 
-		err := config.Save()
-
+		err := config.SaveNow()
 		utils.ErrorAndExit(err)
 
 		utils.Success(fmt.Sprintf("Successfully deleted profile: %s [%s]", profileName, activeEnv.GetName()))

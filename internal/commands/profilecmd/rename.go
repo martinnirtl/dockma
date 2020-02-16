@@ -53,8 +53,7 @@ var renameCmd = &cobra.Command{
 
 		viper.Set(fmt.Sprintf("envs.%s.profiles", activeEnv.GetName()), profileMap)
 
-		err := config.Save()
-
+		err := config.SaveNow()
 		utils.ErrorAndExit(err)
 
 		utils.Success(fmt.Sprintf("Successfully renamed profile from %s to %s [%s]", renameProfile, profileName, activeEnv.GetName()))

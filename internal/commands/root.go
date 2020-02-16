@@ -17,6 +17,7 @@ import (
 	"github.com/martinnirtl/dockma/internal/commands/pscmd"
 	"github.com/martinnirtl/dockma/internal/commands/upcmd"
 	"github.com/martinnirtl/dockma/internal/commands/versioncmd"
+	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/utils"
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
@@ -26,10 +27,11 @@ import (
 
 // RootCommand is the root command of dockma
 var RootCommand = &cobra.Command{
-	Use:              "dockma",
-	Short:            "Dockma is bringing your docker-compose game to the next level.",
-	Long:             `A fast and flexible CLI tool to boost your productivity during development with docker containers built with Go. Full documentation is available at https://dockma.dev`,
-	PersistentPreRun: rootPreRunHook,
+	Use:               "dockma",
+	Short:             "Dockma is bringing your docker-compose game to the next level.",
+	Long:              `A fast and flexible CLI tool to boost your productivity during development with docker containers built with Go. Full documentation is available at https://dockma.dev`,
+	PersistentPreRun:  rootPreRunHook,
+	PersistentPostRun: rootPostRunHook,
 }
 
 func init() {
@@ -96,6 +98,13 @@ func rootPreRunHook(cmd *cobra.Command, args []string) {
 		}
 
 		os.Exit(0)
+	}
+}
+
+func rootPostRunHook(cmd *cobra.Command, args []string) {
+	if config.SaveConfig {
+		err := config.SaveNow()
+		utils.Error(err)
 	}
 }
 

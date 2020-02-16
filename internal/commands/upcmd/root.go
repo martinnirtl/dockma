@@ -117,9 +117,7 @@ var UpCommand = &cobra.Command{
 				viper.Set(fmt.Sprintf("envs.%s.latest", activeEnv.GetName()), selectedServices)
 			}
 
-			err = config.Save()
-
-			utils.ErrorAndExit(err)
+			config.Save()
 		}
 
 		err = envvars.SetEnvVars(services.All, selectedServices)

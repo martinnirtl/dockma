@@ -6,7 +6,6 @@ import (
 
 	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/survey"
-	"github.com/martinnirtl/dockma/internal/utils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -31,6 +30,10 @@ var setCmd = &cobra.Command{
 
 			setConfigVar(varname[0])
 		}
+
+		if len(selected) > 0 {
+			config.Save()
+		}
 	},
 }
 
@@ -38,7 +41,7 @@ func init() {
 	ConfigCommand.AddCommand(setCmd)
 }
 
-func setConfigVar(varname string) error {
+func setConfigVar(varname string) {
 	switch varname {
 	case "hidesubcommandoutput":
 		hide := survey.Confirm("Hide output of external commands [true: show output only on error, false: always pipe output]", viper.GetBool("hidesubcommandoutput"))
@@ -55,10 +58,4 @@ func setConfigVar(varname string) error {
 
 		viper.Set("username", username)
 	}
-
-	err := config.Save()
-
-	utils.ErrorAndExit(err)
-
-	return nil
 }

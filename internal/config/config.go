@@ -13,10 +13,14 @@ import (
 
 // NOTE viper gets initialized in commands/root.go.
 
+// SaveConfig indicates whether config should be saved or not
+var SaveConfig bool
+
 type env struct {
 	name string
 }
 
+// Env provides an interface for easier access to more complex environment config
 type Env interface {
 	GetName() string
 	GetHomeDir() string
@@ -29,12 +33,19 @@ type Env interface {
 	GetLatest() (Profile, error)
 }
 
-// Save saves the config.
-func Save() error {
+// Save sets the config to be saved at end of command execution. Use SaveNow func to save config immediately.
+func Save() {
+	SaveConfig = true
+}
+
+// SaveNow saves the config immediately.
+func SaveNow() error {
+	SaveConfig = false
+
 	err := viper.WriteConfig()
 
 	if err != nil {
-		return errors.New("Could not save changes to dockma config")
+		return errors.New("Could not save changes")
 	}
 
 	return nil
@@ -71,7 +82,7 @@ func GetLogfile() string {
 	return GetFile(filename)
 }
 
-// GetEnvs returns configured envs.
+// GetEnvNames returns configured envs.
 func GetEnvNames() (envs []string) {
 	envsMap := viper.GetStringMap("envs")
 

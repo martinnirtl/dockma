@@ -48,8 +48,7 @@ var createCmd = &cobra.Command{
 
 		viper.Set(fmt.Sprintf("envs.%s.profiles.%s", activeEnv.GetName(), profileName), selected)
 
-		err = config.Save()
-
+		err = config.SaveNow()
 		utils.ErrorAndExit(err)
 
 		utils.Success(fmt.Sprintf("Successfully saved profile: %s [%s]", profileName, activeEnv.GetName()))
