@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/martinnirtl/dockma/internal/config"
-	"github.com/martinnirtl/dockma/internal/survey"
 	"github.com/ttacon/chalk"
 )
 
@@ -52,23 +50,6 @@ func NoEnvs() {
 	fmt.Printf("No environments configured. Add new environment with %sdockma envs init%s.\n", chalk.Cyan, chalk.ResetColor)
 
 	os.Exit(0)
-}
-
-// GetEnvironment returns one environment
-func GetEnvironment(env string) string {
-	envs := config.GetEnvNames()
-
-	for _, envName := range envs {
-		if env == envName {
-			return env
-		}
-	}
-
-	fmt.Printf("%sNo such environment: %s%s\n", chalk.Yellow, env, chalk.ResetColor)
-
-	env = survey.Select("Choose an environment", envs)
-
-	return env
 }
 
 // Fallback returns fallback if val is nil

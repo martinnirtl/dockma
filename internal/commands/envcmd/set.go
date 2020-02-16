@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/martinnirtl/dockma/internal/utils"
+	"github.com/martinnirtl/dockma/internal/utils/helpers"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/ttacon/chalk"
@@ -18,9 +19,9 @@ var setCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		env := ""
 		if len(args) == 0 {
-			env = utils.GetEnvironment("")
+			env = helpers.GetEnvironment("")
 		} else {
-			env = utils.GetEnvironment(args[0])
+			env = helpers.GetEnvironment(args[0])
 		}
 
 		activeEnv := viper.GetString("active")
