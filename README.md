@@ -28,10 +28,15 @@ Level up your docker-compose game during development!
 
 ## TODOs
 
+- check user interactions (logs and surveys)
+  - rethink the way of information output
+  - unify success and error messages
+  - what about cyan primary color
+- add dir and state to env list (up|down) on --all or -a
+- bind version, commit, date to vars provided on 'go build'
+
+- add makefile
+- add bash completion (check if async completion is also possible)
+- use Bats for system tests (https://github.com/sstephenson/bats)
 - build "assessment" tool for docker-compose files
 - write unit tests
-- on init: ask for spinner/game/output
-- unify printing errors
-- add state to env (up|down)
-
-- use Bats for system tests (https://github.com/sstephenson/bats)
