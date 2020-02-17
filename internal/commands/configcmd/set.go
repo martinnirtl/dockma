@@ -20,6 +20,7 @@ var setCmd = &cobra.Command{
 		options := []string{
 			fmt.Sprintf("hidesubcommandoutput: %t", viper.GetBool("hidesubcommandoutput")),
 			fmt.Sprintf("logfile: %s", viper.GetString("logfile")),
+			fmt.Sprintf("color: %s", viper.GetString("color")),
 			fmt.Sprintf("username: %s", viper.GetString("username")),
 		}
 
@@ -52,6 +53,11 @@ func setConfigVar(varname string) {
 		logfile := survey.InputName("Enter name of logfile [stored in dockma home dir]", viper.GetString("logfile"))
 
 		viper.Set("logfile", logfile)
+
+	case "color":
+		color := survey.Select("Select a new primary color", config.PrimaryColors)
+
+		viper.Set("color", color)
 
 	case "username":
 		username := survey.InputName("Enter new username", viper.GetString("username"))

@@ -13,6 +13,9 @@ import (
 
 // NOTE viper gets initialized in commands/root.go.
 
+// PrimaryColors are the available options for the color config field
+var PrimaryColors []string = []string{"blue", "cyan", "magenta"}
+
 // SaveConfig indicates whether config should be saved or not
 var SaveConfig bool
 
@@ -80,6 +83,11 @@ func GetLogfile() string {
 	filename := viper.GetString("logfile")
 
 	return GetFile(filename)
+}
+
+// GetColor returns the configured primary color.
+func GetColor() string {
+	return viper.GetString("color")
 }
 
 // GetEnvNames returns configured envs.
