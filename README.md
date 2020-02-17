@@ -28,6 +28,9 @@ Level up your docker-compose game during development!
 
 ## TODOs
 
+- finish makefile
+- implement arguement based command execution
+  - add bash completion (check if async completion is also possible)
 - check user interactions (logs and surveys)
   - rethink the way of information output
   - unify success and error messages
@@ -35,8 +38,6 @@ Level up your docker-compose game during development!
 - add dir and state to env list (up|down) on --all or -a
 - bind version, commit, date to vars provided on 'go build'
 
-- add makefile
-- add bash completion (check if async completion is also possible)
 - use Bats for system tests (https://github.com/sstephenson/bats)
 - build "assessment" tool for docker-compose files
 - write unit tests
