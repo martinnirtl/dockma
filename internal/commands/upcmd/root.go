@@ -30,7 +30,7 @@ var UpCommand = &cobra.Command{
 		activeEnv := config.GetActiveEnv()
 
 		if activeEnv.GetName() == "-" {
-			utils.NoEnvs()
+			utils.PrintNoEnvs()
 		}
 
 		envHomeDir := activeEnv.GetHomeDir()
