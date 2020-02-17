@@ -69,7 +69,6 @@ func init() {
 	viper.SetDefault("username", "User")
 	viper.SetDefault("hidesubcommandoutput", true)
 	viper.SetDefault("logfile", "log.txt")
-	viper.SetDefault("color", "cyan")
 	viper.SetDefault("active", "-")
 	viper.SetDefault("envs", map[string]interface{}{})
 }

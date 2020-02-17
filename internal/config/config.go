@@ -14,13 +14,10 @@ import (
 
 // NOTE viper gets initialized in commands/root.go.
 
-// PrimaryColors are the available options for the color config field
-var PrimaryColors []string = []string{"blue", "cyan", "magenta"}
-
-// SaveConfig indicates whether config should be saved or not
+// SaveConfig indicates whether config should be saved or not.
 var SaveConfig bool
 
-// message buffers for delayed/one-time saving
+// message buffers for delayed/one-time saving.
 var onWriteConfigError []error = make([]error, 0)
 var onWriteConfigSuccess []string = make([]string, 0)
 
@@ -28,7 +25,7 @@ type env struct {
 	name string
 }
 
-// Env provides an interface for easier access to more complex environment config
+// Env provides an interface for easier access to more complex environment config.
 type Env interface {
 	GetName() string
 	GetHomeDir() string
@@ -42,7 +39,7 @@ type Env interface {
 	GetLatest() (Profile, error)
 }
 
-// Save sets the config to be saved at end of command execution. Respective message is printed after writing config
+// Save sets the config to be saved at end of command execution. Respective message is printed after writing config.
 func Save(success string, err error) {
 	if success != "" {
 		onWriteConfigSuccess = append(onWriteConfigSuccess, success)
@@ -96,11 +93,6 @@ func GetLogfile() string {
 	filename := viper.GetString("logfile")
 
 	return GetFile(filename)
-}
-
-// GetColor returns the configured primary color.
-func GetColor() string {
-	return viper.GetString("color")
 }
 
 // GetEnvNames returns configured envs.
