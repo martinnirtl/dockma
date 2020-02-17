@@ -7,6 +7,7 @@ import (
 	"sort"
 	"time"
 
+	"github.com/martinnirtl/dockma/internal/utils"
 	"github.com/martinnirtl/dockma/pkg/dockercompose"
 	"github.com/spf13/viper"
 )
@@ -19,6 +20,10 @@ var PrimaryColors []string = []string{"blue", "cyan", "magenta"}
 // SaveConfig indicates whether config should be saved or not
 var SaveConfig bool
 
+// message buffers for delayed/one-time saving
+var onWriteConfigError []error = make([]error, 0)
+var onWriteConfigSuccess []string = make([]string, 0)
+
 type env struct {
 	name string
 }
@@ -27,6 +32,7 @@ type env struct {
 type Env interface {
 	GetName() string
 	GetHomeDir() string
+	IsRunning() bool
 	SetUpdated() (time.Time, error)
 	LastUpdate() (time.Duration, error)
 	GetPullSetting() string
@@ -36,22 +42,36 @@ type Env interface {
 	GetLatest() (Profile, error)
 }
 
-// Save sets the config to be saved at end of command execution. Use SaveNow func to save config immediately.
-func Save() {
+// Save sets the config to be saved at end of command execution. Respective message is printed after writing config
+func Save(success string, err error) {
+	if success != "" {
+		onWriteConfigSuccess = append(onWriteConfigSuccess, success)
+	}
+
+	if err != nil {
+		onWriteConfigError = append(onWriteConfigError, err)
+	}
+
 	SaveConfig = true
 }
 
-// SaveNow saves the config immediately.
-func SaveNow() error {
+// SaveNow writes the config to the file and returns previously cached success and error messages.
+func SaveNow() (successMessages []string, errorMessages []error, err error) {
 	SaveConfig = false
 
-	err := viper.WriteConfig()
+	successMessages = onWriteConfigSuccess
+	errorMessages = onWriteConfigError
 
-	if err != nil {
-		return errors.New("Could not save changes")
+	onWriteConfigError = make([]error, 0)
+	onWriteConfigSuccess = make([]string, 0)
+
+	writeError := viper.WriteConfig()
+
+	if writeError != nil {
+		err = errors.New("Could not save changes")
 	}
 
-	return nil
+	return
 }
 
 // GetUsername returns the user's name.
@@ -62,13 +82,6 @@ func GetUsername() string {
 // GetHomeDir returns the full path to dockma home dir.
 func GetHomeDir() string {
 	return viper.GetString("home")
-}
-
-// GetActiveEnv returns the name of the active environment.
-func GetActiveEnv() Env {
-	return &env{
-		name: viper.GetString("active"),
-	}
 }
 
 // GetFile returns full path of the given filename joined with dockma home dir.
@@ -105,6 +118,37 @@ func GetEnvNames() (envs []string) {
 	return
 }
 
+// GetActiveEnv returns the active environment.
+func GetActiveEnv() Env {
+	return &env{
+		name: viper.GetString("active"),
+	}
+}
+
+// SetActiveEnv returns the new active environment and the previous one.
+func SetActiveEnv(new string) (newEnv Env, oldEnv Env) {
+	old := viper.GetString("active")
+
+	viper.Set("active", new)
+
+	return &env{
+			name: new,
+		}, &env{
+			name: old,
+		}
+}
+
+// GetEnv returns the named environment.
+func GetEnv(name string) (Env, error) {
+	if !utils.Includes(GetEnvNames(), name) {
+		return nil, errors.New("No such environment")
+	}
+
+	return &env{
+		name: viper.GetString("active"),
+	}, nil
+}
+
 // GetName returns the name of env.
 func (e *env) GetName() string {
 	return e.name
@@ -113,6 +157,11 @@ func (e *env) GetName() string {
 // GetEnvHomeDir returns the full path to dockma home dir.
 func (e *env) GetHomeDir() string {
 	return viper.GetString(fmt.Sprintf("envs.%s.home", e.name))
+}
+
+// IsRunning returns current state of env.
+func (e *env) IsRunning() bool {
+	return viper.GetBool(fmt.Sprintf("envs.%s.running", e.name))
 }
 
 // SetEnvUpdated updates update timestamp of env. Should be used when running git pull.

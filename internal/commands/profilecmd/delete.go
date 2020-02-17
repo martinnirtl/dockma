@@ -6,7 +6,6 @@ import (
 
 	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/survey"
-	"github.com/martinnirtl/dockma/internal/utils"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/ttacon/chalk"
@@ -37,10 +36,7 @@ var deleteCmd = &cobra.Command{
 
 		viper.Set(fmt.Sprintf("envs.%s.profiles", activeEnv.GetName()), profileMap)
 
-		err := config.SaveNow()
-		utils.ErrorAndExit(err)
-
-		utils.Success(fmt.Sprintf("Successfully deleted profile: %s [%s]", profileName, activeEnv.GetName()))
+		config.Save(fmt.Sprintf("Deleted profile: %s%s%s [%s]", chalk.Cyan, profileName, chalk.ResetColor, activeEnv.GetName()), fmt.Errorf("Failed to delete profile '%s'", profileName))
 	},
 }
 

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/survey"
 	"github.com/martinnirtl/dockma/internal/utils"
 	"github.com/spf13/cobra"
@@ -61,16 +62,23 @@ var initCmd = &cobra.Command{
 
 		viper.Set(fmt.Sprintf("envs.%s.home", env), workingDir)
 		viper.Set(fmt.Sprintf("envs.%s.pull", env), pull)
+		viper.Set(fmt.Sprintf("envs.%s.running", env), false)
 
-		oldEnv := viper.GetString("active")
+		activeEnv := config.GetActiveEnv()
+		oldEnv := activeEnv.GetName()
 
-		viper.Set("active", env)
+		var set bool
+		if activeEnv.IsRunning() {
+			message := fmt.Sprintf("Current active environment running: %s. Set newly initialized environment active", oldEnv)
 
-		if err := viper.WriteConfig(); err != nil {
-			utils.ErrorAndExit(fmt.Errorf("Initializing environment failed: %s", env))
+			set = survey.Confirm(message, false)
 		}
 
-		fmt.Printf("%sSet active environment: %s%s(old: %s)\n", chalk.Cyan, env, chalk.ResetColor, oldEnv)
+		if set {
+			viper.Set("active", env)
+		}
+
+		config.Save(fmt.Sprintf("Initialized new environment: %s%s%s\n", chalk.Cyan, env, chalk.ResetColor), fmt.Errorf("Failed to save newly created environment"))
 	},
 }
 

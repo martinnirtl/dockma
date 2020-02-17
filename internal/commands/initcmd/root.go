@@ -5,9 +5,9 @@ import (
 	"os"
 	"os/user"
 	"path"
-	"strings"
 	"time"
 
+	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/survey"
 	"github.com/martinnirtl/dockma/internal/utils"
 	"github.com/spf13/cobra"
@@ -49,7 +49,8 @@ func initCommandHandler(cmd *cobra.Command, args []string) {
 		username = sysUser.Username
 	}
 
-	username = survey.InputName("What is your name", strings.Title(username))
+	username = survey.InputName("What is your name", username)
+	username = survey.Select("Select primary color", config.PrimaryColors)
 
 	viper.Set("username", username)
 	viper.Set("init", time.Now())

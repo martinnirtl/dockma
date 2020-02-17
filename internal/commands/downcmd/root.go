@@ -48,6 +48,9 @@ var DownCommand = &cobra.Command{
 			os.Exit(0)
 		}
 
+		viper.Set(fmt.Sprintf("envs.%s.running", activeEnv), false)
+		config.Save("", fmt.Errorf("Failed to set running to 'false' [%s]", activeEnv))
+
 		utils.Success("Successfully executed 'docker-compose down'")
 	},
 }

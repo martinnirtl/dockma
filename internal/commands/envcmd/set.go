@@ -3,6 +3,7 @@ package envcmd
 import (
 	"fmt"
 
+	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/utils"
 	"github.com/martinnirtl/dockma/internal/utils/helpers"
 	"github.com/spf13/cobra"
@@ -24,21 +25,21 @@ var setCmd = &cobra.Command{
 			env = helpers.GetEnvironment(args[0])
 		}
 
-		activeEnv := viper.GetString("active")
+		activeEnv := config.GetActiveEnv()
 
-		if env == activeEnv {
-			fmt.Printf("%sActive environment already set: %s%s\n", chalk.Yellow, activeEnv, chalk.ResetColor)
+		if env == activeEnv.GetName() {
+			fmt.Printf("%sEnvironment already set as active: %s%s\n", chalk.Yellow, activeEnv.GetName(), chalk.ResetColor)
 
 			return
 		}
 
-		fmt.Printf("%sNew active environment: %s%s (old: %s)\n", chalk.Green, env, chalk.ResetColor, activeEnv)
+		if activeEnv.IsRunning() {
+			utils.Warn(fmt.Sprintf("Switching from running environment."))
+		}
 
 		viper.Set("active", env)
 
-		if err := viper.WriteConfig(); err != nil {
-			utils.ErrorAndExit(fmt.Errorf("Setting active environment failed: %s", env))
-		}
+		config.Save(fmt.Sprintf("New active environment: %s%s%s (old: %s)\n", chalk.Green, env, chalk.ResetColor, activeEnv.GetName()), fmt.Errorf("Failed to set active environment"))
 	},
 }
 

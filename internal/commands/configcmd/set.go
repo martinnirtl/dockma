@@ -8,6 +8,7 @@ import (
 	"github.com/martinnirtl/dockma/internal/survey"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/ttacon/chalk"
 )
 
 var setCmd = &cobra.Command{
@@ -30,10 +31,10 @@ var setCmd = &cobra.Command{
 			varname := strings.Split(varnameRaw, ":")
 
 			setConfigVar(varname[0])
-		}
 
-		if len(selected) > 0 {
-			config.Save()
+			message := fmt.Sprintf("Set %s%s%s: %s%s%s", chalk.Cyan, varname[0], chalk.ResetColor, chalk.Cyan, viper.GetString(varname[0]), chalk.ResetColor)
+			err := fmt.Errorf("Failed to set '%s'", varname[0])
+			config.Save(message, err)
 		}
 	},
 }

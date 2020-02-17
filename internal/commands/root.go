@@ -19,6 +19,7 @@ import (
 	"github.com/martinnirtl/dockma/internal/commands/versioncmd"
 	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/utils"
+	"github.com/martinnirtl/dockma/internal/utils/helpers"
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -104,8 +105,14 @@ func rootPreRunHook(cmd *cobra.Command, args []string) {
 
 func rootPostRunHook(cmd *cobra.Command, args []string) {
 	if config.SaveConfig {
-		err := config.SaveNow()
+		messages, errors, err := config.SaveNow()
 		utils.Error(err)
+
+		if err != nil {
+			helpers.PrintErrorList(errors)
+		} else {
+			helpers.PrintMessageList(messages)
+		}
 	}
 }
 

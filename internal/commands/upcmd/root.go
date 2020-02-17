@@ -117,7 +117,7 @@ var UpCommand = &cobra.Command{
 				viper.Set(fmt.Sprintf("envs.%s.latest", activeEnv.GetName()), selectedServices)
 			}
 
-			config.Save()
+			config.Save(fmt.Sprintf("Saved profile: %s%s%s", chalk.Cyan, profileName, chalk.ResetColor), fmt.Errorf("Failed to save profile '%s'", profileName))
 		}
 
 		err = envvars.SetEnvVars(services.All, selectedServices)
@@ -143,6 +143,9 @@ var UpCommand = &cobra.Command{
 
 			os.Exit(0)
 		}
+
+		viper.Set(fmt.Sprintf("envs.%s.running", activeEnv.GetName()), true)
+		config.Save("", fmt.Errorf("Failed to set running to 'true' [%s]", activeEnv.GetName()))
 
 		utils.Success("Successfully executed 'docker-compose up'")
 	},

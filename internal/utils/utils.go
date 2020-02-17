@@ -29,6 +29,11 @@ func Success(text string) {
 	fmt.Printf("%s%s%s\n", chalk.Green, text, chalk.ResetColor)
 }
 
+// Warn prints yellow colored text to std out
+func Warn(text string) {
+	fmt.Printf("%s%s%s\n", chalk.Yellow, text, chalk.ResetColor)
+}
+
 // Error checks if err is not nil, prints 'Error: <message>' to std out
 func Error(err error) {
 	if err != nil {

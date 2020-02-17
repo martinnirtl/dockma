@@ -5,7 +5,6 @@ import (
 
 	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 	"github.com/ttacon/chalk"
 )
 
@@ -19,14 +18,25 @@ var listCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		envs := config.GetEnvNames()
 
-		activeEnv := viper.GetString("active")
+		activeEnv := config.GetActiveEnv()
+		activeEnvName := activeEnv.GetName()
 
 		if len(envs) > 0 {
-			for _, env := range envs {
-				if env == activeEnv {
-					fmt.Printf("%s%s [active]%s\n", chalk.Cyan, env, chalk.ResetColor)
+			for _, envName := range envs {
+				if envName == activeEnvName {
+					fmt.Printf("%s%s [active]%s", chalk.Cyan, envName, chalk.ResetColor)
 				} else {
-					fmt.Println(env)
+					fmt.Print(envName)
+				}
+
+				if env, err := config.GetEnv(envName); err != nil {
+
+				} else {
+					if env.IsRunning() {
+						fmt.Printf("%s%s%s\n", chalk.Green, " running", chalk.ResetColor)
+					} else {
+						fmt.Println()
+					}
 				}
 			}
 		} else {
