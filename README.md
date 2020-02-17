@@ -28,14 +28,13 @@ Level up your docker-compose game during development!
 
 ## TODOs
 
+- walk through all cmds
+  - check user interactions (logs and surveys)
+    - rethink the way of information output
+    - unify success and error messages
 - finish makefile
 - implement arguement based command execution
   - add bash completion (check if async completion is also possible)
-- check user interactions (logs and surveys)
-  - rethink the way of information output
-  - unify success and error messages
-  - what about cyan primary color
-- add dir and state to env list (up|down) on --all or -a
 - bind version, commit, date to vars provided on 'go build'
 
 - use Bats for system tests (https://github.com/sstephenson/bats)
