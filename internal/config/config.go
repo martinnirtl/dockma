@@ -95,7 +95,7 @@ func GetLogfile() string {
 	return GetFile(filename)
 }
 
-// GetEnvNames returns configured envs.
+// GetEnvNames returns sorted envs.
 func GetEnvNames() (envs []string) {
 	envsMap := viper.GetStringMap("envs")
 
