@@ -13,10 +13,10 @@ var servicesFlag bool
 
 var listCmd = &cobra.Command{
 	Use:     "list",
-	Short:   "List profiles of active environment.",
-	Long:    "List profiles of active environment.",
+	Short:   "List profiles of active environment",
+	Long:    "List profiles of active environment",
+	Example: "dockma profiles list",
 	Args:    cobra.NoArgs,
-	Example: "dockma profile list",
 	Run: func(cmd *cobra.Command, args []string) {
 		activeEnv := config.GetActiveEnv()
 		profileNames := activeEnv.GetProfileNames()
@@ -51,5 +51,5 @@ var listCmd = &cobra.Command{
 func init() {
 	ProfileCommand.AddCommand(listCmd)
 
-	listCmd.Flags().BoolVarP(&servicesFlag, "services", "S", false, "Print services")
+	listCmd.Flags().BoolVarP(&servicesFlag, "services", "S", false, "print services")
 }

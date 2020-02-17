@@ -15,10 +15,11 @@ import (
 
 // InspectCommand implements the top level inspect command
 var InspectCommand = &cobra.Command{
-	Use:   "inspect",
-	Short: "Print detailed output of previously executed command [up|down|pull].",
-	Long:  "Print detailed output of previously executed command [up|down|pull].",
-	Args:  cobra.NoArgs,
+	Use:     "inspect",
+	Short:   "Print detailed output of previously executed external command [up|down|pull]",
+	Long:    "Print detailed output of previously executed external command [up|down|pull]",
+	Example: "dockma inspect",
+	Args:    cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		filepath := config.GetLogfile()
 

@@ -15,10 +15,11 @@ import (
 )
 
 var pullCommand = &cobra.Command{
-	Use:   "pull",
-	Short: "Run 'git pull' in active environment home dir.",
-	Long:  "Run 'git pull' in active environment home dir.",
-	Args:  cobra.NoArgs,
+	Use:     "pull",
+	Short:   "Run 'git pull' in active environment home dir",
+	Long:    "Run 'git pull' in active environment home dir",
+	Example: "dockma env pull",
+	Args:    cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		activeEnv := config.GetActiveEnv()

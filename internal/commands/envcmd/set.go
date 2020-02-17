@@ -13,10 +13,10 @@ import (
 
 var setCmd = &cobra.Command{
 	Use:     "set [environment]",
-	Short:   "Set active environment.",
-	Long:    "Set active environment.",
-	Args:    cobra.RangeArgs(0, 1),
+	Short:   "Set active environment",
+	Long:    "Set active environment",
 	Example: "dockma envs set",
+	Args:    cobra.RangeArgs(0, 1),
 	Run: func(cmd *cobra.Command, args []string) {
 		env := ""
 		if len(args) == 0 {

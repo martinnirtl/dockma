@@ -13,8 +13,8 @@ import (
 
 var catCmd = &cobra.Command{
 	Use:     "cat",
-	Short:   "Print config.json of Dockma.",
-	Long:    "Print config.json of Dockma.",
+	Short:   "Print config.json of Dockma",
+	Long:    "Print config.json of Dockma",
 	Example: "dockma config cat",
 	Args:    cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {

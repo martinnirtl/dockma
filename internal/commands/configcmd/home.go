@@ -10,8 +10,8 @@ import (
 
 var homeCmd = &cobra.Command{
 	Use:     "home",
-	Short:   "Print home dir of Dockma config.",
-	Long:    "Print home dir of Dockma config.",
+	Short:   "Print home dir of Dockma config",
+	Long:    "Print home dir of Dockma config",
 	Example: "dockma config home",
 	Args:    cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {

@@ -12,10 +12,11 @@ import (
 
 // PSCommand implements the top level ps command
 var PSCommand = &cobra.Command{
-	Use:   "ps",
-	Short: "List running services of active environment.",
-	Long:  "List running services of active environment.",
-	Args:  cobra.NoArgs,
+	Use:     "ps",
+	Short:   "List running services of active environment",
+	Long:    "List running services of active environment",
+	Example: "dockma ps",
+	Args:    cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		activeEnv := viper.GetString("active")
 

@@ -13,10 +13,10 @@ var pathFlag bool
 // TODO could be table with props from envs
 var listCmd = &cobra.Command{
 	Use:     "list",
-	Short:   "List all configured environments.",
-	Long:    "List all configured environments.",
+	Short:   "List all configured environments",
+	Long:    "List all configured environments",
+	Example: "dockma envs list",
 	Args:    cobra.NoArgs,
-	Example: "dockma env list",
 	Run: func(cmd *cobra.Command, args []string) {
 		envs := config.GetEnvNames()
 		maxEnvNameLength := getLongestWordLength(envs, 3)

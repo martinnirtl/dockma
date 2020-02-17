@@ -19,6 +19,7 @@ var InitCommand = &cobra.Command{
 	Use:              "init",
 	Short:            "Initialize the Dockma CLI.",
 	Long:             "Initialize the Dockma CLI.",
+	Example:          "dockma init",
 	Args:             cobra.NoArgs,
 	PersistentPreRun: initPreRunHook, // used to override root PreRun func
 	Run:              initCommandHandler,

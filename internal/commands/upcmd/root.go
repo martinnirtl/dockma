@@ -20,10 +20,12 @@ import (
 
 // UpCommand implements the top level up command
 var UpCommand = &cobra.Command{
-	Use:   "up",
-	Short: "Runs active environment with service selection.",
-	Long:  "Runs active environment with service selection.",
-	Args:  cobra.NoArgs,
+	Use:     "up",
+	Aliases: []string{"run"},
+	Short:   "Runs active environment with profile or service selection",
+	Long:    "Runs active environment with profile or service selection",
+	Example: "dockma up",
+	Args:    cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		filepath := config.GetLogfile()
 

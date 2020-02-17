@@ -15,8 +15,8 @@ import (
 // DownCommand implements the top level down command
 var DownCommand = &cobra.Command{
 	Use:     "down",
-	Short:   "Stops active environment.",
-	Long:    "Stops active environment.",
+	Short:   "Stops active environment",
+	Long:    "Stops active environment",
 	Example: "dockma down",
 	Args:    cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {

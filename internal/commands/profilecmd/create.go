@@ -15,10 +15,10 @@ import (
 
 var createCmd = &cobra.Command{
 	Use:     "create",
-	Short:   "Create named service selection.",
-	Long:    "Create named service selection.",
-	Args:    cobra.NoArgs,
+	Short:   "Create named service selection",
+	Long:    "Create named service selection",
 	Example: "dockma profile create",
+	Args:    cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		activeEnv := config.GetActiveEnv()
 		envHomeDir := activeEnv.GetHomeDir()

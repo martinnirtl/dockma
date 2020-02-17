@@ -17,10 +17,11 @@ var tailFlag int
 
 // LogsCommand implements the top level logs command
 var LogsCommand = &cobra.Command{
-	Use:   "logs [service...]",
-	Short: "Logs output of all or only selected services.",
-	Long:  "Logs output of all or only selected services.",
-	Args:  cobra.ArbitraryArgs,
+	Use:     "logs [service...]",
+	Short:   "Logs output of all or only selected services",
+	Long:    "Logs output of all or only selected services",
+	Example: "dockma logs -f my-service",
+	Args:    cobra.ArbitraryArgs,
 	// Args:      cobra.OnlyValidArgs, // TODO investigate
 	// ValidArgs: getValidArgs(),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -47,9 +48,9 @@ var LogsCommand = &cobra.Command{
 }
 
 func init() {
-	LogsCommand.Flags().BoolVarP(&followFlag, "follow", "f", false, "Follow log output.")
-	LogsCommand.Flags().BoolVarP(&timestampsFlag, "timestamps", "t", false, "Show timestamps.")
-	LogsCommand.Flags().IntVar(&tailFlag, "tail", 0, "Number of lines to show from the end of the logs for each service.")
+	LogsCommand.Flags().BoolVarP(&followFlag, "follow", "f", false, "follow log output")
+	LogsCommand.Flags().BoolVarP(&timestampsFlag, "timestamps", "t", false, "show timestamps")
+	LogsCommand.Flags().IntVar(&tailFlag, "tail", 0, "number of lines to show from the end of the logs for each service")
 }
 
 func addFlagsToArgs(args []string) []string {
