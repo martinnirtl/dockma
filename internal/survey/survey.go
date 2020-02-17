@@ -2,11 +2,11 @@ package survey
 
 import (
 	"fmt"
-	"os"
 	"regexp"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/AlecAivazis/survey/v2/terminal"
+	"github.com/martinnirtl/dockma/internal/utils"
 )
 
 // NameRegex should be used to verify all names
@@ -119,9 +119,7 @@ func MultiSelect(message string, options []string, preselected []string) (select
 
 func checkError(err error) {
 	if err == terminal.InterruptErr {
-		fmt.Println("Interrupted.")
-
-		os.Exit(0)
+		utils.Abort()
 	} else if err != nil {
 		panic(err)
 	}
