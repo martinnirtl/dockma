@@ -1,6 +1,7 @@
 package completioncmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -32,15 +33,20 @@ var CompletionCommand = &cobra.Command{
 			shell = survey.Select("Select shell to install completion for", shells)
 		}
 
+		var err error
 		switch shell {
 		case "bash":
-			cmd.Root().GenBashCompletion(os.Stdout)
+			err = cmd.Root().GenBashCompletion(os.Stdout)
 
 		case "powershell":
-			cmd.Root().GenPowerShellCompletion(os.Stdout)
+			err = cmd.Root().GenPowerShellCompletion(os.Stdout)
 
 		case "zsh":
-			cmd.Root().GenZshCompletion(os.Stdout)
+			err = cmd.Root().GenZshCompletion(os.Stdout)
+		}
+
+		if err != nil {
+			utils.Error(errors.New("Failed to generate shell completion code"))
 		}
 	},
 }
