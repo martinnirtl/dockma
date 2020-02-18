@@ -39,7 +39,7 @@ var setCmd = &cobra.Command{
 
 		viper.Set("active", env)
 
-		config.Save(fmt.Sprintf("New active environment: %s%s%s (old: %s)\n", chalk.Green, env, chalk.ResetColor, activeEnv.GetName()), fmt.Errorf("Failed to set active environment"))
+		config.Save(fmt.Sprintf("New active environment: %s%s%s (old: %s)\n", chalk.Cyan, env, chalk.ResetColor, activeEnv.GetName()), fmt.Errorf("Failed to set active environment"))
 	},
 }
 
