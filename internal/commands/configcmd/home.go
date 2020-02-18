@@ -15,7 +15,7 @@ var homeCmd = &cobra.Command{
 	Example: "dockma config home",
 	Args:    cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("Dockma config home dir: %s%s%s\n", chalk.Cyan, viper.GetString("home"), chalk.ResetColor)
+		fmt.Printf("Dockma config home dir: %s\n", chalk.Cyan.Color(viper.GetString("home")))
 	},
 }
 

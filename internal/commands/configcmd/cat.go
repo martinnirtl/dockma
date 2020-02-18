@@ -18,14 +18,14 @@ var catCmd = &cobra.Command{
 	Example: "dockma config cat",
 	Args:    cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
-		filepath := config.GetFile(("config.json"))
+		filepath := config.GetFile("config.json")
 
 		content, err := ioutil.ReadFile(filepath)
 
 		if err != nil {
 			utils.ErrorAndExit(errors.New("Could not read config file"))
 		} else {
-			fmt.Printf("%sHere comes the dockma configuration file:%s\n", chalk.Cyan, chalk.ResetColor)
+			fmt.Printf("Here comes the %s file:\n", chalk.Cyan.Color("Dockma config"))
 
 			fmt.Println(string(content))
 		}
