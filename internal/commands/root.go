@@ -7,6 +7,7 @@ import (
 	"path"
 	"strings"
 
+	"github.com/martinnirtl/dockma/internal/commands/completioncmd"
 	"github.com/martinnirtl/dockma/internal/commands/configcmd"
 	"github.com/martinnirtl/dockma/internal/commands/downcmd"
 	"github.com/martinnirtl/dockma/internal/commands/envcmd"
@@ -36,6 +37,7 @@ var RootCommand = &cobra.Command{
 }
 
 func init() {
+	RootCommand.AddCommand(completioncmd.CompletionCommand)
 	RootCommand.AddCommand(configcmd.ConfigCommand)
 	RootCommand.AddCommand(downcmd.DownCommand)
 	RootCommand.AddCommand(envcmd.EnvCommand)

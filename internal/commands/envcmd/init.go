@@ -19,7 +19,6 @@ var initCmd = &cobra.Command{
 	Long:    "Initialize new environment",
 	Example: "dockma env init path/to/env",
 	Args:    cobra.RangeArgs(0, 1),
-
 	Run: func(cmd *cobra.Command, args []string) {
 		var env string
 
