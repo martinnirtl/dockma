@@ -27,6 +27,10 @@ import (
 	"github.com/ttacon/chalk"
 )
 
+// FIXME make flags work
+// var verboseFlag bool
+// var authorFlag bool
+
 // RootCommand is the root command of dockma
 var RootCommand = &cobra.Command{
 	Use:               "dockma",
@@ -52,8 +56,8 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	// TODO FLAGS GO HERE
-	// author flag
-	// version flag
+	// RootCommand.PersistentFlags().BoolVarP(&verboseFlag, "verbose", "v", false, "verbose output")
+	// RootCommand.PersistentFlags().BoolVar(&authorFlag, "author", false, "print author")
 
 	// TODO behavior not clear. no consideration of envs set via .bash_profile !?
 	viper.SetEnvPrefix("dockma")
