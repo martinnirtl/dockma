@@ -59,7 +59,7 @@ func setConfigVar(varname string) {
 		viper.Set("hidesubcommandoutput", hide)
 
 	case "logfile":
-		logfile := survey.InputName("Enter name of logfile [stored in dockma home dir]", viper.GetString("logfile"))
+		logfile := survey.InputName("Enter name of logfile [stored in Dockma home dir]", viper.GetString("logfile"))
 
 		viper.Set("logfile", logfile)
 
