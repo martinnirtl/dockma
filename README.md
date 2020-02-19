@@ -34,14 +34,16 @@ Level up your docker-compose game during development!
     - unify success and error messages
 - finish makefile
 - implement arguement based command execution
-  - add bash completion (check if async completion is also possible)
+  - add 'dynamic' bash completion via ValidArgs
   - add func for Args field (take valid args only but also no args for interactive mode)
-- Add logging for verbose output (see doctl ?)
+- add logging for verbose output (see doctl ?)
   - inspect cmd only for external commands
   - verboseFlag shall ignore timebridgers
-- Write long command descriptions (eg. doctl help completion)
+- write long command descriptions (eg. doctl help completion)
+- rethink git-pull setting and updating it becoming git-based project
 - bind version, commit, date to vars provided on 'go build'
+- support swarm mode and move towards kubernetes ?
 
-- use Bats for system tests (https://github.com/sstephenson/bats)
+- use bats for system tests (https://github.com/sstephenson/bats)
 - build "assessment" tool for docker-compose files
 - write unit tests
