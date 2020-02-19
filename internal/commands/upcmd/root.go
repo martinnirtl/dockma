@@ -71,7 +71,7 @@ var UpCommand = &cobra.Command{
 		if doPull {
 			output, err := envcmd.Pull(envHomeDir, hideCmdOutput, false)
 			if err != nil && hideCmdOutput {
-				fmt.Println(output)
+				fmt.Println(string(output))
 				utils.Warn("Could not execute 'git pull'.")
 			} else {
 				utils.Success(fmt.Sprintf("Pulled environment: %s", activeEnv.GetName()))
