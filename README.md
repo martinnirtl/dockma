@@ -28,20 +28,18 @@ Level up your docker-compose game during development!
 
 ## TODOs
 
-- walk through all cmds
-  - check user interactions (logs and surveys)
-    - rethink the way of information output
-    - unify success and error messages
-- finish makefile
 - implement arguement based command execution
   - add 'dynamic' bash completion via ValidArgs
   - add func for Args field (take valid args only but also no args for interactive mode)
+  - refactor config to be loaded first before anything else
+- finish makefile
 - add logging for verbose output (see doctl ?)
   - inspect cmd only for external commands
   - verboseFlag shall ignore timebridgers
 - write long command descriptions (eg. doctl help completion)
 - rethink git-pull setting and updating it becoming git-based project
 - bind version, commit, date to vars provided on 'go build'
+- use table instead of long lists (dockma profile list --services)
 - support swarm mode and move towards kubernetes ?
 
 - use bats for system tests (https://github.com/sstephenson/bats)
