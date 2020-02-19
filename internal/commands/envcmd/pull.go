@@ -25,7 +25,7 @@ var pullCommand = &cobra.Command{
 		activeEnv := config.GetActiveEnv()
 
 		if activeEnv.GetName() == "-" {
-			utils.PrintNoEnvs()
+			utils.PrintNoActiveEnvSet()
 		}
 
 		envHomeDir := activeEnv.GetHomeDir()

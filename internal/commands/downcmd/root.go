@@ -25,7 +25,7 @@ var DownCommand = &cobra.Command{
 		activeEnv := viper.GetString("active")
 
 		if activeEnv == "-" {
-			utils.PrintNoEnvs()
+			utils.PrintNoActiveEnvSet()
 		}
 
 		envHomeDir := viper.GetString(fmt.Sprintf("envs.%s.home", activeEnv))

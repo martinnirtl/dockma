@@ -50,9 +50,9 @@ func ErrorAndExit(err error) {
 	}
 }
 
-// PrintNoEnvs prints no envs configured and exits
-func PrintNoEnvs() {
-	fmt.Printf("No environments configured. Add new environment with %sdockma envs init%s.\n", chalk.Cyan, chalk.ResetColor)
+// PrintNoActiveEnvSet prints no envs configured and exits
+func PrintNoActiveEnvSet() {
+	fmt.Printf("No active environment configured. Add new environment with %s or set active environment with %s.\n", chalk.Cyan.Color("dockma envs init"), chalk.Cyan.Color("dockma env set"))
 
 	os.Exit(0)
 }
