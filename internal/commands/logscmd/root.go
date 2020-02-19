@@ -5,10 +5,10 @@ import (
 	"os"
 	"sort"
 
+	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/utils"
 	"github.com/martinnirtl/dockma/pkg/externalcommand"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 var followFlag bool
@@ -25,24 +25,21 @@ var LogsCommand = &cobra.Command{
 	// Args:      cobra.OnlyValidArgs, // TODO investigate
 	// ValidArgs: getValidArgs(),
 	Run: func(cmd *cobra.Command, args []string) {
-		activeEnv := viper.GetString("active")
+		activeEnv := config.GetActiveEnv()
 
-		if activeEnv == "-" {
+		if activeEnv.GetName() == "-" {
 			utils.PrintNoActiveEnvSet()
 		}
 
-		envHomeDir := viper.GetString(fmt.Sprintf("envs.%s.home", activeEnv))
+		envHomeDir := activeEnv.GetHomeDir()
 
 		err := os.Chdir(envHomeDir)
-
 		utils.ErrorAndExit(err)
 
 		args = addFlagsToArgs(args)
-
 		command := externalcommand.JoinCommand("docker-compose logs", args...)
 
 		_, err = externalcommand.Execute(command, nil, "")
-
 		utils.ErrorAndExit(err)
 	},
 }
