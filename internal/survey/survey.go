@@ -48,7 +48,9 @@ func Confirm(message string, preselected bool) (confirm bool) {
 	err := survey.AskOne(&survey.Confirm{
 		Message: message,
 		Default: preselected,
-	}, &confirm)
+	}, &confirm, survey.WithIcons(func(icons *survey.IconSet) {
+		icons.Question.Format = "magenta+hb"
+	}))
 
 	checkError(err)
 
@@ -60,7 +62,9 @@ func Input(message string, suggestion string) (response string) {
 	err := survey.AskOne(&survey.Input{
 		Message: message,
 		Default: suggestion,
-	}, &response)
+	}, &response, survey.WithIcons(func(icons *survey.IconSet) {
+		icons.Question.Format = "magenta+hb"
+	}))
 
 	checkError(err)
 
@@ -73,7 +77,9 @@ func InputName(message string, suggestion string) (response string) {
 		Message: message,
 		Default: suggestion,
 		Help:    fmt.Sprintf("Name has to comply with regex: %s", NameRegex),
-	}, &response, survey.WithValidator(ValidateName))
+	}, &response, survey.WithValidator(ValidateName), survey.WithIcons(func(icons *survey.IconSet) {
+		icons.Question.Format = "magenta+hb"
+	}))
 
 	checkError(err)
 
@@ -86,8 +92,9 @@ func Select(message string, options []string) (selection string) {
 		Message: message,
 		Options: options,
 	}, &selection, survey.WithIcons(func(icons *survey.IconSet) {
-		icons.SelectFocus.Text = "❯"
+		icons.Question.Format = "magenta+hb"
 
+		icons.SelectFocus.Text = "❯"
 		icons.SelectFocus.Format = "cyan+b"
 	}))
 
@@ -104,11 +111,14 @@ func MultiSelect(message string, options []string, preselected []string) (select
 		Default:  preselected,
 		PageSize: len(options),
 	}, &selection, survey.WithIcons(func(icons *survey.IconSet) {
-		icons.UnmarkedOption.Text = "◯"
-		icons.MarkedOption.Text = "◉"
-		icons.SelectFocus.Text = "❯"
+		icons.Question.Format = "magenta+hb"
 
-		icons.MarkedOption.Format = "green+b"
+		icons.UnmarkedOption.Text = "◯"
+
+		icons.MarkedOption.Text = "◉"
+		icons.MarkedOption.Format = "cyan+b"
+
+		icons.SelectFocus.Text = "❯"
 		icons.SelectFocus.Format = "cyan+b"
 	}))
 
