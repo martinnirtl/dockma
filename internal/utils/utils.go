@@ -7,16 +7,6 @@ import (
 	"github.com/ttacon/chalk"
 )
 
-// Println works as custom fmt.Printf with chalk.ResetColor and \n automattically attached
-func Println(text string) {
-	fmt.Printf("%s%s\n", text, chalk.ResetColor)
-}
-
-// PrintCyan colors text in cyan
-func PrintCyan(text string) string {
-	return fmt.Sprintf("%s%s%s", chalk.Cyan, text, chalk.ResetColor)
-}
-
 // Abort prints 'Aborted.' to std out and exits process with 0
 func Abort() {
 	fmt.Printf("%sAborted.%s\n", chalk.Cyan, chalk.ResetColor)
@@ -26,25 +16,25 @@ func Abort() {
 
 // Success prints green colored text to std out
 func Success(text string) {
-	fmt.Printf("%s%s%s\n", chalk.Green, text, chalk.ResetColor)
+	fmt.Println(chalk.Green.Color(text))
 }
 
 // Warn prints yellow colored text to std out
 func Warn(text string) {
-	fmt.Printf("%s%s%s\n", chalk.Yellow, text, chalk.ResetColor)
+	fmt.Println(chalk.Yellow.Color(text))
 }
 
 // Error checks if err is not nil, prints 'Error: <message>' to std out
 func Error(err error) {
 	if err != nil {
-		fmt.Printf("%sError: %s%s\n", chalk.Red, err, chalk.ResetColor)
+		fmt.Println(chalk.Red.Color(fmt.Sprintf("Error: %s", err)))
 	}
 }
 
 // ErrorAndExit checks if err is not nil, prints 'Error: <message>' to std out and exits process with 0
 func ErrorAndExit(err error) {
 	if err != nil {
-		fmt.Printf("%sError: %s%s\n", chalk.Red, err, chalk.ResetColor)
+		fmt.Println(chalk.Red.Color(fmt.Sprintf("Error: %s", err)))
 
 		os.Exit(0)
 	}

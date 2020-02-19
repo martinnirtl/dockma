@@ -22,7 +22,7 @@ var listCmd = &cobra.Command{
 		profileNames := activeEnv.GetProfileNames()
 
 		if len(profileNames) == 0 {
-			fmt.Printf("No profiles in %s. Create one with %s.\n", utils.PrintCyan(activeEnv.GetName()), utils.PrintCyan("dockma profile create"))
+			fmt.Printf("No profiles in %s. Create one with %s.\n", chalk.Cyan.Color(activeEnv.GetName()), chalk.Cyan.Color("dockma profile create"))
 		}
 
 		for _, profileName := range profileNames {

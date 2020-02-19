@@ -56,7 +56,7 @@ var UpCommand = &cobra.Command{
 			timePassed, err := activeEnv.LastUpdate()
 
 			if err != nil {
-				doPull = survey.Confirm(fmt.Sprintf("Environment never got updated (%s). Wanna pull now", utils.PrintCyan("dockma env pull")), true)
+				doPull = survey.Confirm(fmt.Sprintf("Environment never got updated (%s). Wanna pull now", chalk.Cyan.Color("dockma env pull")), true)
 			} else if timePassed.Hours() > 24*7 {
 				doPull = survey.Confirm("Some time has passed since last git pull. Wanna pull now", true)
 			}
