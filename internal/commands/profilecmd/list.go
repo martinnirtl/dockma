@@ -25,23 +25,27 @@ var listCmd = &cobra.Command{
 			fmt.Printf("No profiles in %s. Create one with %s.\n", chalk.Cyan.Color(activeEnv.GetName()), chalk.Cyan.Color("dockma profile create"))
 		}
 
-		for _, profileName := range profileNames {
-			fmt.Printf("%s%s%s\n", chalk.Cyan, profileName, chalk.ResetColor)
+		fmt.Printf("Profiles of %s environment:\n", chalk.Bold.TextStyle(activeEnv.GetName()))
 
+		for _, profileName := range profileNames {
 			if servicesFlag {
+				fmt.Println()
+
+				fmt.Println(chalk.Bold.TextStyle(profileName))
+
 				profile, err := activeEnv.GetProfile(profileName)
 
 				utils.ErrorAndExit(err)
 
 				for _, service := range profile.Services {
 					if utils.Includes(profile.Selected, service) {
-						fmt.Printf("- %s%s%s\n", chalk.Green, service, chalk.ResetColor)
+						fmt.Printf("- %s\n", chalk.Cyan.Color(service))
 					} else {
 						fmt.Printf("- %s\n", service)
 					}
 				}
-
-				fmt.Println()
+			} else {
+				fmt.Printf("- %s\n", chalk.Cyan.Color(profileName))
 			}
 
 		}

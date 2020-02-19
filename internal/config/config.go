@@ -205,6 +205,8 @@ func (e *env) GetProfileNames() (profiles []string) {
 		profiles = append(profiles, profile)
 	}
 
+	sort.Strings(profiles)
+
 	return
 }
 
