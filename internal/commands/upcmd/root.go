@@ -41,7 +41,7 @@ var UpCommand = &cobra.Command{
 		utils.ErrorAndExit(err)
 
 		if len(services.Override) > 0 {
-			fmt.Printf("%sFound %d services in docker-compose override file: %s%s\n", chalk.Yellow, len(services.Override), strings.Join(services.Override, ", "), chalk.ResetColor)
+			utils.Warn(fmt.Sprintf("Found %d services in docker-compose override file: %s", len(services.Override), strings.Join(services.Override, ", ")))
 		}
 
 		pull := activeEnv.GetPullSetting()
@@ -58,7 +58,7 @@ var UpCommand = &cobra.Command{
 			if err != nil {
 				doPull = survey.Confirm(fmt.Sprintf("Environment never got updated (%s). Wanna pull now", chalk.Cyan.Color("dockma env pull")), true)
 			} else if timePassed.Hours() > 24*7 {
-				doPull = survey.Confirm("Some time has passed since last git pull. Wanna pull now", true)
+				doPull = survey.Confirm(fmt.Sprintf("Some time has passed since last %s. Wanna pull now", chalk.Cyan.Color("git pull")), true)
 			}
 		case "off":
 			doPull = false
@@ -72,7 +72,7 @@ var UpCommand = &cobra.Command{
 			output, err := envcmd.Pull(envHomeDir, hideCmdOutput, false)
 			if err != nil && hideCmdOutput {
 				fmt.Println(output)
-				utils.Warn("Could not execute git pull.")
+				utils.Warn("Could not execute 'git pull'.")
 			} else {
 				utils.Success(fmt.Sprintf("Pulled environment: %s", activeEnv.GetName()))
 			}
@@ -91,13 +91,11 @@ var UpCommand = &cobra.Command{
 
 			if profileName != "latest" {
 				profile, err := activeEnv.GetProfile(profileName)
-
 				utils.ErrorAndExit(err)
 
 				preselected = profile.Selected
 			} else {
 				profile, err := activeEnv.GetLatest()
-
 				utils.ErrorAndExit(err)
 
 				preselected = profile.Selected
@@ -117,36 +115,31 @@ var UpCommand = &cobra.Command{
 				profileName = survey.InputName("Enter profile name", "")
 
 				viper.Set(fmt.Sprintf("envs.%s.profiles.%s", activeEnv.GetName(), profileName), selectedServices)
+
+				config.Save(fmt.Sprintf("Saved profile: %s", chalk.Cyan.Color(profileName), fmt.Errorf("Failed to save profile: %s", profileName)))
 			} else {
 				viper.Set(fmt.Sprintf("envs.%s.latest", activeEnv.GetName()), selectedServices)
 			}
-
-			config.Save(fmt.Sprintf("Saved profile: %s%s%s", chalk.Cyan, profileName, chalk.ResetColor), fmt.Errorf("Failed to save profile '%s'", profileName))
 		}
 
 		err = envvars.SetEnvVars(services.All, selectedServices)
-
 		utils.ErrorAndExit(err)
 
 		err = os.Chdir(envHomeDir)
-
 		utils.ErrorAndExit(err)
 
 		var timebridger externalcommand.Timebridger
 		if hideCmdOutput {
-			timebridger = spinnertimebridger.New("Running 'docker-compose up'", 14, "cyan")
+			timebridger = spinnertimebridger.Default("Running 'docker-compose up'")
 		}
 
 		command := externalcommand.JoinCommand("docker-compose up -d", selectedServices...)
 
 		output, err := externalcommand.Execute(command, timebridger, filepath)
-
-		utils.Error(err)
 		if err != nil {
 			fmt.Print(string(output))
-
-			os.Exit(0)
 		}
+		utils.ErrorAndExit(err)
 
 		viper.Set(fmt.Sprintf("envs.%s.running", activeEnv.GetName()), true)
 		config.Save("", fmt.Errorf("Failed to set running to 'true' [%s]", activeEnv.GetName()))
