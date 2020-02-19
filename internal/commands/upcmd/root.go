@@ -37,13 +37,6 @@ var UpCommand = &cobra.Command{
 
 		envHomeDir := activeEnv.GetHomeDir()
 
-		services, err := dockercompose.GetServices(envHomeDir)
-		utils.ErrorAndExit(err)
-
-		if len(services.Override) > 0 {
-			utils.Warn(fmt.Sprintf("Found %d services in docker-compose override file: %s", len(services.Override), strings.Join(services.Override, ", ")))
-		}
-
 		pull := activeEnv.GetPullSetting()
 
 		var doPull bool
@@ -71,11 +64,20 @@ var UpCommand = &cobra.Command{
 		if doPull {
 			output, err := envcmd.Pull(envHomeDir, hideCmdOutput, false)
 			if err != nil && hideCmdOutput {
-				fmt.Println(string(output))
+				fmt.Print(string(output))
 				utils.Warn("Could not execute 'git pull'.")
+
+				fmt.Println() // Add empty line for better readability
 			} else {
 				utils.Success(fmt.Sprintf("Pulled environment: %s", activeEnv.GetName()))
 			}
+		}
+
+		services, err := dockercompose.GetServices(envHomeDir)
+		utils.ErrorAndExit(err)
+
+		if len(services.Override) > 0 {
+			utils.Warn(fmt.Sprintf("Found %d services in docker-compose override file: %s", len(services.Override), strings.Join(services.Override, ", ")))
 		}
 
 		profileNames := activeEnv.GetProfileNames()
