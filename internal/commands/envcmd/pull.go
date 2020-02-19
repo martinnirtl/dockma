@@ -66,7 +66,7 @@ func Pull(path string, hideCmdOutput bool, writeToDockmaLog bool) (output []byte
 
 	var timebridger externalcommand.Timebridger
 	if hideCmdOutput {
-		timebridger = spinnertimebridger.New(fmt.Sprintf("Running %sgit pull%s", chalk.Cyan, chalk.ResetColor), 14, "cyan")
+		timebridger = spinnertimebridger.Default(fmt.Sprintf("Running %s", chalk.Cyan.Color("git pull")))
 	}
 
 	var logfile string

@@ -116,7 +116,7 @@ var UpCommand = &cobra.Command{
 
 				viper.Set(fmt.Sprintf("envs.%s.profiles.%s", activeEnv.GetName(), profileName), selectedServices)
 
-				config.Save(fmt.Sprintf("Saved profile: %s", chalk.Cyan.Color(profileName), fmt.Errorf("Failed to save profile: %s", profileName)))
+				config.Save(fmt.Sprintf("Saved profile: %s", chalk.Cyan.Color(profileName)), fmt.Errorf("Failed to save profile: %s", profileName))
 			} else {
 				viper.Set(fmt.Sprintf("envs.%s.latest", activeEnv.GetName()), selectedServices)
 			}
@@ -130,7 +130,7 @@ var UpCommand = &cobra.Command{
 
 		var timebridger externalcommand.Timebridger
 		if hideCmdOutput {
-			timebridger = spinnertimebridger.Default("Running 'docker-compose up'")
+			timebridger = spinnertimebridger.Default(fmt.Sprintf("Running %s", chalk.Cyan.Color("docker-compose up")))
 		}
 
 		command := externalcommand.JoinCommand("docker-compose up -d", selectedServices...)
