@@ -72,6 +72,11 @@ func SaveNow() (successMessages []string, errorMessages []error, err error) {
 	return
 }
 
+// GetInitTime returns the init time.
+func GetInitTime() time.Time {
+	return viper.GetTime("init")
+}
+
 // GetUsername returns the user's name.
 func GetUsername() string {
 	return viper.GetString("username")

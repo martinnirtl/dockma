@@ -7,6 +7,7 @@ import (
 	"path"
 	"time"
 
+	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/survey"
 	"github.com/martinnirtl/dockma/internal/utils"
 	"github.com/spf13/cobra"
@@ -26,14 +27,13 @@ var InitCommand = &cobra.Command{
 }
 
 func initPreRunHook(cmd *cobra.Command, args []string) {
-	if init := viper.GetTime("init"); !init.IsZero() {
+	if init := config.GetInitTime(); !init.IsZero() {
 		proceed := survey.Confirm(fmt.Sprintf("%sDockma CLI has already been initialized!%s Do you want to proceed", chalk.Yellow, chalk.ResetColor), false)
-
 		if !proceed {
 			utils.Abort()
 		}
 	} else {
-		accept := survey.Confirm(fmt.Sprintf("Dockma CLI config will be stored at: %s", viper.GetString("home")), true)
+		accept := survey.Confirm(fmt.Sprintf("Dockma CLI config will be stored at: %s", config.GetHomeDir()), true)
 
 		if !accept {
 			fmt.Printf("Ok, you can change the config default location by setting %sDOCKMA_HOME%s environment variable.\n", chalk.Cyan, chalk.ResetColor)
@@ -54,7 +54,7 @@ func initCommandHandler(cmd *cobra.Command, args []string) {
 	viper.Set("username", username)
 	viper.Set("init", time.Now())
 
-	home := viper.GetString("home")
+	home := config.GetHomeDir()
 
 	if err := os.MkdirAll(home, os.FileMode(0755)); err != nil {
 		utils.ErrorAndExit(fmt.Errorf("Could not create config dir: %s", err))
