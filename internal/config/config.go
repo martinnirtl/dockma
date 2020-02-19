@@ -33,6 +33,7 @@ type Env interface {
 	SetUpdated() (time.Time, error)
 	LastUpdate() (time.Duration, error)
 	GetPullSetting() string
+	IsGitBased() bool
 	GetProfileNames() []string
 	HasProfile(name string) bool
 	GetProfile(name string) (Profile, error)
@@ -142,7 +143,7 @@ func GetEnv(name string) (Env, error) {
 	}
 
 	return &env{
-		name: viper.GetString("active"),
+		name: name,
 	}, nil
 }
 
@@ -186,6 +187,11 @@ func (e *env) LastUpdate() (time.Duration, error) {
 // GetAutoPullSetting returns wether to run git pull or not.
 func (e *env) GetPullSetting() string {
 	return viper.GetString(fmt.Sprintf("envs.%s.pull", e.name))
+}
+
+// IsGitBased returns whether environment is versioned with git or not.
+func (e *env) IsGitBased() bool {
+	return viper.GetString(fmt.Sprintf("envs.%s.pull", e.name)) != "no-git"
 }
 
 // GetProfilesNames returns profile names for given env.

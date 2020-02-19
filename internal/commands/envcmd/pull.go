@@ -27,16 +27,23 @@ var pullCommand = &cobra.Command{
 		} else {
 			envName = helpers.GetEnvironment(args[0])
 		}
+
 		env, err := config.GetEnv(envName)
 		utils.ErrorAndExit(err)
 
 		envHomeDir := env.GetHomeDir()
 
+		if !env.IsGitBased() {
+			fmt.Printf("Environment %s is not a git repository.\n", chalk.Cyan.Color(envName))
+
+			os.Exit(0)
+		}
+
 		hideCmdOutput := config.GetHideSubcommandOutputSetting()
 
 		output, err := Pull(envHomeDir, hideCmdOutput, true)
 		if err != nil && hideCmdOutput {
-			fmt.Println(string(output))
+			fmt.Print(string(output))
 		}
 		utils.ErrorAndExit(err)
 
@@ -70,7 +77,7 @@ func Pull(path string, hideCmdOutput bool, writeToDockmaLog bool) (output []byte
 	output, cmdErr := externalcommand.Execute("git pull", timebridger, logfile)
 
 	if cmdErr != nil {
-		err = errors.New("Could not execute 'git pull' in active environment home dir")
+		err = errors.New("Could not execute 'git pull'")
 	}
 
 	// activeEnv.SetUpdated() // TODO make config to object
