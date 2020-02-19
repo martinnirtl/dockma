@@ -27,13 +27,12 @@ var InspectCommand = &cobra.Command{
 
 		if err != nil {
 			if errors.Is(err, os.ErrNotExist) {
-				fmt.Printf("%sNothing to output yet. Sry, %s!%s\n", chalk.Cyan, viper.GetString("username"), chalk.ResetColor)
+				fmt.Println("Nothing to output yet.")
 			} else {
 				utils.ErrorAndExit(fmt.Errorf("Could not read logfile: %s", viper.GetString("logfile")))
 			}
 		} else {
-			fmt.Printf("%sHere come the logs:%s\n", chalk.Cyan, chalk.ResetColor)
-
+			fmt.Println(chalk.Cyan.Color("Here come the logs:"))
 			fmt.Print(string(content))
 		}
 	},
