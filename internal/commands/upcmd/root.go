@@ -74,7 +74,7 @@ var UpCommand = &cobra.Command{
 				fmt.Println(output)
 				utils.Warn("Could not execute git pull.")
 			} else {
-				utils.Success("Pulled environment.")
+				utils.Success(fmt.Sprintf("Pulled environment: %s", activeEnv.GetName()))
 			}
 		}
 
