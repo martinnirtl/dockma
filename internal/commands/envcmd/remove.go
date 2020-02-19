@@ -1,8 +1,10 @@
 package envcmd
 
 import (
+	"errors"
 	"fmt"
 
+	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/survey"
 	"github.com/martinnirtl/dockma/internal/utils"
 	"github.com/martinnirtl/dockma/internal/utils/helpers"
@@ -17,7 +19,8 @@ var removeCmd = &cobra.Command{
 	Short:   "Remove environment",
 	Long:    "Remove environment",
 	Example: "dockma envs remove my-env",
-	Args:    cobra.RangeArgs(0, 1),
+	// FIXME rewrite/rethink loading of dockma config for dynamic generation of ValidArgs
+	Args: cobra.RangeArgs(0, 1),
 	Run: func(cmd *cobra.Command, args []string) {
 		env := ""
 		if len(args) == 0 {
@@ -27,32 +30,22 @@ var removeCmd = &cobra.Command{
 		}
 
 		sure := survey.Confirm(fmt.Sprintf("Are you sure to remove '%s'", env), false)
-
 		if !sure {
 			utils.Abort()
 		}
 
-		activeEnv := viper.GetString("active")
+		activeEnv := config.GetActiveEnv()
 
-		if env == activeEnv {
-			fmt.Printf("%sRemoved active environment: %s%s\n\n", chalk.Yellow, env, chalk.ResetColor)
-
+		if env == activeEnv.GetName() {
 			viper.Set("active", "-")
-
-			fmt.Printf("%sUnset active environment%s\n", chalk.Cyan, chalk.ResetColor)
-		} else {
-			fmt.Printf("%sRemoved environment: %s%s\n", chalk.Cyan, env, chalk.ResetColor)
+			config.Save(chalk.Yellow.Color("Unset active environment."), errors.New("Failed to unset active environment"))
 		}
+
+		config.Save(fmt.Sprintf("Removed environment: %s", chalk.Cyan.Color(env)), errors.New("Failed to remove environment"))
 
 		envs := viper.GetStringMap("envs")
-
 		delete(envs, env)
-
 		viper.Set("envs", envs)
-
-		if err := viper.WriteConfig(); err != nil {
-			utils.ErrorAndExit(fmt.Errorf("Removing environment failed: %s", env))
-		}
 	},
 }
 

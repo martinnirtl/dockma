@@ -21,7 +21,6 @@ var pullCommand = &cobra.Command{
 	Example: "dockma env pull",
 	Args:    cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
-
 		activeEnv := config.GetActiveEnv()
 
 		if activeEnv.GetName() == "-" {
@@ -30,11 +29,15 @@ var pullCommand = &cobra.Command{
 
 		envHomeDir := activeEnv.GetHomeDir()
 
-		err := Pull(envHomeDir, true)
+		hideCmdOutput := viper.GetBool("hidesubcommandoutput")
 
+		output, err := Pull(envHomeDir, hideCmdOutput, true)
+		if err != nil && hideCmdOutput {
+			fmt.Println(string(output))
+		}
 		utils.ErrorAndExit(err)
 
-		utils.Success(fmt.Sprintf("Successfully pulled env: %s", activeEnv.GetName()))
+		utils.Success(fmt.Sprintf("Pulled env: %s", activeEnv.GetName()))
 	},
 }
 
@@ -43,30 +46,31 @@ func init() {
 }
 
 // Pull runs git pull in given path and optionally logs output
-func Pull(path string, log bool) error {
-	err := os.Chdir(path)
+func Pull(path string, hideCmdOutput bool, writeToDockmaLog bool) (output []byte, err error) {
+	chdirErr := os.Chdir(path)
+	if chdirErr != nil {
+		err = errors.New("Could not change working dir")
 
-	if err != nil {
-		return errors.New("Could not change working dir")
+		return
 	}
 
 	var timebridger externalcommand.Timebridger
-	if hideCmdOutput := viper.GetBool("hidesubcommandoutput"); hideCmdOutput {
+	if hideCmdOutput {
 		timebridger = spinnertimebridger.New(fmt.Sprintf("Running %sgit pull%s", chalk.Cyan, chalk.ResetColor), 14, "cyan")
 	}
 
 	var logfile string
-	if log {
+	if writeToDockmaLog {
 		logfile = config.GetLogfile()
 	}
 
-	_, err = externalcommand.Execute("git pull", timebridger, logfile)
+	output, cmdErr := externalcommand.Execute("git pull", timebridger, logfile)
 
-	if err != nil {
-		return errors.New("Could not execute 'git pull' in active environment home dir")
+	if cmdErr != nil {
+		err = errors.New("Could not execute 'git pull' in active environment home dir")
 	}
 
 	// activeEnv.SetUpdated() // TODO make config to object
 
-	return nil
+	return
 }

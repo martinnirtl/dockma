@@ -66,13 +66,15 @@ var UpCommand = &cobra.Command{
 			doPull = false
 		}
 
-		if doPull {
-			err := envcmd.Pull(envHomeDir, false)
+		hideCmdOutput := config.GetHideSubcommandOutputSetting()
 
-			if err != nil {
-				fmt.Printf("%sCould not execute git pull.%s\n", chalk.Yellow, chalk.ResetColor)
+		if doPull {
+			output, err := envcmd.Pull(envHomeDir, hideCmdOutput, false)
+			if err != nil && hideCmdOutput {
+				fmt.Println(output)
+				utils.Warn("Could not execute git pull.")
 			} else {
-				utils.Success("Successfully pulled environment.")
+				utils.Success("Pulled environment.")
 			}
 		}
 
@@ -131,7 +133,7 @@ var UpCommand = &cobra.Command{
 		utils.ErrorAndExit(err)
 
 		var timebridger externalcommand.Timebridger
-		if hideCmdOutput := viper.GetBool("hidesubcommandoutput"); hideCmdOutput {
+		if hideCmdOutput {
 			timebridger = spinnertimebridger.New("Running 'docker-compose up'", 14, "cyan")
 		}
 

@@ -130,6 +130,11 @@ func SetActiveEnv(new string) (newEnv Env, oldEnv Env) {
 		}
 }
 
+// GetHideSubcommandOutputSetting returns hidesubcommandoutput flag.
+func GetHideSubcommandOutputSetting() bool {
+	return viper.GetBool("hidesubcommandoutput")
+}
+
 // GetEnv returns the named environment.
 func GetEnv(name string) (Env, error) {
 	if !utils.Includes(GetEnvNames(), name) {

@@ -27,7 +27,7 @@ var listCmd = &cobra.Command{
 		if len(envs) > 0 {
 			for _, envName := range envs {
 				if envName == activeEnvName {
-					fmt.Printf("%s[active] %s", chalk.Cyan, chalk.ResetColor)
+					fmt.Printf("%s ", chalk.Cyan.Color("[active]"))
 				} else {
 					fmt.Print("         ")
 				}
@@ -36,7 +36,7 @@ var listCmd = &cobra.Command{
 
 				if env, err := config.GetEnv(envName); err == nil {
 					if env.IsRunning() {
-						fmt.Printf("%s%s%s", chalk.Green, " running", chalk.ResetColor)
+						fmt.Printf(" %s", chalk.Green.Color("running"))
 					} else {
 						fmt.Print(" -------")
 					}
@@ -49,7 +49,7 @@ var listCmd = &cobra.Command{
 				fmt.Println()
 			}
 		} else {
-			fmt.Printf("No environments configured. Add a new environment by running %sdockma envs init%s.\n", chalk.Cyan, chalk.ResetColor)
+			fmt.Printf("No environments configured. Add a new environment by running %s.\n", chalk.Cyan.Color("dockma envs init"))
 		}
 	},
 }

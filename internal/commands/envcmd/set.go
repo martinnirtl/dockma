@@ -16,7 +16,8 @@ var setCmd = &cobra.Command{
 	Short:   "Set active environment",
 	Long:    "Set active environment",
 	Example: "dockma envs set",
-	Args:    cobra.RangeArgs(0, 1),
+	// FIXME loading of viper config for dynamic ValidArgs
+	Args: cobra.RangeArgs(0, 1),
 	Run: func(cmd *cobra.Command, args []string) {
 		env := ""
 		if len(args) == 0 {
@@ -28,7 +29,7 @@ var setCmd = &cobra.Command{
 		activeEnv := config.GetActiveEnv()
 
 		if env == activeEnv.GetName() {
-			fmt.Printf("%sEnvironment already set as active: %s%s\n", chalk.Yellow, activeEnv.GetName(), chalk.ResetColor)
+			fmt.Printf("Environment already set active: %s\n", chalk.Cyan.Color(activeEnv.GetName()))
 
 			return
 		}
@@ -39,7 +40,7 @@ var setCmd = &cobra.Command{
 
 		viper.Set("active", env)
 
-		config.Save(fmt.Sprintf("New active environment: %s%s%s (old: %s)\n", chalk.Cyan, env, chalk.ResetColor, activeEnv.GetName()), fmt.Errorf("Failed to set active environment"))
+		config.Save(fmt.Sprintf("New active environment: %s (old: %s)", chalk.Cyan.Color(env), activeEnv.GetName()), fmt.Errorf("Failed to set active environment"))
 	},
 }
 

@@ -31,31 +31,25 @@ var initCmd = &cobra.Command{
 			if err != nil {
 				utils.ErrorAndExit(fmt.Errorf("Could not find directory: %s", path))
 			}
+		} else {
+			utils.Warn("No path provided. Default is: .")
 		}
 
 		env = survey.InputName("Enter a name for the new environment (has to be unique)", "")
 
-		if env == "" {
-			utils.ErrorAndExit(errors.New("Got empty string for environment name"))
-		} else if env == "-" {
-			utils.ErrorAndExit(errors.New("Invalid environment name '-'"))
-		}
-
 		workingDir, err := os.Getwd()
-
 		if err != nil {
 			utils.ErrorAndExit(errors.New("Could not read current working directory"))
 		}
 
 		pull := "off"
 		if _, err := os.Stat(".git"); !os.IsNotExist(err) {
-			pull = survey.Select(fmt.Sprintf("Run %sgit pull%s before %sdockma up%s", chalk.Cyan, chalk.Reset, chalk.Cyan, chalk.ResetColor), []string{"auto", "optional", "manual", "off"})
+			pull = survey.Select(fmt.Sprintf("Run %s before %s", chalk.Cyan.Color("git pull"), chalk.Cyan.Color("dockma up")), []string{"auto", "optional", "manual", "off"})
 		} else {
 			pull = "no-git"
 		}
 
-		proceed := survey.Confirm(fmt.Sprintf("Add new environment %s%s%s (location: %s)", chalk.Cyan, env, chalk.ResetColor, workingDir), true)
-
+		proceed := survey.Confirm(fmt.Sprintf("Add new environment %s (location: %s)", chalk.Cyan.Color(env), workingDir), true)
 		if !proceed {
 			utils.Abort()
 		}
@@ -67,18 +61,17 @@ var initCmd = &cobra.Command{
 		activeEnv := config.GetActiveEnv()
 		oldEnv := activeEnv.GetName()
 
-		var set bool
 		if activeEnv.IsRunning() {
 			message := fmt.Sprintf("Current active environment running: %s. Set newly initialized environment active", oldEnv)
 
-			set = survey.Confirm(message, false)
+			set := survey.Confirm(message, false)
+
+			if set {
+				viper.Set("active", env)
+			}
 		}
 
-		if set {
-			viper.Set("active", env)
-		}
-
-		config.Save(fmt.Sprintf("Initialized new environment: %s%s%s\n", chalk.Cyan, env, chalk.ResetColor), fmt.Errorf("Failed to save newly created environment"))
+		config.Save(fmt.Sprintf("Initialized new environment: %s", chalk.Cyan.Color(env)), fmt.Errorf("Failed to save newly created environment"))
 	},
 }
 
