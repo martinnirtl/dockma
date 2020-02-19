@@ -16,6 +16,7 @@ var VersionCommand = &cobra.Command{
 	Hidden:           true,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {},
 	Run: func(cmd *cobra.Command, args []string) {
+		// TODO use version from build flags
 		fmt.Println("🐳 Dockma v0.0.0")
 	},
 }
