@@ -22,16 +22,15 @@ var DownCommand = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		filepath := config.GetLogfile()
 
-		activeEnv := viper.GetString("active")
+		activeEnv := config.GetActiveEnv()
 
-		if activeEnv == "-" {
+		if activeEnv.GetName() == "-" {
 			utils.PrintNoActiveEnvSet()
 		}
 
-		envHomeDir := viper.GetString(fmt.Sprintf("envs.%s.home", activeEnv))
+		envHomeDir := activeEnv.GetHomeDir()
 
 		err := os.Chdir(envHomeDir)
-
 		utils.ErrorAndExit(err)
 
 		var timebridger externalcommand.Timebridger
@@ -48,9 +47,9 @@ var DownCommand = &cobra.Command{
 			os.Exit(0)
 		}
 
-		viper.Set(fmt.Sprintf("envs.%s.running", activeEnv), false)
-		config.Save("", fmt.Errorf("Failed to set running to 'false' [%s]", activeEnv))
+		utils.Success("Executed 'docker-compose down'")
 
-		utils.Success("Successfully executed 'docker-compose down'")
+		viper.Set(fmt.Sprintf("envs.%s.running", activeEnv.GetName()), false)
+		config.Save("", fmt.Errorf("Failed to set running to 'false' [%s]", activeEnv))
 	},
 }
