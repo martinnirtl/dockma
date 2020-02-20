@@ -48,7 +48,7 @@ var DownCommand = &cobra.Command{
 			os.Exit(0)
 		}
 
-		utils.Success(fmt.Sprintf("Executed %s.", chalk.Bold.TextStyle("docker-compose down")))
+		utils.Success("Executed command: docker-compose down")
 
 		viper.Set(fmt.Sprintf("envs.%s.running", activeEnv.GetName()), false)
 		config.Save("", fmt.Errorf("Failed to set running to 'false' [%s]", activeEnv))

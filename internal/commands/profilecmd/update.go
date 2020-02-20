@@ -64,7 +64,7 @@ var updateCmd = &cobra.Command{
 
 		viper.Set(fmt.Sprintf("envs.%s.profiles.%s", activeEnv.GetName(), profileName), selected)
 
-		config.Save(fmt.Sprintf("Updated profile in %s: %s", chalk.Bold.TextStyle(activeEnv.GetName()), chalk.Cyan.Color(profileName)), fmt.Errorf("Failed to update profile: %s", profileName))
+		config.Save(fmt.Sprintf("Updated profile of env %s: %s", chalk.Bold.TextStyle(activeEnv.GetName()), chalk.Cyan.Color(profileName)), fmt.Errorf("Failed to update profile: %s", profileName))
 	},
 }
 

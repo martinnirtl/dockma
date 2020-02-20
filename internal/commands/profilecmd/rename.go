@@ -59,7 +59,7 @@ var renameCmd = &cobra.Command{
 
 		viper.Set(fmt.Sprintf("envs.%s.profiles", activeEnv.GetName()), profileMap)
 
-		config.Save(fmt.Sprintf("Renamed profile from %s to %s %s", chalk.Cyan.Color(renameProfile), chalk.Cyan.Color(profileName), chalk.Bold.TextStyle(fmt.Sprintf("[%s]", activeEnv.GetName()))), fmt.Errorf("Failed to rename profile: %s", renameProfile))
+		config.Save(fmt.Sprintf("Renamed profile of env %s from %s to %s", chalk.Bold.TextStyle(activeEnv.GetName()), chalk.Cyan.Color(renameProfile), chalk.Cyan.Color(profileName)), fmt.Errorf("Failed to rename profile: %s", renameProfile))
 	},
 }
 

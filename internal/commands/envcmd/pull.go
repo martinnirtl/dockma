@@ -47,7 +47,7 @@ var pullCommand = &cobra.Command{
 		}
 		utils.ErrorAndExit(err)
 
-		utils.Success(fmt.Sprintf("Pulled environment %s.", chalk.Bold.TextStyle(env.GetName())))
+		utils.Success(fmt.Sprintf("Pulled environment: %s", env.GetName()))
 	},
 }
 

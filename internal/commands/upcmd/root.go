@@ -65,11 +65,11 @@ var UpCommand = &cobra.Command{
 			output, err := envcmd.Pull(envHomeDir, hideCmdOutput, false)
 			if err != nil && hideCmdOutput {
 				fmt.Print(string(output))
-				utils.Warn(fmt.Sprintf("Could not execute %s.", chalk.Bold.TextStyle("git pull")))
+				utils.Warn("Could not execute command: git pull")
 
 				fmt.Println() // Add empty line for better readability
 			} else {
-				utils.Success(fmt.Sprintf("Pulled environment %s.", chalk.Bold.TextStyle(activeEnv.GetName())))
+				utils.Success(fmt.Sprintf("Pulled environment: %s", activeEnv.GetName()))
 			}
 		}
 
@@ -146,6 +146,6 @@ var UpCommand = &cobra.Command{
 		viper.Set(fmt.Sprintf("envs.%s.running", activeEnv.GetName()), true)
 		config.Save("", fmt.Errorf("Failed to save running state of environment: %s", activeEnv.GetName()))
 
-		utils.Success(fmt.Sprintf("Executed %s.", chalk.Bold.TextStyle("docker-compose up")))
+		utils.Success("Executed command: docker-compose up")
 	},
 }
