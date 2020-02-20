@@ -47,12 +47,12 @@ func Execute(command string, timebridger Timebridger, logfile string) ([]byte, e
 		fileError := ioutil.WriteFile(logfile, output, 0644)
 
 		if fileError != nil {
-			return output, fmt.Errorf("Could not save output to logfile")
+			return output, fmt.Errorf("Could not save output to logfile: %s", logfile)
 		}
 	}
 
 	if commandError != nil {
-		return output, fmt.Errorf("Could not run command '%s'", command)
+		return output, fmt.Errorf("Could not run command: %s", command)
 	}
 
 	return output, nil

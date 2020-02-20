@@ -36,7 +36,7 @@ func getDockerCompose(filepath string, override bool) (*viper.Viper, error) {
 	readError := temp.ReadInConfig()
 
 	if readError != nil {
-		return nil, fmt.Errorf("Could not read %s file", fileName)
+		return nil, fmt.Errorf("Could not read file: %s", fileName)
 	}
 
 	return temp, nil

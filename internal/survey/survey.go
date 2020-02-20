@@ -7,6 +7,7 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/AlecAivazis/survey/v2/terminal"
 	"github.com/martinnirtl/dockma/internal/utils"
+	"github.com/ttacon/chalk"
 )
 
 // NameRegex should be used to verify all names
@@ -23,7 +24,7 @@ func ValidateName(val interface{}) error {
 		}
 
 		if !match {
-			return fmt.Errorf("'%s' has to comply with regex /%s/", name, NameRegex)
+			return fmt.Errorf("%s has to comply with regex: %s", chalk.Bold.TextStyle(name), NameRegex)
 		}
 
 		return nil

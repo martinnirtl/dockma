@@ -21,7 +21,7 @@ var deleteCmd = &cobra.Command{
 	Example: "dockma profile delete",
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 1 && !config.GetActiveEnv().HasProfile(args[0]) {
-			return fmt.Errorf("No such profile '%s'", args[0])
+			return fmt.Errorf("No such profile: %s", args[0])
 		}
 
 		if len(args) > 1 {
@@ -58,7 +58,7 @@ var deleteCmd = &cobra.Command{
 
 		viper.Set(fmt.Sprintf("envs.%s.profiles", activeEnv.GetName()), profileMap)
 
-		config.Save(fmt.Sprintf("Deleted profile from %s environment: %s", chalk.Bold.TextStyle(activeEnv.GetName()), chalk.Cyan.Color(profileName)), fmt.Errorf("Failed to delete profile '%s'", profileName))
+		config.Save(fmt.Sprintf("Deleted profile from %s environment: %s", chalk.Bold.TextStyle(activeEnv.GetName()), chalk.Cyan.Color(profileName)), fmt.Errorf("Failed to delete profile: %s", profileName))
 	},
 }
 

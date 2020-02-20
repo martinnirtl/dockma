@@ -41,7 +41,7 @@ var setCmd = &cobra.Command{
 			setConfigVar(varname[0])
 
 			message := fmt.Sprintf("Set %s: %s", chalk.Cyan.Color(varname[0]), chalk.Cyan.Color(viper.GetString(varname[0])))
-			err := fmt.Errorf("Failed to set '%s'", varname[0])
+			err := fmt.Errorf("Failed to set: %s", varname[0])
 			config.Save(message, err)
 		}
 	},

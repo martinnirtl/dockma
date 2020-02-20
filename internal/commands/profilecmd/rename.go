@@ -20,7 +20,7 @@ var renameCmd = &cobra.Command{
 	Example: "dockma profile rename",
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 1 && !config.GetActiveEnv().HasProfile(args[0]) {
-			return fmt.Errorf("No such profile '%s'", args[0])
+			return fmt.Errorf("No such profile: %s", args[0])
 		}
 
 		if len(args) > 1 {
@@ -59,7 +59,7 @@ var renameCmd = &cobra.Command{
 
 		viper.Set(fmt.Sprintf("envs.%s.profiles", activeEnv.GetName()), profileMap)
 
-		config.Save(fmt.Sprintf("Renamed profile from %s to %s %s", chalk.Cyan.Color(renameProfile), chalk.Cyan.Color(profileName), chalk.Bold.TextStyle(fmt.Sprintf("[%s]", activeEnv.GetName()))), fmt.Errorf("Failed to rename profile '%s'", renameProfile))
+		config.Save(fmt.Sprintf("Renamed profile from %s to %s %s", chalk.Cyan.Color(renameProfile), chalk.Cyan.Color(profileName), chalk.Bold.TextStyle(fmt.Sprintf("[%s]", activeEnv.GetName()))), fmt.Errorf("Failed to rename profile: %s", renameProfile))
 	},
 }
 
