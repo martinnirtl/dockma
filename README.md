@@ -31,6 +31,7 @@ Level up your docker-compose game during development!
 - implement arguement based command execution
   - check all commands for arg count check and command usage definition
   - add 'dynamic' bash completion
+- build command/solution to change selection without downing env in between
 - format error messages which get logged with prefix 'Error: ' (not handed over to config.Save func) and include ':'
 - finish makefile
   - bind version, commit, date to vars provided on 'go build'
