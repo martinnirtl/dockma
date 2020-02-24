@@ -11,7 +11,7 @@ import (
 	"github.com/ttacon/chalk"
 )
 
-var configVars []string = []string{"hidesubcommandoutput", "logfile", "username"}
+var configVars []string = []string{"hidesubcommandoutput", "username"}
 
 func getSetCommand() *cobra.Command {
 	return &cobra.Command{
@@ -31,7 +31,6 @@ func runSetCommand(cmd *cobra.Command, args []string) {
 	if len(args) == 0 {
 		options := []string{
 			fmt.Sprintf("hidesubcommandoutput: %t", viper.GetBool("hidesubcommandoutput")),
-			fmt.Sprintf("logfile: %s", viper.GetString("logfile")),
 			fmt.Sprintf("username: %s", viper.GetString("username")),
 		}
 
@@ -57,11 +56,6 @@ func setConfigVar(varname string) {
 		hide := survey.Confirm("Hide output of external commands [true: show output only on error, false: always pipe output]", viper.GetBool("hidesubcommandoutput"))
 
 		viper.Set("hidesubcommandoutput", hide)
-
-	case "logfile":
-		logfile := survey.InputName("Enter name of logfile [stored in Dockma home dir]", viper.GetString("logfile"))
-
-		viper.Set("logfile", logfile)
 
 	case "username":
 		username := survey.InputName("Enter new username", viper.GetString("username"))
