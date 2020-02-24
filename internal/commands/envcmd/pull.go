@@ -71,7 +71,7 @@ func Pull(path string, hideCmdOutput bool, writeToDockmaLog bool) (output []byte
 
 	var logfile string
 	if writeToDockmaLog {
-		logfile = config.GetLogfile()
+		logfile = config.GetSubcommandLogfile()
 	}
 
 	output, cmdErr := externalcommand.Execute("git pull", timebridger, logfile)

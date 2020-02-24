@@ -29,8 +29,7 @@ import (
 )
 
 // FIXME make flags work
-// var verboseFlag bool
-// var authorFlag bool
+var verboseFlag bool
 
 // RootCommand is the root command of dockma
 var RootCommand = &cobra.Command{
@@ -45,7 +44,7 @@ func init() {
 	// cobra.OnInitialize(initConfig)
 
 	// TODO FLAGS GO HERE
-	// RootCommand.PersistentFlags().BoolVarP(&verboseFlag, "verbose", "v", false, "verbose output")
+	RootCommand.PersistentFlags().BoolVarP(&verboseFlag, "verbose", "v", false, "verbose output")
 	// RootCommand.PersistentFlags().BoolVar(&authorFlag, "author", false, "print author")
 
 	// TODO behavior not clear. no consideration of envs set via .bash_profile !?
@@ -63,7 +62,8 @@ func init() {
 
 	viper.SetDefault("username", "User")
 	viper.SetDefault("hidesubcommandoutput", true)
-	viper.SetDefault("logfile", "log.txt")
+	viper.SetDefault("subcommandlogfile", "subcommand.log")
+	viper.SetDefault("dockmalogfile", "dockma.log")
 	viper.SetDefault("active", "-")
 	viper.SetDefault("envs", map[string]interface{}{})
 

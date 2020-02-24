@@ -26,7 +26,7 @@ func GetInspectCommand() *cobra.Command {
 }
 
 func runInspectCommand(cmd *cobra.Command, args []string) {
-	filepath := config.GetLogfile()
+	filepath := config.GetSubcommandLogfile()
 
 	content, err := ioutil.ReadFile(filepath)
 

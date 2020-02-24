@@ -94,9 +94,16 @@ func GetFile(filename string) string {
 	return filepath.Join(path, filename)
 }
 
-// GetLogfile returns full path to std dockma logfile.
-func GetLogfile() string {
-	filename := viper.GetString("logfile")
+// GetDockmaLogfile returns full path to dockma logfile.
+func GetDockmaLogfile() string {
+	filename := viper.GetString("dockmalogfile")
+
+	return GetFile(filename)
+}
+
+// GetSubcommandLogfile returns full path to subcommand logfile.
+func GetSubcommandLogfile() string {
+	filename := viper.GetString("subcommandlogfile")
 
 	return GetFile(filename)
 }

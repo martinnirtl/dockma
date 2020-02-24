@@ -32,7 +32,7 @@ func GetUpCommand() *cobra.Command {
 }
 
 func runUpCommand(cmd *cobra.Command, args []string) {
-	filepath := config.GetLogfile()
+	filepath := config.GetSubcommandLogfile()
 
 	activeEnv := config.GetActiveEnv()
 

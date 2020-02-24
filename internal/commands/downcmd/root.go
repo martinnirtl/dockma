@@ -26,7 +26,7 @@ func GetDownCommand() *cobra.Command {
 }
 
 func runDownCommand(cmd *cobra.Command, args []string) {
-	filepath := config.GetLogfile()
+	filepath := config.GetSubcommandLogfile()
 
 	activeEnv := config.GetActiveEnv()
 
