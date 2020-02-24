@@ -29,9 +29,9 @@ Level up your docker-compose game during development!
 ## TODOs
 
 - implement arguement based command execution
-  - add func for Args field (take valid args only but also no args for interactive mode)
-  - refactor config to be loaded first before anything else
+  - check all commands for arg count check and command usage definition
   - add 'dynamic' bash completion
+- format error messages which get logged with prefix 'Error: ' (not handed over to config.Save func) and include ':'
 - finish makefile
   - bind version, commit, date to vars provided on 'go build'
 - add logging for verbose output
