@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+
 	"github.com/martinnirtl/dockma/internal/commands"
 )
 
@@ -12,5 +14,7 @@ import (
 // )
 
 func main() {
+	log.SetPrefix("Dockma")
+
 	commands.Execute()
 }
