@@ -34,7 +34,7 @@ func runInspectCommand(cmd *cobra.Command, args []string) {
 		if errors.Is(err, os.ErrNotExist) {
 			fmt.Println("Nothing to output yet.")
 		} else {
-			utils.ErrorAndExit(fmt.Errorf("Could not read logfile: %s", viper.GetString("logfile")))
+			utils.ErrorAndExit(fmt.Errorf("Could not read logfile %s", viper.GetString("subcommandlogfile")))
 		}
 	} else {
 		fmt.Println(chalk.Cyan.Color("Here come the logs:"))
