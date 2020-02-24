@@ -13,55 +13,57 @@ import (
 	"github.com/ttacon/chalk"
 )
 
-var deleteCmd = &cobra.Command{
-	Use:     "delete",
-	Aliases: []string{"del"},
-	Short:   "Delete a profile of active environment",
-	Long:    "Delete a profile of active environment",
-	Example: "dockma profile delete",
-	Args: func(cmd *cobra.Command, args []string) error {
-		if len(args) == 1 && !config.GetActiveEnv().HasProfile(args[0]) {
-			return fmt.Errorf("No such profile: %s", args[0])
-		}
-
-		if len(args) > 1 {
-			return errors.New("Command only takes one argument")
-		}
-
-		return nil
-	},
-	Run: func(cmd *cobra.Command, args []string) {
-		activeEnv := config.GetActiveEnv()
-		profileNames := activeEnv.GetProfileNames()
-
-		if len(profileNames) == 0 {
-			fmt.Printf("No profiles in environment: %s\n", chalk.Cyan.Color(activeEnv.GetName()))
-
-			os.Exit(0)
-		}
-
-		var profileName string
-		if len(args) == 0 {
-			profileName = survey.Select("Select profile to be deleted", profileNames)
-		} else {
-			profileName = args[0]
-
-			proceed := survey.Confirm("Are you sure", true)
-			if !proceed {
-				utils.Abort()
+func getDeleteCommand() *cobra.Command {
+	return &cobra.Command{
+		Use:     "delete",
+		Aliases: []string{"del"},
+		Short:   "Delete a profile of active environment",
+		Long:    "Delete a profile of active environment",
+		Example: "dockma profile delete",
+		Args: func(cmd *cobra.Command, args []string) error {
+			if len(args) == 1 && !config.GetActiveEnv().HasProfile(args[0]) {
+				return fmt.Errorf("No such profile: %s", args[0])
 			}
-		}
 
-		profileMap := viper.GetStringMap(fmt.Sprintf("envs.%s.profiles", activeEnv.GetName()))
+			if len(args) > 1 {
+				return errors.New("Command only takes one argument")
+			}
 
-		profileMap[profileName] = nil
-
-		viper.Set(fmt.Sprintf("envs.%s.profiles", activeEnv.GetName()), profileMap)
-
-		config.Save(fmt.Sprintf("Deleted profile from %s environment: %s", chalk.Bold.TextStyle(activeEnv.GetName()), chalk.Cyan.Color(profileName)), fmt.Errorf("Failed to delete profile: %s", profileName))
-	},
+			return nil
+		},
+		// Args:      cobra.OnlyValidArgs,
+		// ValidArgs: config.GetActiveEnv().GetProfileNames(),
+		Run: runDeleteCommand,
+	}
 }
 
-func init() {
-	ProfileCommand.AddCommand(deleteCmd)
+func runDeleteCommand(cmd *cobra.Command, args []string) {
+	activeEnv := config.GetActiveEnv()
+	profileNames := activeEnv.GetProfileNames()
+
+	if len(profileNames) == 0 {
+		fmt.Printf("No profiles in environment: %s\n", chalk.Cyan.Color(activeEnv.GetName()))
+
+		os.Exit(0)
+	}
+
+	var profileName string
+	if len(args) == 0 {
+		profileName = survey.Select("Select profile to be deleted", profileNames)
+	} else {
+		profileName = args[0]
+
+		proceed := survey.Confirm("Are you sure", true)
+		if !proceed {
+			utils.Abort()
+		}
+	}
+
+	profileMap := viper.GetStringMap(fmt.Sprintf("envs.%s.profiles", activeEnv.GetName()))
+
+	profileMap[profileName] = nil
+
+	viper.Set(fmt.Sprintf("envs.%s.profiles", activeEnv.GetName()), profileMap)
+
+	config.Save(fmt.Sprintf("Deleted profile from %s environment: %s", chalk.Bold.TextStyle(activeEnv.GetName()), chalk.Cyan.Color(profileName)), fmt.Errorf("Failed to delete profile: %s", profileName))
 }

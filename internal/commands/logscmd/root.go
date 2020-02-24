@@ -15,39 +15,43 @@ var followFlag bool
 var timestampsFlag bool
 var tailFlag int
 
-// LogsCommand implements the top level logs command
-var LogsCommand = &cobra.Command{
-	Use:     "logs [service...]",
-	Short:   "Logs output of all or only selected services",
-	Long:    "Logs output of all or only selected services",
-	Example: "dockma logs -f my-service",
-	Args:    cobra.ArbitraryArgs,
-	// Args:      cobra.OnlyValidArgs, // TODO investigate
-	// ValidArgs: getValidArgs(),
-	Run: func(cmd *cobra.Command, args []string) {
-		activeEnv := config.GetActiveEnv()
+// GetLogsCommand returns the top level logs command
+func GetLogsCommand() *cobra.Command {
+	logsCommand := &cobra.Command{
+		Use:     "logs [service...]",
+		Short:   "Logs output of all or only selected services",
+		Long:    "Logs output of all or only selected services",
+		Example: "dockma logs -f my-service",
+		Args:    cobra.ArbitraryArgs,
+		// Args:      cobra.OnlyValidArgs, // TODO investigate
+		// ValidArgs: getValidArgs(),
+		Run: runLogsCommand,
+	}
 
-		if activeEnv.GetName() == "-" {
-			utils.PrintNoActiveEnvSet()
-		}
+	logsCommand.Flags().BoolVarP(&followFlag, "follow", "f", false, "follow log output")
+	logsCommand.Flags().BoolVarP(&timestampsFlag, "timestamps", "t", false, "show timestamps")
+	logsCommand.Flags().IntVar(&tailFlag, "tail", 0, "number of lines to show from the end of the logs for each service")
 
-		envHomeDir := activeEnv.GetHomeDir()
-
-		err := os.Chdir(envHomeDir)
-		utils.ErrorAndExit(err)
-
-		args = addFlagsToArgs(args)
-		command := externalcommand.JoinCommand("docker-compose logs", args...)
-
-		_, err = externalcommand.Execute(command, nil, "")
-		utils.ErrorAndExit(err)
-	},
+	return logsCommand
 }
 
-func init() {
-	LogsCommand.Flags().BoolVarP(&followFlag, "follow", "f", false, "follow log output")
-	LogsCommand.Flags().BoolVarP(&timestampsFlag, "timestamps", "t", false, "show timestamps")
-	LogsCommand.Flags().IntVar(&tailFlag, "tail", 0, "number of lines to show from the end of the logs for each service")
+func runLogsCommand(cmd *cobra.Command, args []string) {
+	activeEnv := config.GetActiveEnv()
+
+	if activeEnv.GetName() == "-" {
+		utils.PrintNoActiveEnvSet()
+	}
+
+	envHomeDir := activeEnv.GetHomeDir()
+
+	err := os.Chdir(envHomeDir)
+	utils.ErrorAndExit(err)
+
+	args = addFlagsToArgs(args)
+	command := externalcommand.JoinCommand("docker-compose logs", args...)
+
+	_, err = externalcommand.Execute(command, nil, "")
+	utils.ErrorAndExit(err)
 }
 
 func addFlagsToArgs(args []string) []string {

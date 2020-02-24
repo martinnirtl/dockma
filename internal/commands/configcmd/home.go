@@ -8,17 +8,17 @@ import (
 	"github.com/ttacon/chalk"
 )
 
-var homeCmd = &cobra.Command{
-	Use:     "home",
-	Short:   "Print home dir of Dockma config",
-	Long:    "Print home dir of Dockma config",
-	Example: "dockma config home",
-	Args:    cobra.NoArgs,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("Dockma config home dir: %s\n", chalk.Cyan.Color(viper.GetString("home")))
-	},
+func getHomeCommand() *cobra.Command {
+	return &cobra.Command{
+		Use:     "home",
+		Short:   "Print home dir of Dockma config",
+		Long:    "Print home dir of Dockma config",
+		Example: "dockma config home",
+		Args:    cobra.NoArgs,
+		Run:     runHomeCommand,
+	}
 }
 
-func init() {
-	ConfigCommand.AddCommand(homeCmd)
+func runHomeCommand(cmd *cobra.Command, args []string) {
+	fmt.Printf("Dockma config home dir: %s\n", chalk.Cyan.Color(viper.GetString("home")))
 }

@@ -11,49 +11,51 @@ import (
 
 var servicesFlag bool
 
-var listCmd = &cobra.Command{
-	Use:     "list",
-	Short:   "List profiles of active environment",
-	Long:    "List profiles of active environment",
-	Example: "dockma profiles list",
-	Args:    cobra.NoArgs,
-	Run: func(cmd *cobra.Command, args []string) {
-		activeEnv := config.GetActiveEnv()
-		profileNames := activeEnv.GetProfileNames()
+func getListCommand() *cobra.Command {
+	listCommand := &cobra.Command{
+		Use:     "list",
+		Short:   "List profiles of active environment",
+		Long:    "List profiles of active environment",
+		Example: "dockma profiles list",
+		Args:    cobra.NoArgs,
+		Run:     runListCommand,
+	}
 
-		if len(profileNames) == 0 {
-			fmt.Printf("No profiles in %s. Create one with %s.\n", chalk.Cyan.Color(activeEnv.GetName()), chalk.Cyan.Color("dockma profile create"))
-		}
+	listCommand.Flags().BoolVarP(&servicesFlag, "services", "S", false, "print services")
 
-		fmt.Printf("Profiles of %s environment:\n", chalk.Bold.TextStyle(activeEnv.GetName()))
-
-		for _, profileName := range profileNames {
-			if servicesFlag {
-				fmt.Println()
-
-				fmt.Println(chalk.Bold.TextStyle(profileName))
-
-				profile, err := activeEnv.GetProfile(profileName)
-
-				utils.ErrorAndExit(err)
-
-				for _, service := range profile.Services {
-					if utils.Includes(profile.Selected, service) {
-						fmt.Printf("- %s\n", chalk.Cyan.Color(service))
-					} else {
-						fmt.Printf("- %s\n", service)
-					}
-				}
-			} else {
-				fmt.Printf("- %s\n", chalk.Cyan.Color(profileName))
-			}
-
-		}
-	},
+	return listCommand
 }
 
-func init() {
-	ProfileCommand.AddCommand(listCmd)
+func runListCommand(cmd *cobra.Command, args []string) {
+	activeEnv := config.GetActiveEnv()
+	profileNames := activeEnv.GetProfileNames()
 
-	listCmd.Flags().BoolVarP(&servicesFlag, "services", "S", false, "print services")
+	if len(profileNames) == 0 {
+		fmt.Printf("No profiles in %s. Create one with %s.\n", chalk.Cyan.Color(activeEnv.GetName()), chalk.Cyan.Color("dockma profile create"))
+	}
+
+	fmt.Printf("Profiles of %s environment:\n", chalk.Bold.TextStyle(activeEnv.GetName()))
+
+	for _, profileName := range profileNames {
+		if servicesFlag {
+			fmt.Println()
+
+			fmt.Println(chalk.Bold.TextStyle(profileName))
+
+			profile, err := activeEnv.GetProfile(profileName)
+
+			utils.ErrorAndExit(err)
+
+			for _, service := range profile.Services {
+				if utils.Includes(profile.Selected, service) {
+					fmt.Printf("- %s\n", chalk.Cyan.Color(service))
+				} else {
+					fmt.Printf("- %s\n", service)
+				}
+			}
+		} else {
+			fmt.Printf("- %s\n", chalk.Cyan.Color(profileName))
+		}
+
+	}
 }

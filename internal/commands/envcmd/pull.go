@@ -14,45 +14,45 @@ import (
 	"github.com/ttacon/chalk"
 )
 
-var pullCommand = &cobra.Command{
-	Use:     "pull",
-	Short:   "Run 'git pull' in environment home dir",
-	Long:    "Run 'git pull' in environment home dir",
-	Example: "dockma env pull",
-	Args:    cobra.RangeArgs(0, 1),
-	Run: func(cmd *cobra.Command, args []string) {
-		envName := ""
-		if len(args) == 0 {
-			envName = helpers.GetEnvironment("")
-		} else {
-			envName = helpers.GetEnvironment(args[0])
-		}
-
-		env, err := config.GetEnv(envName)
-		utils.ErrorAndExit(err)
-
-		envHomeDir := env.GetHomeDir()
-
-		if !env.IsGitBased() {
-			fmt.Printf("Environment %s is not a git repository.\n", chalk.Cyan.Color(envName))
-
-			os.Exit(0)
-		}
-
-		hideCmdOutput := config.GetHideSubcommandOutputSetting()
-
-		output, err := Pull(envHomeDir, hideCmdOutput, true)
-		if err != nil && hideCmdOutput {
-			fmt.Print(string(output))
-		}
-		utils.ErrorAndExit(err)
-
-		utils.Success(fmt.Sprintf("Pulled environment: %s", env.GetName()))
-	},
+func getPullCommand() *cobra.Command {
+	return &cobra.Command{
+		Use:     "pull",
+		Short:   "Run 'git pull' in environment home dir",
+		Long:    "Run 'git pull' in environment home dir",
+		Example: "dockma env pull",
+		Args:    cobra.RangeArgs(0, 1),
+		Run:     runPullCommand,
+	}
 }
 
-func init() {
-	EnvCommand.AddCommand(pullCommand)
+func runPullCommand(cmd *cobra.Command, args []string) {
+	envName := ""
+	if len(args) == 0 {
+		envName = helpers.GetEnvironment("")
+	} else {
+		envName = helpers.GetEnvironment(args[0])
+	}
+
+	env, err := config.GetEnv(envName)
+	utils.ErrorAndExit(err)
+
+	envHomeDir := env.GetHomeDir()
+
+	if !env.IsGitBased() {
+		fmt.Printf("Environment %s is not a git repository.\n", chalk.Cyan.Color(envName))
+
+		os.Exit(0)
+	}
+
+	hideCmdOutput := config.GetHideSubcommandOutputSetting()
+
+	output, err := Pull(envHomeDir, hideCmdOutput, true)
+	if err != nil && hideCmdOutput {
+		fmt.Print(string(output))
+	}
+	utils.ErrorAndExit(err)
+
+	utils.Success(fmt.Sprintf("Pulled environment: %s", env.GetName()))
 }
 
 // Pull runs git pull in given path and optionally logs output

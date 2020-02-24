@@ -13,44 +13,48 @@ import (
 	"github.com/ttacon/chalk"
 )
 
-// DownCommand implements the top level down command
-var DownCommand = &cobra.Command{
-	Use:     "down",
-	Short:   "Stops active environment",
-	Long:    "Stops active environment",
-	Example: "dockma down",
-	Args:    cobra.NoArgs,
-	Run: func(cmd *cobra.Command, args []string) {
-		filepath := config.GetLogfile()
+// GetDownCommand returns the top level down command
+func GetDownCommand() *cobra.Command {
+	return &cobra.Command{
+		Use:     "down",
+		Short:   "Stops active environment",
+		Long:    "Stops active environment",
+		Example: "dockma down",
+		Args:    cobra.NoArgs,
+		Run:     runDownCommand,
+	}
+}
 
-		activeEnv := config.GetActiveEnv()
+func runDownCommand(cmd *cobra.Command, args []string) {
+	filepath := config.GetLogfile()
 
-		if activeEnv.GetName() == "-" {
-			utils.PrintNoActiveEnvSet()
-		}
+	activeEnv := config.GetActiveEnv()
 
-		envHomeDir := activeEnv.GetHomeDir()
+	if activeEnv.GetName() == "-" {
+		utils.PrintNoActiveEnvSet()
+	}
 
-		err := os.Chdir(envHomeDir)
-		utils.ErrorAndExit(err)
+	envHomeDir := activeEnv.GetHomeDir()
 
-		var timebridger externalcommand.Timebridger
-		if hideCmdOutput := viper.GetBool("hidesubcommandoutput"); hideCmdOutput {
-			timebridger = spinnertimebridger.Default(fmt.Sprintf("Running %s", chalk.Cyan.Color("docker-compose down")))
-		}
+	err := os.Chdir(envHomeDir)
+	utils.ErrorAndExit(err)
 
-		output, err := externalcommand.Execute("docker-compose down", timebridger, filepath)
+	var timebridger externalcommand.Timebridger
+	if hideCmdOutput := viper.GetBool("hidesubcommandoutput"); hideCmdOutput {
+		timebridger = spinnertimebridger.Default(fmt.Sprintf("Running %s", chalk.Cyan.Color("docker-compose down")))
+	}
 
-		utils.Error(err)
-		if err != nil {
-			fmt.Print(string(output))
+	output, err := externalcommand.Execute("docker-compose down", timebridger, filepath)
 
-			os.Exit(0)
-		}
+	utils.Error(err)
+	if err != nil {
+		fmt.Print(string(output))
 
-		utils.Success("Executed command: docker-compose down")
+		os.Exit(0)
+	}
 
-		viper.Set(fmt.Sprintf("envs.%s.running", activeEnv.GetName()), false)
-		config.Save("", fmt.Errorf("Failed to set running to 'false' [%s]", activeEnv))
-	},
+	utils.Success("Executed command: docker-compose down")
+
+	viper.Set(fmt.Sprintf("envs.%s.running", activeEnv.GetName()), false)
+	config.Save("", fmt.Errorf("Failed to set running to 'false' [%s]", activeEnv))
 }

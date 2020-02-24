@@ -11,27 +11,27 @@ import (
 	"github.com/ttacon/chalk"
 )
 
-var catCmd = &cobra.Command{
-	Use:     "cat",
-	Short:   "Print config.json of Dockma",
-	Long:    "Print config.json of Dockma",
-	Example: "dockma config cat",
-	Args:    cobra.NoArgs,
-	Run: func(cmd *cobra.Command, args []string) {
-		filepath := config.GetFile("config.json")
-
-		content, err := ioutil.ReadFile(filepath)
-
-		if err != nil {
-			utils.ErrorAndExit(errors.New("Could not read config file"))
-		} else {
-			fmt.Printf("Here comes the %s file:\n", chalk.Cyan.Color("Dockma config"))
-
-			fmt.Println(string(content))
-		}
-	},
+func getCatCommand() *cobra.Command {
+	return &cobra.Command{
+		Use:     "cat",
+		Short:   "Print config.json of Dockma",
+		Long:    "Print config.json of Dockma",
+		Example: "dockma config cat",
+		Args:    cobra.NoArgs,
+		Run:     runCatCommand,
+	}
 }
 
-func init() {
-	ConfigCommand.AddCommand(catCmd)
+func runCatCommand(cmd *cobra.Command, args []string) {
+	filepath := config.GetFile("config.json")
+
+	content, err := ioutil.ReadFile(filepath)
+
+	if err != nil {
+		utils.ErrorAndExit(errors.New("Could not read config file"))
+	} else {
+		fmt.Printf("Here comes the %s file:\n", chalk.Cyan.Color("Dockma config"))
+
+		fmt.Println(string(content))
+	}
 }

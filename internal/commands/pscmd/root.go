@@ -9,26 +9,30 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// PSCommand implements the top level ps command
-var PSCommand = &cobra.Command{
-	Use:     "ps",
-	Short:   "List running services of active environment",
-	Long:    "List running services of active environment",
-	Example: "dockma ps",
-	Args:    cobra.NoArgs,
-	Run: func(cmd *cobra.Command, args []string) {
-		activeEnv := config.GetActiveEnv()
+// GetPSCommand returns the top level ps command
+func GetPSCommand() *cobra.Command {
+	return &cobra.Command{
+		Use:     "ps",
+		Short:   "List running services of active environment",
+		Long:    "List running services of active environment",
+		Example: "dockma ps",
+		Args:    cobra.NoArgs,
+		Run:     runPSCommand,
+	}
+}
 
-		if activeEnv.GetName() == "-" {
-			utils.PrintNoActiveEnvSet()
-		}
+func runPSCommand(cmd *cobra.Command, args []string) {
+	activeEnv := config.GetActiveEnv()
 
-		envHomeDir := activeEnv.GetHomeDir()
+	if activeEnv.GetName() == "-" {
+		utils.PrintNoActiveEnvSet()
+	}
 
-		err := os.Chdir(envHomeDir)
-		utils.ErrorAndExit(err)
+	envHomeDir := activeEnv.GetHomeDir()
 
-		_, err = externalcommand.Execute("docker-compose ps", nil, "")
-		utils.ErrorAndExit(err)
-	},
+	err := os.Chdir(envHomeDir)
+	utils.ErrorAndExit(err)
+
+	_, err = externalcommand.Execute("docker-compose ps", nil, "")
+	utils.ErrorAndExit(err)
 }

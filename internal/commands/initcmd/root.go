@@ -15,15 +15,17 @@ import (
 	"github.com/ttacon/chalk"
 )
 
-// InitCommand implements the top level init command
-var InitCommand = &cobra.Command{
-	Use:              "init",
-	Short:            "Initialize the Dockma CLI.",
-	Long:             "Initialize the Dockma CLI.",
-	Example:          "dockma init",
-	Args:             cobra.NoArgs,
-	PersistentPreRun: initPreRunHook, // used to override root PreRun func
-	Run:              initCommandHandler,
+// GetInitCommand returns the top level init command
+func GetInitCommand() *cobra.Command {
+	return &cobra.Command{
+		Use:              "init",
+		Short:            "Initialize the Dockma CLI.",
+		Long:             "Initialize the Dockma CLI.",
+		Example:          "dockma init",
+		Args:             cobra.NoArgs,
+		PersistentPreRun: initPreRunHook, // used to override root PreRun func
+		Run:              runInitCommand,
+	}
 }
 
 func initPreRunHook(cmd *cobra.Command, args []string) {
@@ -43,7 +45,7 @@ func initPreRunHook(cmd *cobra.Command, args []string) {
 	}
 }
 
-func initCommandHandler(cmd *cobra.Command, args []string) {
+func runInitCommand(cmd *cobra.Command, args []string) {
 	username := "User"
 	if sysUser, err := user.Current(); err == nil {
 		username = sysUser.Username

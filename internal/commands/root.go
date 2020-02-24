@@ -16,6 +16,7 @@ import (
 	"github.com/martinnirtl/dockma/internal/commands/logscmd"
 	"github.com/martinnirtl/dockma/internal/commands/profilecmd"
 	"github.com/martinnirtl/dockma/internal/commands/pscmd"
+	"github.com/martinnirtl/dockma/internal/commands/testcmd"
 	"github.com/martinnirtl/dockma/internal/commands/upcmd"
 	"github.com/martinnirtl/dockma/internal/commands/versioncmd"
 	"github.com/martinnirtl/dockma/internal/config"
@@ -41,19 +42,7 @@ var RootCommand = &cobra.Command{
 }
 
 func init() {
-	RootCommand.AddCommand(completioncmd.CompletionCommand)
-	RootCommand.AddCommand(configcmd.ConfigCommand)
-	RootCommand.AddCommand(downcmd.DownCommand)
-	RootCommand.AddCommand(envcmd.EnvCommand)
-	RootCommand.AddCommand(initcmd.InitCommand)
-	RootCommand.AddCommand(inspectcmd.InspectCommand)
-	RootCommand.AddCommand(logscmd.LogsCommand)
-	RootCommand.AddCommand(profilecmd.ProfileCommand)
-	RootCommand.AddCommand(pscmd.PSCommand)
-	RootCommand.AddCommand(upcmd.UpCommand)
-	RootCommand.AddCommand(versioncmd.VersionCommand)
-
-	cobra.OnInitialize(initConfig)
+	// cobra.OnInitialize(initConfig)
 
 	// TODO FLAGS GO HERE
 	// RootCommand.PersistentFlags().BoolVarP(&verboseFlag, "verbose", "v", false, "verbose output")
@@ -77,6 +66,25 @@ func init() {
 	viper.SetDefault("logfile", "log.txt")
 	viper.SetDefault("active", "-")
 	viper.SetDefault("envs", map[string]interface{}{})
+
+	initConfig()
+	initRootCmd()
+}
+
+func initRootCmd() {
+	RootCommand.AddCommand(completioncmd.GetCompletionCommand())
+	RootCommand.AddCommand(configcmd.GetConfigCommand())
+	RootCommand.AddCommand(downcmd.GetDownCommand())
+	RootCommand.AddCommand(envcmd.GetEnvCommand())
+	RootCommand.AddCommand(initcmd.GetInitCommand())
+	RootCommand.AddCommand(inspectcmd.GetInspectCommand())
+	RootCommand.AddCommand(logscmd.GetLogsCommand())
+	RootCommand.AddCommand(profilecmd.GetProfileCommand())
+	RootCommand.AddCommand(pscmd.GetPSCommand())
+	RootCommand.AddCommand(upcmd.GetUpCommand())
+	RootCommand.AddCommand(versioncmd.GetVersionCommand())
+
+	RootCommand.AddCommand(testcmd.GetTestCommand())
 }
 
 func initConfig() {
@@ -93,7 +101,7 @@ func initConfig() {
 
 func rootPreRunHook(cmd *cobra.Command, args []string) {
 	// enable printing of help
-	if "help" == cmd.Name() {
+	if cmd.Name() == "help" {
 		return
 	}
 

@@ -13,42 +13,42 @@ import (
 
 var configVars []string = []string{"hidesubcommandoutput", "logfile", "username"}
 
-var setCmd = &cobra.Command{
-	Use:       "set",
-	Short:     "Set Dockma config vars in an interactive walkthrough",
-	Long:      "Set Dockma config vars in an interactive walkthrough",
-	Example:   "dockma config set",
-	Args:      cobra.OnlyValidArgs,
-	ValidArgs: configVars,
-	Run: func(cmd *cobra.Command, args []string) {
-		var selected []string
-
-		if len(args) == 0 {
-			options := []string{
-				fmt.Sprintf("hidesubcommandoutput: %t", viper.GetBool("hidesubcommandoutput")),
-				fmt.Sprintf("logfile: %s", viper.GetString("logfile")),
-				fmt.Sprintf("username: %s", viper.GetString("username")),
-			}
-
-			selected = survey.MultiSelect("Select config items to change", options, nil)
-		} else {
-			selected = args
-		}
-
-		for _, varnameRaw := range selected {
-			varname := strings.Split(varnameRaw, ":")
-
-			setConfigVar(varname[0])
-
-			message := fmt.Sprintf("Set %s: %s", chalk.Cyan.Color(varname[0]), chalk.Cyan.Color(viper.GetString(varname[0])))
-			err := fmt.Errorf("Failed to set: %s", varname[0])
-			config.Save(message, err)
-		}
-	},
+func getSetCommand() *cobra.Command {
+	return &cobra.Command{
+		Use:       "set",
+		Short:     "Set Dockma config vars in an interactive walkthrough",
+		Long:      "Set Dockma config vars in an interactive walkthrough",
+		Example:   "dockma config set",
+		Args:      cobra.OnlyValidArgs,
+		ValidArgs: configVars,
+		Run:       runSetCommand,
+	}
 }
 
-func init() {
-	ConfigCommand.AddCommand(setCmd)
+func runSetCommand(cmd *cobra.Command, args []string) {
+	var selected []string
+
+	if len(args) == 0 {
+		options := []string{
+			fmt.Sprintf("hidesubcommandoutput: %t", viper.GetBool("hidesubcommandoutput")),
+			fmt.Sprintf("logfile: %s", viper.GetString("logfile")),
+			fmt.Sprintf("username: %s", viper.GetString("username")),
+		}
+
+		selected = survey.MultiSelect("Select config items to change", options, nil)
+	} else {
+		selected = args
+	}
+
+	for _, varnameRaw := range selected {
+		varname := strings.Split(varnameRaw, ":")
+
+		setConfigVar(varname[0])
+
+		message := fmt.Sprintf("Set %s: %s", chalk.Cyan.Color(varname[0]), chalk.Cyan.Color(viper.GetString(varname[0])))
+		err := fmt.Errorf("Failed to set: %s", varname[0])
+		config.Save(message, err)
+	}
 }
 
 func setConfigVar(varname string) {

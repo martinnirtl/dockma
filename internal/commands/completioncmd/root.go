@@ -11,37 +11,41 @@ import (
 
 var shells []string = []string{"bash", "powershell", "zsh"}
 
-// CompletionCommand implements the top level install command
-var CompletionCommand = &cobra.Command{
-	Use:       "completion [shell]",
-	Short:     "Generate shell completion code",
-	Long:      "Generate shell completion code",
-	Example:   "dockma completion bash",
-	Args:      cobra.OnlyValidArgs,
-	ValidArgs: shells,
-	Run: func(cmd *cobra.Command, args []string) {
-		var shell string
+// GetCompletionCommand returns the top level completion command
+func GetCompletionCommand() *cobra.Command {
+	return &cobra.Command{
+		Use:       "completion [shell]",
+		Short:     "Generate shell completion code",
+		Long:      "Generate shell completion code",
+		Example:   "dockma completion bash",
+		Args:      cobra.OnlyValidArgs,
+		ValidArgs: shells,
+		Run:       runCompletionCommand,
+	}
+}
 
-		if len(args) > 0 {
-			shell = args[0]
-		} else {
-			shell = survey.Select("Select shell to install completion for", shells)
-		}
+func runCompletionCommand(cmd *cobra.Command, args []string) {
+	var shell string
 
-		var err error
-		switch shell {
-		case "bash":
-			err = cmd.Root().GenBashCompletion(os.Stdout)
+	if len(args) > 0 {
+		shell = args[0]
+	} else {
+		shell = survey.Select("Select shell to install completion for", shells)
+	}
 
-		case "powershell":
-			err = cmd.Root().GenPowerShellCompletion(os.Stdout)
+	var err error
+	switch shell {
+	case "bash":
+		err = cmd.Root().GenBashCompletion(os.Stdout)
 
-		case "zsh":
-			err = cmd.Root().GenZshCompletion(os.Stdout)
-		}
+	case "powershell":
+		err = cmd.Root().GenPowerShellCompletion(os.Stdout)
 
-		if err != nil {
-			utils.Error(errors.New("Failed to generate shell completion code"))
-		}
-	},
+	case "zsh":
+		err = cmd.Root().GenZshCompletion(os.Stdout)
+	}
+
+	if err != nil {
+		utils.Error(errors.New("Failed to generate shell completion code"))
+	}
 }
