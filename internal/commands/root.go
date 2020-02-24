@@ -16,6 +16,7 @@ import (
 	"github.com/martinnirtl/dockma/internal/commands/logscmd"
 	"github.com/martinnirtl/dockma/internal/commands/profilecmd"
 	"github.com/martinnirtl/dockma/internal/commands/pscmd"
+	"github.com/martinnirtl/dockma/internal/commands/restartcmd"
 	"github.com/martinnirtl/dockma/internal/commands/testcmd"
 	"github.com/martinnirtl/dockma/internal/commands/upcmd"
 	"github.com/martinnirtl/dockma/internal/commands/versioncmd"
@@ -81,6 +82,7 @@ func initRootCmd() {
 	RootCommand.AddCommand(logscmd.GetLogsCommand())
 	RootCommand.AddCommand(profilecmd.GetProfileCommand())
 	RootCommand.AddCommand(pscmd.GetPSCommand())
+	RootCommand.AddCommand(restartcmd.GetRestartCommand())
 	RootCommand.AddCommand(upcmd.GetUpCommand())
 	RootCommand.AddCommand(versioncmd.GetVersionCommand())
 
