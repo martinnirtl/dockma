@@ -151,7 +151,7 @@ func runUpCommand(cmd *cobra.Command, args []string) {
 	command := externalcommand.JoinCommand("docker-compose up -d", selectedServices...)
 
 	output, err := externalcommand.Execute(command, timebridger, filepath)
-	if err != nil {
+	if err != nil && timebridger != nil {
 		fmt.Print(string(output))
 	}
 	utils.ErrorAndExit(err)

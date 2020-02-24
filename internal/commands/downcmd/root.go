@@ -45,13 +45,10 @@ func runDownCommand(cmd *cobra.Command, args []string) {
 	}
 
 	output, err := externalcommand.Execute("docker-compose down", timebridger, filepath)
-
-	utils.Error(err)
-	if err != nil {
+	if err != nil && timebridger != nil {
 		fmt.Print(string(output))
-
-		os.Exit(0)
 	}
+	utils.ErrorAndExit(err)
 
 	utils.Success("Executed command: docker-compose down")
 
