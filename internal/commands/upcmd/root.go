@@ -132,10 +132,10 @@ func runUpCommand(cmd *cobra.Command, args []string) {
 			viper.Set(fmt.Sprintf("envs.%s.profiles.%s", activeEnv.GetName(), profileName), selectedServices)
 
 			config.Save(fmt.Sprintf("Saved profile: %s", chalk.Cyan.Color(profileName)), fmt.Errorf("Failed to save profile: %s", profileName))
-		} else {
-			viper.Set(fmt.Sprintf("envs.%s.latest", activeEnv.GetName()), selectedServices)
 		}
 	}
+
+	viper.Set(fmt.Sprintf("envs.%s.latest", activeEnv.GetName()), selectedServices)
 
 	err = envvars.SetEnvVars(services.All, selectedServices)
 	utils.ErrorAndExit(err)
