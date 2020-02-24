@@ -8,6 +8,8 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+
+	"github.com/ttacon/chalk"
 )
 
 // JoinCommand joins all command slices with spaces
@@ -47,12 +49,12 @@ func Execute(command string, timebridger Timebridger, logfile string) ([]byte, e
 		fileError := ioutil.WriteFile(logfile, output, 0644)
 
 		if fileError != nil {
-			return output, fmt.Errorf("Could not save output to logfile: %s", logfile)
+			return output, fmt.Errorf("Could not save output to logfile %s", chalk.Underline.TextStyle(logfile))
 		}
 	}
 
 	if commandError != nil {
-		return output, fmt.Errorf("Could not run command: %s", command)
+		return output, fmt.Errorf("Could not run command %s", chalk.Underline.TextStyle(command))
 	}
 
 	return output, nil
