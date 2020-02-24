@@ -5,7 +5,7 @@ import (
 
 	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/utils"
-	"github.com/martinnirtl/dockma/internal/utils/helpers"
+	"github.com/martinnirtl/dockma/pkg/dockercompose"
 	"github.com/spf13/cobra"
 	"github.com/ttacon/chalk"
 )
@@ -71,10 +71,19 @@ func OnlyServices(cmd *cobra.Command, args []string) error {
 	activeEnv := config.GetActiveEnv()
 
 	for _, arg := range args {
-		if !utils.Includes(helpers.GetEnvServices(activeEnv), arg) {
+		if !utils.Includes(getEnvServices(activeEnv), arg) {
 			return fmt.Errorf("No such environment %s", chalk.Underline.TextStyle(arg))
 		}
 	}
 
 	return nil
+}
+
+func getEnvServices(env config.Env) []string {
+	envHomeDir := env.GetHomeDir()
+
+	services, err := dockercompose.GetServices(envHomeDir)
+	utils.ErrorAndExit(err)
+
+	return services.All
 }

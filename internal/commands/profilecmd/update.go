@@ -1,10 +1,10 @@
 package profilecmd
 
 import (
-	"errors"
 	"fmt"
 	"os"
 
+	"github.com/martinnirtl/dockma/internal/commands/argsvalidator"
 	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/survey"
 	"github.com/martinnirtl/dockma/internal/utils"
@@ -16,23 +16,13 @@ import (
 
 func getUpdateCommand() *cobra.Command {
 	return &cobra.Command{
-		Use:     "update",
+		Use:     "update [profile]",
 		Aliases: []string{"upd"},
 		Short:   "Update profile's service selection",
 		Long:    "Update profile's service selection",
 		Example: "dockma profile update",
-		Args: func(cmd *cobra.Command, args []string) error {
-			if len(args) == 1 && !config.GetActiveEnv().HasProfile(args[0]) {
-				return fmt.Errorf("No such profile: %s", args[0])
-			}
-
-			if len(args) > 1 {
-				return errors.New("Command only takes one argument")
-			}
-
-			return nil
-		},
-		Run: runUpdateCommand,
+		Args:    argsvalidator.OptionalProfile,
+		Run:     runUpdateCommand,
 	}
 }
 

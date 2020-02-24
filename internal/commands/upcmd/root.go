@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/martinnirtl/dockma/internal/commands/argsvalidator"
 	"github.com/martinnirtl/dockma/internal/commands/envcmd"
 	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/envvars"
@@ -26,7 +27,7 @@ func GetUpCommand() *cobra.Command {
 		Short:   "Runs active environment with profile or service selection",
 		Long:    "Runs active environment with profile or service selection",
 		Example: "dockma up",
-		Args:    cobra.NoArgs,
+		Args:    argsvalidator.OptionalProfile,
 		Run:     runUpCommand,
 	}
 }
@@ -91,7 +92,14 @@ func runUpCommand(cmd *cobra.Command, args []string) {
 
 	// default
 	profileName := "latest"
-	if len(profileNames) > 0 {
+	if len(args) > 0 {
+		profileName = args[0]
+
+		profile, err := activeEnv.GetProfile(profileName)
+		utils.ErrorAndExit(err)
+
+		preselected = profile.Selected
+	} else if len(profileNames) > 0 {
 		profileNames = append(profileNames, "latest")
 
 		profileName = survey.Select(fmt.Sprintf("Select profile to run"), profileNames)

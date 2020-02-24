@@ -5,6 +5,7 @@ import (
 	"os"
 	"sort"
 
+	"github.com/martinnirtl/dockma/internal/commands/argsvalidator"
 	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/utils"
 	"github.com/martinnirtl/dockma/pkg/externalcommand"
@@ -21,11 +22,9 @@ func GetLogsCommand() *cobra.Command {
 		Use:     "logs [service...]",
 		Short:   "Logs output of all or only selected services",
 		Long:    "Logs output of all or only selected services",
-		Example: "dockma logs -f my-service",
-		Args:    cobra.ArbitraryArgs,
-		// Args:      cobra.OnlyValidArgs, // TODO investigate
-		// ValidArgs: getValidArgs(),
-		Run: runLogsCommand,
+		Example: "dockma logs -f database",
+		Args:    argsvalidator.OnlyServices,
+		Run:     runLogsCommand,
 	}
 
 	logsCommand.Flags().BoolVarP(&followFlag, "follow", "f", false, "follow log output")
@@ -73,18 +72,3 @@ func addFlagsToArgs(args []string) []string {
 
 	return args
 }
-
-// func getValidArgs() []string {
-// 	activeEnv := config.GetActiveEnv()
-
-// 	if activeEnv == "-" {
-// 		return []string{}
-// 	}
-
-// 	envHomeDir := config.GetEnvHomeDir(activeEnv)
-
-// 	services, err := dockercompose.GetServices(envHomeDir)
-// 	utils.ErrorAndExit(err)
-
-// 	return services.All
-// }

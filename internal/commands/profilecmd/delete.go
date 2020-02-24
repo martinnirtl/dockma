@@ -1,10 +1,10 @@
 package profilecmd
 
 import (
-	"errors"
 	"fmt"
 	"os"
 
+	"github.com/martinnirtl/dockma/internal/commands/argsvalidator"
 	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/survey"
 	"github.com/martinnirtl/dockma/internal/utils"
@@ -15,25 +15,13 @@ import (
 
 func getDeleteCommand() *cobra.Command {
 	return &cobra.Command{
-		Use:     "delete",
+		Use:     "delete [profiles...]",
 		Aliases: []string{"del"},
 		Short:   "Delete a profile of active environment",
 		Long:    "Delete a profile of active environment",
 		Example: "dockma profile delete",
-		Args: func(cmd *cobra.Command, args []string) error {
-			if len(args) == 1 && !config.GetActiveEnv().HasProfile(args[0]) {
-				return fmt.Errorf("No such profile: %s", args[0])
-			}
-
-			if len(args) > 1 {
-				return errors.New("Command only takes one argument")
-			}
-
-			return nil
-		},
-		// Args:      cobra.OnlyValidArgs,
-		// ValidArgs: config.GetActiveEnv().GetProfileNames(),
-		Run: runDeleteCommand,
+		Args:    argsvalidator.OnlyProfiles,
+		Run:     runDeleteCommand,
 	}
 }
 
@@ -47,23 +35,25 @@ func runDeleteCommand(cmd *cobra.Command, args []string) {
 		os.Exit(0)
 	}
 
-	var profileName string
+	var selected []string
 	if len(args) == 0 {
-		profileName = survey.Select("Select profile to be deleted", profileNames)
+		selected = survey.MultiSelect("Select profiles to be deleted", profileNames, nil)
 	} else {
-		profileName = args[0]
-
-		proceed := survey.Confirm("Are you sure", true)
-		if !proceed {
-			utils.Abort()
-		}
+		selected = args
 	}
 
-	profileMap := viper.GetStringMap(fmt.Sprintf("envs.%s.profiles", activeEnv.GetName()))
+	proceed := survey.Confirm("Are you sure", true)
+	if !proceed {
+		utils.Abort()
+	}
 
-	profileMap[profileName] = nil
+	activeEnvName := activeEnv.GetName()
+	profileMap := viper.GetStringMap(fmt.Sprintf("envs.%s.profiles", activeEnvName))
+	for _, profileName := range selected {
+		profileMap[profileName] = nil
 
-	viper.Set(fmt.Sprintf("envs.%s.profiles", activeEnv.GetName()), profileMap)
+		config.Save(fmt.Sprintf("Deleted profile from %s environment: %s", chalk.Bold.TextStyle(activeEnvName), chalk.Cyan.Color(profileName)), fmt.Errorf("Failed to delete profile: %s", profileName))
+	}
 
-	config.Save(fmt.Sprintf("Deleted profile from %s environment: %s", chalk.Bold.TextStyle(activeEnv.GetName()), chalk.Cyan.Color(profileName)), fmt.Errorf("Failed to delete profile: %s", profileName))
+	viper.Set(fmt.Sprintf("envs.%s.profiles", activeEnvName), profileMap)
 }

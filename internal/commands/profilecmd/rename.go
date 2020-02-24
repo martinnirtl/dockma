@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/martinnirtl/dockma/internal/commands/argsvalidator"
 	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/survey"
 	"github.com/martinnirtl/dockma/internal/utils"
@@ -15,22 +16,12 @@ import (
 
 func getRenameCommand() *cobra.Command {
 	return &cobra.Command{
-		Use:     "rename",
+		Use:     "rename [profile]",
 		Short:   "Rename profile",
 		Long:    "Rename profile",
 		Example: "dockma profile rename",
-		Args: func(cmd *cobra.Command, args []string) error {
-			if len(args) == 1 && !config.GetActiveEnv().HasProfile(args[0]) {
-				return fmt.Errorf("No such profile: %s", args[0])
-			}
-
-			if len(args) > 1 {
-				return errors.New("Command only takes one argument")
-			}
-
-			return nil
-		},
-		Run: runRenameCommand,
+		Args:    argsvalidator.OptionalProfile,
+		Run:     runRenameCommand,
 	}
 }
 

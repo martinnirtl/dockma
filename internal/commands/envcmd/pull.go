@@ -5,9 +5,10 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/martinnirtl/dockma/internal/commands/argsvalidator"
 	"github.com/martinnirtl/dockma/internal/config"
+	"github.com/martinnirtl/dockma/internal/survey"
 	"github.com/martinnirtl/dockma/internal/utils"
-	"github.com/martinnirtl/dockma/internal/utils/helpers"
 	"github.com/martinnirtl/dockma/pkg/externalcommand"
 	"github.com/martinnirtl/dockma/pkg/externalcommand/spinnertimebridger"
 	"github.com/spf13/cobra"
@@ -16,11 +17,11 @@ import (
 
 func getPullCommand() *cobra.Command {
 	return &cobra.Command{
-		Use:     "pull",
+		Use:     "pull [env]",
 		Short:   "Run 'git pull' in environment home dir",
 		Long:    "Run 'git pull' in environment home dir",
 		Example: "dockma env pull",
-		Args:    cobra.RangeArgs(0, 1),
+		Args:    argsvalidator.OptionalEnv,
 		Run:     runPullCommand,
 	}
 }
@@ -28,9 +29,10 @@ func getPullCommand() *cobra.Command {
 func runPullCommand(cmd *cobra.Command, args []string) {
 	envName := ""
 	if len(args) == 0 {
-		envName = helpers.GetEnvironment("")
+		envNames := config.GetEnvNames()
+		envName = survey.Select("Choose an environment", envNames)
 	} else {
-		envName = helpers.GetEnvironment(args[0])
+		envName = args[0]
 	}
 
 	env, err := config.GetEnv(envName)
