@@ -13,6 +13,7 @@ import (
 	"github.com/martinnirtl/dockma/pkg/externalcommand"
 	"github.com/martinnirtl/dockma/pkg/externalcommand/spinnertimebridger"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 	"github.com/ttacon/chalk"
 )
 
@@ -55,9 +56,24 @@ func runPullCommand(cmd *cobra.Command, args []string) {
 	envHomeDir := env.GetHomeDir()
 
 	if !env.IsGitBased() {
-		fmt.Printf("Environment %s is not a git repository.\n", chalk.Cyan.Color(envName))
+		err := os.Chdir(envHomeDir)
+		if err != nil {
+			fmt.Println(err)
+			utils.ErrorAndExit(fmt.Errorf("Could not change to path %s", chalk.Underline.TextStyle(envHomeDir)))
+		}
 
-		os.Exit(0)
+		// FIXME duplicated code > see env init cmd
+		if _, err := os.Stat(".git"); !os.IsNotExist(err) {
+			pull := survey.Select(fmt.Sprintf("Run %s before %s", chalk.Cyan.Color("git pull"), chalk.Cyan.Color("dockma up")), []string{"auto", "optional", "manual", "off"})
+
+			viper.Set(fmt.Sprintf("envs.%s.pull", envName), pull)
+
+			config.Save(fmt.Sprintf("Saved pull setting for environment: %s", chalk.Cyan.Color(envName)), errors.New("Failed to save pull setting"))
+		} else {
+			fmt.Printf("Environment %s is %s.\n", chalk.Cyan.Color(envName), chalk.Red.Color("not a git repository"))
+
+			os.Exit(0)
+		}
 	}
 
 	hideCmdOutput := config.GetHideSubcommandOutputSetting()
