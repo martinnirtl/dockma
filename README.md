@@ -30,7 +30,7 @@ Level up your docker-compose game during development!
 
 ### Code-Related
 
-- implement arguement based command execution
+- implement argument based command execution
   - check all commands for arg count check and command usage definition
   - add 'dynamic' bash completion
 - add support for env var prefix (eg. 'DOCKMA\_') and make configurable per environment (subcommand 'env set' is taken and should prob be changed to 'env act(ivate)')
