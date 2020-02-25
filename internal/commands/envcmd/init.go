@@ -25,7 +25,7 @@ func getInitCommand() *cobra.Command {
 }
 
 func runInitCommand(cmd *cobra.Command, args []string) {
-	var env string
+	var envName string
 
 	path := "."
 	if len(args) == 1 {
@@ -40,7 +40,7 @@ func runInitCommand(cmd *cobra.Command, args []string) {
 		utils.Warn("No path provided. Default is: .")
 	}
 
-	env = survey.InputName("Enter a name for the new environment (has to be unique)", "")
+	envName = survey.InputName("Enter a name for the new environment (has to be unique)", "")
 
 	workingDir, err := os.Getwd()
 	if err != nil {
@@ -54,31 +54,31 @@ func runInitCommand(cmd *cobra.Command, args []string) {
 		pull = "no-git"
 	}
 
-	proceed := survey.Confirm(fmt.Sprintf("Add new environment %s (location: %s)", chalk.Cyan.Color(env), workingDir), true)
+	proceed := survey.Confirm(fmt.Sprintf("Add new environment %s (location: %s)", chalk.Cyan.Color(envName), workingDir), true)
 	if !proceed {
 		utils.Abort()
 	}
 
-	viper.Set(fmt.Sprintf("envs.%s.home", env), workingDir)
-	viper.Set(fmt.Sprintf("envs.%s.pull", env), pull)
-	viper.Set(fmt.Sprintf("envs.%s.running", env), false)
+	viper.Set(fmt.Sprintf("envs.%s.home", envName), workingDir)
+	viper.Set(fmt.Sprintf("envs.%s.pull", envName), pull)
+	viper.Set(fmt.Sprintf("envs.%s.running", envName), false)
 
-	config.Save(fmt.Sprintf("Initialized new environment: %s", chalk.Cyan.Color(env)), fmt.Errorf("Failed to save newly created environment"))
+	config.Save(fmt.Sprintf("Initialized new environment: %s", chalk.Cyan.Color(envName)), fmt.Errorf("Failed to save newly created environment"))
 
 	activeEnv := config.GetActiveEnv()
 	oldEnv := activeEnv.GetName()
 
 	set := true
 	if activeEnv.IsRunning() {
-		message := fmt.Sprintf("Current active environment running: %s. Set newly initialized environment active", oldEnv)
+		message := fmt.Sprintf("Currently active environment %s is %s. Set new environment %s active", chalk.Cyan.Color(oldEnv), chalk.Green.Color("running"), chalk.Cyan.Color(envName))
 
 		set = survey.Confirm(message, false)
 	}
 
 	if set {
-		viper.Set("active", env)
+		viper.Set("active", envName)
 
-		config.Save(fmt.Sprintf("Set active environment: %s", chalk.Cyan.Color(env)), fmt.Errorf("Failed to set active environment"))
+		config.Save(fmt.Sprintf("Set active environment: %s", chalk.Cyan.Color(envName)), fmt.Errorf("Failed to set active environment"))
 	}
 
 }

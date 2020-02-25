@@ -36,7 +36,7 @@ func runListCommand(cmd *cobra.Command, args []string) {
 		fmt.Printf("No profiles in %s. Create one with %s.\n", chalk.Cyan.Color(activeEnv.GetName()), chalk.Cyan.Color("dockma profile create"))
 	}
 
-	fmt.Printf("Profiles of %s environment:\n", chalk.Bold.TextStyle(activeEnv.GetName()))
+	fmt.Printf("Profiles of %s environment:\n", chalk.Cyan.Color(activeEnv.GetName()))
 
 	for _, profileName := range profileNames {
 		if servicesFlag {

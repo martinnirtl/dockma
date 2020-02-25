@@ -57,5 +57,5 @@ func runRenameCommand(cmd *cobra.Command, args []string) {
 
 	viper.Set(fmt.Sprintf("envs.%s.profiles", activeEnv.GetName()), profileMap)
 
-	config.Save(fmt.Sprintf("Renamed profile of env %s from %s to %s", chalk.Bold.TextStyle(activeEnv.GetName()), chalk.Cyan.Color(renameProfile), chalk.Cyan.Color(profileName)), fmt.Errorf("Failed to rename profile: %s", renameProfile))
+	config.Save(fmt.Sprintf("Renamed profile of environment %s from %s to %s.", chalk.Cyan.Color(activeEnv.GetName()), chalk.Yellow.Color(renameProfile), chalk.Cyan.Color(profileName)), fmt.Errorf("Failed to rename profile: %s", renameProfile))
 }

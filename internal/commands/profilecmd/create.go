@@ -72,5 +72,5 @@ func runCreateCommand(cmd *cobra.Command, args []string) {
 
 	viper.Set(fmt.Sprintf("envs.%s.profiles.%s", activeEnv.GetName(), profileName), selected)
 
-	config.Save(fmt.Sprintf("Saved profile to %s environment: %s", chalk.Bold.TextStyle(activeEnv.GetName()), chalk.Cyan.Color(profileName)), fmt.Errorf("Failed to save profile: %s", profileName))
+	config.Save(fmt.Sprintf("Saved profile %s to environment %s.", chalk.Cyan.Color(profileName), chalk.Cyan.Color(activeEnv.GetName())), fmt.Errorf("Failed to save profile: %s", profileName))
 }

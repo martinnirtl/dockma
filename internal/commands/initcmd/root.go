@@ -67,4 +67,6 @@ func runInitCommand(cmd *cobra.Command, args []string) {
 	if err := viper.WriteConfigAs(filepath); err != nil {
 		utils.ErrorAndExit(fmt.Errorf("Could not save config.json at: %s", home))
 	}
+
+	fmt.Printf("%s has been initialized successfully!\n\nStart with adding a new environment by %s or run %s for some little docs.\n", chalk.Cyan.Color("Dockma"), chalk.Cyan.Color("dockma env init"), chalk.Cyan.Color("dockma help"))
 }

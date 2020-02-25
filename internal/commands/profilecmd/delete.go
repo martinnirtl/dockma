@@ -54,7 +54,7 @@ func runDeleteCommand(cmd *cobra.Command, args []string) {
 	for _, profileName := range selected {
 		profileMap[profileName] = nil
 
-		config.Save(fmt.Sprintf("Deleted profile from %s environment: %s", chalk.Bold.TextStyle(activeEnvName), chalk.Cyan.Color(profileName)), fmt.Errorf("Failed to delete profile: %s", profileName))
+		config.Save(fmt.Sprintf("Deleted profile %s from environment %s.", chalk.Cyan.Color(profileName), chalk.Cyan.Color(activeEnvName)), fmt.Errorf("Failed to delete profile: %s", profileName))
 	}
 
 	viper.Set(fmt.Sprintf("envs.%s.profiles", activeEnvName), profileMap)

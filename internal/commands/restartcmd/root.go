@@ -56,7 +56,7 @@ func runRestartCommand(cmd *cobra.Command, args []string) {
 
 	var timebridger externalcommand.Timebridger
 	if config.GetHideSubcommandOutputSetting() {
-		timebridger = spinnertimebridger.Default(fmt.Sprintf("Running %s", chalk.Cyan.Color("docker-compose restart")))
+		timebridger = spinnertimebridger.Default(fmt.Sprintf("Running %s", chalk.Cyan.Color(command)))
 	}
 
 	output, err := externalcommand.Execute(command, timebridger, logfile)
