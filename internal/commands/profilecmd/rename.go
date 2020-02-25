@@ -5,7 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/martinnirtl/dockma/internal/commands/argsvalidator"
+	"github.com/martinnirtl/dockma/internal/commands/argvalidators"
+	"github.com/martinnirtl/dockma/internal/commands/hooks"
 	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/survey"
 	"github.com/martinnirtl/dockma/internal/utils"
@@ -20,7 +21,8 @@ func getRenameCommand() *cobra.Command {
 		Short:   "Rename profile",
 		Long:    "Rename profile",
 		Example: "dockma profile rename",
-		Args:    argsvalidator.OptionalProfile,
+		Args:    argvalidators.OptionalProfile,
+		PreRun:  hooks.RequiresActiveEnv,
 		Run:     runRenameCommand,
 	}
 }

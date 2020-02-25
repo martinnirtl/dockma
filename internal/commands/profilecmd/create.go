@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/martinnirtl/dockma/internal/commands/hooks"
 	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/survey"
 	"github.com/martinnirtl/dockma/internal/utils"
@@ -19,27 +20,30 @@ func getCreateCommand() *cobra.Command {
 		Short:   "Create named service selection",
 		Long:    "Create named service selection",
 		Example: "dockma profile create my-profile",
-		Args: func(cmd *cobra.Command, args []string) error {
-			if len(args) == 1 {
-				match, err := survey.CheckName(args[0])
-
-				if !match {
-					return fmt.Errorf("Given name does not match regex: %s", survey.NameRegex)
-				}
-
-				if err != nil {
-					return errors.New("Invalid input")
-				}
-			}
-
-			if len(args) > 1 {
-				return errors.New("Command only takes one argument")
-			}
-
-			return nil
-		},
-		Run: runCreateCommand,
+		Args:    createCmdArgsValidator,
+		PreRun:  hooks.RequiresActiveEnv,
+		Run:     runCreateCommand,
 	}
+}
+
+func createCmdArgsValidator(cmd *cobra.Command, args []string) error {
+	if len(args) == 1 {
+		match, err := survey.CheckName(args[0])
+
+		if !match {
+			return fmt.Errorf("Given name does not match regex: %s", survey.NameRegex)
+		}
+
+		if err != nil {
+			return errors.New("Invalid input")
+		}
+	}
+
+	if len(args) > 1 {
+		return errors.New("Command only takes one argument")
+	}
+
+	return nil
 }
 
 func runCreateCommand(cmd *cobra.Command, args []string) {

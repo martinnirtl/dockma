@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/martinnirtl/dockma/internal/commands/argsvalidator"
+	"github.com/martinnirtl/dockma/internal/commands/argvalidators"
+	"github.com/martinnirtl/dockma/internal/commands/hooks"
 	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/survey"
 	"github.com/martinnirtl/dockma/internal/utils"
@@ -21,7 +22,8 @@ func getUpdateCommand() *cobra.Command {
 		Short:   "Update profile's service selection",
 		Long:    "Update profile's service selection",
 		Example: "dockma profile update",
-		Args:    argsvalidator.OptionalProfile,
+		Args:    argvalidators.OptionalProfile,
+		PreRun:  hooks.RequiresActiveEnv,
 		Run:     runUpdateCommand,
 	}
 }

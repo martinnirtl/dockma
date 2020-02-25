@@ -3,6 +3,7 @@ package pscmd
 import (
 	"os"
 
+	"github.com/martinnirtl/dockma/internal/commands/hooks"
 	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/utils"
 	"github.com/martinnirtl/dockma/pkg/externalcommand"
@@ -17,16 +18,13 @@ func GetPSCommand() *cobra.Command {
 		Long:    "List running services of active environment",
 		Example: "dockma ps",
 		Args:    cobra.NoArgs,
+		PreRun:  hooks.RequiresActiveEnv,
 		Run:     runPSCommand,
 	}
 }
 
 func runPSCommand(cmd *cobra.Command, args []string) {
 	activeEnv := config.GetActiveEnv()
-
-	if activeEnv.GetName() == "-" {
-		utils.PrintNoActiveEnvSet()
-	}
 
 	envHomeDir := activeEnv.GetHomeDir()
 

@@ -5,7 +5,8 @@ import (
 	"os"
 	"sort"
 
-	"github.com/martinnirtl/dockma/internal/commands/argsvalidator"
+	"github.com/martinnirtl/dockma/internal/commands/argvalidators"
+	"github.com/martinnirtl/dockma/internal/commands/hooks"
 	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/utils"
 	"github.com/martinnirtl/dockma/pkg/externalcommand"
@@ -23,7 +24,8 @@ func GetLogsCommand() *cobra.Command {
 		Short:   "Logs output of all or only selected services",
 		Long:    "Logs output of all or only selected services",
 		Example: "dockma logs -f database",
-		Args:    argsvalidator.OnlyServices,
+		Args:    argvalidators.OnlyServices,
+		PreRun:  hooks.RequiresActiveEnv,
 		Run:     runLogsCommand,
 	}
 
@@ -36,10 +38,6 @@ func GetLogsCommand() *cobra.Command {
 
 func runLogsCommand(cmd *cobra.Command, args []string) {
 	activeEnv := config.GetActiveEnv()
-
-	if activeEnv.GetName() == "-" {
-		utils.PrintNoActiveEnvSet()
-	}
 
 	envHomeDir := activeEnv.GetHomeDir()
 

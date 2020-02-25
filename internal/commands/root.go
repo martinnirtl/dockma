@@ -2,15 +2,13 @@ package commands
 
 import (
 	"fmt"
-	"os"
-	"os/user"
 	"path"
-	"strings"
 
 	"github.com/martinnirtl/dockma/internal/commands/completioncmd"
 	"github.com/martinnirtl/dockma/internal/commands/configcmd"
 	"github.com/martinnirtl/dockma/internal/commands/downcmd"
 	"github.com/martinnirtl/dockma/internal/commands/envcmd"
+	"github.com/martinnirtl/dockma/internal/commands/hooks"
 	"github.com/martinnirtl/dockma/internal/commands/initcmd"
 	"github.com/martinnirtl/dockma/internal/commands/inspectcmd"
 	"github.com/martinnirtl/dockma/internal/commands/logscmd"
@@ -27,7 +25,6 @@ import (
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/ttacon/chalk"
 )
 
 // FIXME make flags work
@@ -38,7 +35,7 @@ var RootCommand = &cobra.Command{
 	Use:               "dockma",
 	Short:             "Dockma is bringing your docker-compose game to the next level.",
 	Long:              `A fast and flexible CLI tool to boost your productivity during development with docker containers built with Go. Full documentation is available at https://dockma.dev`,
-	PersistentPreRun:  rootPreRunHook,
+	PersistentPreRun:  hooks.RequiresInit,
 	PersistentPostRun: rootPostRunHook,
 }
 
@@ -101,23 +98,6 @@ func initConfig() {
 
 	// NOTE read errors get ignored and execution is mainly prevented by rootPreRunHook func
 	_ = viper.ReadInConfig()
-}
-
-func rootPreRunHook(cmd *cobra.Command, args []string) {
-	// enable printing of help
-	if cmd.Name() == "help" {
-		return
-	}
-
-	if init := viper.GetTime("init"); init.IsZero() {
-		if user, err := user.Current(); err == nil {
-			fmt.Printf("Come on, %s! Run %sdockma init%s first to initialize the Dockma CLI.\n", strings.Title(user.Username), chalk.Cyan, chalk.ResetColor)
-		} else {
-			fmt.Printf("Please run %sdockma init%s first to initialize the Dockma CLI.\n", chalk.Cyan, chalk.ResetColor)
-		}
-
-		os.Exit(0)
-	}
 }
 
 func rootPostRunHook(cmd *cobra.Command, args []string) {

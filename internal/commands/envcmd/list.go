@@ -3,6 +3,7 @@ package envcmd
 import (
 	"fmt"
 
+	"github.com/martinnirtl/dockma/internal/commands/hooks"
 	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/spf13/cobra"
 	"github.com/ttacon/chalk"
@@ -18,6 +19,7 @@ func getListCommand() *cobra.Command {
 		Long:    "List all configured environments",
 		Example: "dockma envs list",
 		Args:    cobra.NoArgs,
+		PreRun:  hooks.RequiresEnv,
 		Run:     runListCommand,
 	}
 
@@ -33,37 +35,32 @@ func runListCommand(cmd *cobra.Command, args []string) {
 	activeEnv := config.GetActiveEnv()
 	activeEnvName := activeEnv.GetName()
 
-	if len(envs) > 0 {
-		if activeEnvName == "-" {
-			fmt.Print(chalk.Yellow.Color("No active environment configured. "))
-			fmt.Printf("Set active environment with %s.\n", chalk.Cyan.Color("dockma env set"))
+	if activeEnvName == "-" {
+		hooks.PrintNoActiveEnvSet()
+	}
+
+	for _, envName := range envs {
+		if envName == activeEnvName {
+			fmt.Printf("%s ", chalk.Cyan.Color("[active]"))
+		} else {
+			fmt.Print("         ")
 		}
 
-		for _, envName := range envs {
-			if envName == activeEnvName {
-				fmt.Printf("%s ", chalk.Cyan.Color("[active]"))
+		fmt.Print(chalk.Bold.TextStyle(pad(envName, maxEnvNameLength)))
+
+		if env, err := config.GetEnv(envName); err == nil {
+			if env.IsRunning() {
+				fmt.Printf(" %s", chalk.Green.Color("running"))
 			} else {
-				fmt.Print("         ")
+				fmt.Print(" -------")
 			}
 
-			fmt.Print(chalk.Bold.TextStyle(pad(envName, maxEnvNameLength)))
-
-			if env, err := config.GetEnv(envName); err == nil {
-				if env.IsRunning() {
-					fmt.Printf(" %s", chalk.Green.Color("running"))
-				} else {
-					fmt.Print(" -------")
-				}
-
-				if pathFlag {
-					fmt.Print(" " + env.GetHomeDir())
-				}
+			if pathFlag {
+				fmt.Print(" " + env.GetHomeDir())
 			}
-
-			fmt.Println()
 		}
-	} else {
-		fmt.Printf("No environments configured. Add a new environment by running %s.\n", chalk.Cyan.Color("dockma env init"))
+
+		fmt.Println()
 	}
 }
 

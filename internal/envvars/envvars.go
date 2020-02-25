@@ -8,7 +8,7 @@ import (
 )
 
 // SetEnvVars sets env vars for given service selection
-func SetEnvVars(services []string, selected []string) error {
+func SetEnvVars(envVarPrefix string, services []string, selected []string) error {
 	for _, service := range services {
 		key := fmt.Sprintf("%s_HOST", strings.ToUpper(strings.ReplaceAll(service, "-", "_")))
 

@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/martinnirtl/dockma/internal/commands/argsvalidator"
+	"github.com/martinnirtl/dockma/internal/commands/argvalidators"
+	"github.com/martinnirtl/dockma/internal/commands/hooks"
 	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/survey"
 	"github.com/martinnirtl/dockma/internal/utils"
@@ -20,7 +21,8 @@ func getDeleteCommand() *cobra.Command {
 		Short:   "Delete a profile of active environment",
 		Long:    "Delete a profile of active environment",
 		Example: "dockma profile delete",
-		Args:    argsvalidator.OnlyProfiles,
+		Args:    argvalidators.OnlyProfiles,
+		PreRun:  hooks.RequiresActiveEnv,
 		Run:     runDeleteCommand,
 	}
 }

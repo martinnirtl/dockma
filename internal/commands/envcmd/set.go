@@ -3,7 +3,8 @@ package envcmd
 import (
 	"fmt"
 
-	"github.com/martinnirtl/dockma/internal/commands/argsvalidator"
+	"github.com/martinnirtl/dockma/internal/commands/argvalidators"
+	"github.com/martinnirtl/dockma/internal/commands/hooks"
 	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/survey"
 	"github.com/martinnirtl/dockma/internal/utils"
@@ -18,7 +19,8 @@ func getSetCommand() *cobra.Command {
 		Short:   "Set active environment",
 		Long:    "Set active environment",
 		Example: "dockma envs set",
-		Args:    argsvalidator.OptionalEnv,
+		Args:    argvalidators.OptionalEnv,
+		PreRun:  hooks.RequiresEnv,
 		Run:     runSetCommand,
 	}
 }

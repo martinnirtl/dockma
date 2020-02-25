@@ -5,8 +5,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/martinnirtl/dockma/internal/commands/argsvalidator"
+	"github.com/martinnirtl/dockma/internal/commands/argvalidators"
 	"github.com/martinnirtl/dockma/internal/commands/envcmd"
+	"github.com/martinnirtl/dockma/internal/commands/hooks"
 	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/envvars"
 	"github.com/martinnirtl/dockma/internal/survey"
@@ -27,20 +28,15 @@ func GetUpCommand() *cobra.Command {
 		Short:   "Runs active environment with profile or service selection",
 		Long:    "Runs active environment with profile or service selection",
 		Example: "dockma up",
-		Args:    argsvalidator.OptionalProfile,
+		Args:    argvalidators.OptionalProfile,
+		PreRun:  hooks.RequiresActiveEnv,
 		Run:     runUpCommand,
 	}
 }
 
 func runUpCommand(cmd *cobra.Command, args []string) {
 	filepath := config.GetSubcommandLogfile()
-
 	activeEnv := config.GetActiveEnv()
-
-	if activeEnv.GetName() == "-" {
-		utils.PrintNoActiveEnvSet()
-	}
-
 	envHomeDir := activeEnv.GetHomeDir()
 
 	pull := activeEnv.GetPullSetting()
@@ -137,7 +133,7 @@ func runUpCommand(cmd *cobra.Command, args []string) {
 
 	viper.Set(fmt.Sprintf("envs.%s.latest", activeEnv.GetName()), selectedServices)
 
-	err = envvars.SetEnvVars(services.All, selectedServices)
+	err = envvars.SetEnvVars("", services.All, selectedServices)
 	utils.ErrorAndExit(err)
 
 	err = os.Chdir(envHomeDir)

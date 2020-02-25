@@ -5,7 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/martinnirtl/dockma/internal/commands/argsvalidator"
+	"github.com/martinnirtl/dockma/internal/commands/argvalidators"
+	"github.com/martinnirtl/dockma/internal/commands/hooks"
 	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/survey"
 	"github.com/martinnirtl/dockma/internal/utils"
@@ -21,16 +22,29 @@ func getPullCommand() *cobra.Command {
 		Short:   "Run 'git pull' in environment home dir",
 		Long:    "Run 'git pull' in environment home dir",
 		Example: "dockma env pull",
-		Args:    argsvalidator.OptionalEnv,
+		Args:    argvalidators.OptionalEnv,
+		PreRun:  hooks.RequiresEnv,
 		Run:     runPullCommand,
 	}
 }
 
 func runPullCommand(cmd *cobra.Command, args []string) {
+	// activeEnv := config.GetActiveEnv()
+
 	envName := ""
 	if len(args) == 0 {
-		envNames := config.GetEnvNames()
-		envName = survey.Select("Choose an environment", envNames)
+		// if activeEnv.GetName() != "-" {
+		// 	pullActive := survey.Confirm(fmt.Sprintf("Pull active env %s", chalk.Cyan.Color(activeEnv.GetName())), true)
+
+		// 	if pullActive {
+		// 		envName = activeEnv.GetName()
+		// 	}
+		// }
+
+		if envName == "" {
+			envNames := config.GetEnvNames()
+			envName = survey.Select("Choose an environment", envNames)
+		}
 	} else {
 		envName = args[0]
 	}

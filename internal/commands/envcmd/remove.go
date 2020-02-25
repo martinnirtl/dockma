@@ -4,7 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/martinnirtl/dockma/internal/commands/argsvalidator"
+	"github.com/martinnirtl/dockma/internal/commands/argvalidators"
+	"github.com/martinnirtl/dockma/internal/commands/hooks"
 	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/survey"
 	"github.com/martinnirtl/dockma/internal/utils"
@@ -20,7 +21,8 @@ func getRemoveCommand() *cobra.Command {
 		Short:   "Remove environment",
 		Long:    "Remove environment",
 		Example: "dockma envs remove",
-		Args:    argsvalidator.OptionalEnv,
+		Args:    argvalidators.OptionalEnv,
+		PreRun:  hooks.RequiresEnv,
 		Run:     runRemoveCommand,
 	}
 }

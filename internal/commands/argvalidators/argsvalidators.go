@@ -1,4 +1,4 @@
-package argsvalidator
+package argvalidators
 
 import (
 	"fmt"

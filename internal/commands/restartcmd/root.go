@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/martinnirtl/dockma/internal/commands/argsvalidator"
+	"github.com/martinnirtl/dockma/internal/commands/argvalidators"
+	"github.com/martinnirtl/dockma/internal/commands/hooks"
 	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/survey"
 	"github.com/martinnirtl/dockma/internal/utils"
@@ -21,17 +22,14 @@ func GetRestartCommand() *cobra.Command {
 		Short:   "Restart all or only selected services",
 		Long:    "Restart all or only selected services",
 		Example: "dockma restart database",
-		Args:    argsvalidator.OnlyServices,
+		Args:    argvalidators.OnlyServices,
+		PreRun:  hooks.RequiresActiveEnv,
 		Run:     runRestartCommand,
 	}
 }
 
 func runRestartCommand(cmd *cobra.Command, args []string) {
 	activeEnv := config.GetActiveEnv()
-
-	if activeEnv.GetName() == "-" {
-		utils.PrintNoActiveEnvSet()
-	}
 
 	envHomeDir := activeEnv.GetHomeDir()
 

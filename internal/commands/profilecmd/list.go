@@ -3,6 +3,7 @@ package profilecmd
 import (
 	"fmt"
 
+	"github.com/martinnirtl/dockma/internal/commands/hooks"
 	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/utils"
 	"github.com/spf13/cobra"
@@ -18,6 +19,7 @@ func getListCommand() *cobra.Command {
 		Long:    "List profiles of active environment",
 		Example: "dockma profiles list",
 		Args:    cobra.NoArgs,
+		PreRun:  hooks.RequiresActiveEnv,
 		Run:     runListCommand,
 	}
 

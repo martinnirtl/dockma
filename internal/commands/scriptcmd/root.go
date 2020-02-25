@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/martinnirtl/dockma/internal/commands/hooks"
 	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/martinnirtl/dockma/internal/survey"
 	"github.com/martinnirtl/dockma/internal/utils"
@@ -22,17 +23,13 @@ func GetScriptCommand() *cobra.Command {
 		Long:    "Run script located in scripts dir of active environment",
 		Example: "dockma script",
 		Args:    cobra.ArbitraryArgs,
+		PreRun:  hooks.RequiresActiveEnv,
 		Run:     runScriptCommand,
 	}
 }
 
 func runScriptCommand(cmd *cobra.Command, args []string) {
 	activeEnv := config.GetActiveEnv()
-
-	if activeEnv.GetName() == "-" {
-		utils.PrintNoActiveEnvSet()
-	}
-
 	envHomeDir := activeEnv.GetHomeDir()
 
 	err := os.Chdir(envHomeDir)
