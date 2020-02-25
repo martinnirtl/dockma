@@ -54,7 +54,7 @@ func Execute(command string, timebridger Timebridger, logfile string) ([]byte, e
 	}
 
 	if commandError != nil {
-		return output, fmt.Errorf("Could not run command %s", chalk.Underline.TextStyle(command))
+		return output, fmt.Errorf("Could not execute command %s", chalk.Underline.TextStyle(command))
 	}
 
 	return output, nil

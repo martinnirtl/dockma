@@ -64,7 +64,7 @@ func runPullCommand(cmd *cobra.Command, args []string) {
 
 		// FIXME duplicated code > see env init cmd
 		if _, err := os.Stat(".git"); !os.IsNotExist(err) {
-			pull := survey.Select(fmt.Sprintf("Run %s before %s", chalk.Cyan.Color("git pull"), chalk.Cyan.Color("dockma up")), []string{"auto", "optional", "manual", "off"})
+			pull := survey.Select(fmt.Sprintf("Environment is now git-based. Run %s before %s", chalk.Cyan.Color("git pull"), chalk.Cyan.Color("dockma up")), []string{"auto", "optional", "manual", "off"})
 
 			viper.Set(fmt.Sprintf("envs.%s.pull", envName), pull)
 
@@ -106,11 +106,7 @@ func Pull(path string, hideCmdOutput bool, writeToDockmaLog bool) (output []byte
 		logfile = config.GetSubcommandLogfile()
 	}
 
-	output, cmdErr := externalcommand.Execute("git pull", timebridger, logfile)
-
-	if cmdErr != nil {
-		err = errors.New("Could not execute 'git pull'")
-	}
+	output, err = externalcommand.Execute("git pull", timebridger, logfile)
 
 	// activeEnv.SetUpdated() // TODO make config to object
 
