@@ -42,7 +42,7 @@ func OnlyProfiles(cmd *cobra.Command, args []string) error {
 
 	for _, arg := range args {
 		if !utils.Includes(activeEnv.GetProfileNames(), arg) {
-			return fmt.Errorf("No such environment %s", chalk.Underline.TextStyle(arg))
+			return fmt.Errorf("No such profile %s", chalk.Underline.TextStyle(arg))
 		}
 	}
 
@@ -59,7 +59,7 @@ func OptionalProfile(cmd *cobra.Command, args []string) error {
 
 	for _, arg := range args {
 		if !utils.Includes(activeEnv.GetProfileNames(), arg) {
-			return fmt.Errorf("No such environment %s", chalk.Underline.TextStyle(arg))
+			return fmt.Errorf("No such profile %s", chalk.Underline.TextStyle(arg))
 		}
 	}
 
@@ -72,7 +72,7 @@ func OnlyServices(cmd *cobra.Command, args []string) error {
 
 	for _, arg := range args {
 		if !utils.Includes(getEnvServices(activeEnv), arg) {
-			return fmt.Errorf("No such environment %s", chalk.Underline.TextStyle(arg))
+			return fmt.Errorf("No such service %s", chalk.Underline.TextStyle(arg))
 		}
 	}
 
