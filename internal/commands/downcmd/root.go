@@ -18,8 +18,8 @@ import (
 func GetDownCommand() *cobra.Command {
 	return &cobra.Command{
 		Use:              "down",
-		Short:            "Stops active environment",
-		Long:             "Stops active environment",
+		Short:            "Downs active environment",
+		Long:             "Downs active environment",
 		Example:          "dockma down",
 		Args:             cobra.NoArgs,
 		PersistentPreRun: hooks.RequiresActiveEnv,
@@ -29,7 +29,6 @@ func GetDownCommand() *cobra.Command {
 
 func runDownCommand(cmd *cobra.Command, args []string) {
 	activeEnv := config.GetActiveEnv()
-
 	envHomeDir := activeEnv.GetHomeDir()
 
 	err := os.Chdir(envHomeDir)
@@ -51,5 +50,5 @@ func runDownCommand(cmd *cobra.Command, args []string) {
 	utils.Success("Executed command: docker-compose down")
 
 	viper.Set(fmt.Sprintf("envs.%s.running", activeEnv.GetName()), false)
-	config.Save("", fmt.Errorf("Failed to set running to 'false' [%s]", activeEnv))
+	config.Save("", fmt.Errorf("Failed to set environment %s to %s", chalk.Underline.TextStyle(activeEnv.GetName()), chalk.Underline.TextStyle("not running")))
 }

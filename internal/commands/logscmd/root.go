@@ -1,6 +1,7 @@
 package logscmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"sort"
@@ -42,7 +43,11 @@ func runLogsCommand(cmd *cobra.Command, args []string) {
 	envHomeDir := activeEnv.GetHomeDir()
 
 	err := os.Chdir(envHomeDir)
-	utils.ErrorAndExit(err)
+	if err != nil {
+		fmt.Println(err)
+
+		utils.ErrorAndExit(errors.New("Could not change dir"))
+	}
 
 	args = addFlagsToArgs(args)
 	command := externalcommand.JoinCommand("docker-compose logs", args...)

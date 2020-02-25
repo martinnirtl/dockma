@@ -32,7 +32,7 @@ func runDeleteCommand(cmd *cobra.Command, args []string) {
 	profileNames := activeEnv.GetProfileNames()
 
 	if len(profileNames) == 0 {
-		fmt.Printf("No profiles in environment: %s\n", chalk.Cyan.Color(activeEnv.GetName()))
+		fmt.Printf("No profiles in environment %s.\n", chalk.Cyan.Color(activeEnv.GetName()))
 
 		os.Exit(0)
 	}

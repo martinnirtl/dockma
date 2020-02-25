@@ -40,7 +40,7 @@ func createCmdArgsValidator(cmd *cobra.Command, args []string) error {
 	}
 
 	if len(args) > 1 {
-		return errors.New("Command only takes one argument")
+		return fmt.Errorf("Expected 1 argument. Got %d", len(args))
 	}
 
 	return nil

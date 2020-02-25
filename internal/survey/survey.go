@@ -1,6 +1,7 @@
 package survey
 
 import (
+	"errors"
 	"fmt"
 	"regexp"
 
@@ -28,7 +29,7 @@ func ValidateName(val interface{}) error {
 
 		return nil
 	default:
-		return fmt.Errorf("Input is not a string")
+		return errors.New("Input is not a string")
 	}
 }
 
@@ -37,7 +38,7 @@ func CheckName(name string) (match bool, err error) {
 	match, err = regexp.MatchString(NameRegex, name)
 
 	if err != nil {
-		return false, fmt.Errorf("Matching string with regex failed")
+		return false, errors.New("Matching string with regex failed")
 	}
 
 	return

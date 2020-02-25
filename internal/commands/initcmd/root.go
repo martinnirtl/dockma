@@ -1,6 +1,7 @@
 package initcmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"os/user"
@@ -30,7 +31,7 @@ func GetInitCommand() *cobra.Command {
 
 func initPreRunHook(cmd *cobra.Command, args []string) {
 	if init := config.GetInitTime(); !init.IsZero() {
-		proceed := survey.Confirm(fmt.Sprintf("%sDockma CLI has already been initialized!%s Do you want to proceed", chalk.Yellow, chalk.ResetColor), false)
+		proceed := survey.Confirm(fmt.Sprintf("%s Do you want to proceed", chalk.Yellow.Color("Dockma CLI has already been initialized!")), false)
 		if !proceed {
 			utils.Abort()
 		}
@@ -38,7 +39,7 @@ func initPreRunHook(cmd *cobra.Command, args []string) {
 		accept := survey.Confirm(fmt.Sprintf("Dockma CLI config will be stored at: %s", config.GetHomeDir()), true)
 
 		if !accept {
-			fmt.Printf("Ok, you can change the config default location by setting %sDOCKMA_HOME%s environment variable.\n", chalk.Cyan, chalk.ResetColor)
+			fmt.Printf("Dockma's config location can be set by %s environment variable.\n", chalk.Cyan.Color("DOCKMA_HOME"))
 
 			os.Exit(0)
 		}
@@ -59,13 +60,15 @@ func runInitCommand(cmd *cobra.Command, args []string) {
 	home := config.GetHomeDir()
 
 	if err := os.MkdirAll(home, os.FileMode(0755)); err != nil {
-		utils.ErrorAndExit(fmt.Errorf("Could not create config dir: %s", err))
+		fmt.Println(err)
+		utils.ErrorAndExit(errors.New("Could not create config dir"))
 	}
 
 	filepath := path.Join(home, "config.json")
 
 	if err := viper.WriteConfigAs(filepath); err != nil {
-		utils.ErrorAndExit(fmt.Errorf("Could not save config.json at: %s", home))
+		fmt.Println(err)
+		utils.ErrorAndExit(fmt.Errorf("Could not save config.json to %s", chalk.Underline.TextStyle(home)))
 	}
 
 	fmt.Printf("%s has been initialized successfully!\n\nStart with adding a new environment by %s or run %s for some little docs.\n", chalk.Cyan.Color("Dockma"), chalk.Cyan.Color("dockma env init"), chalk.Cyan.Color("dockma help"))

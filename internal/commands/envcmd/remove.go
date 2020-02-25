@@ -45,6 +45,7 @@ func runRemoveCommand(cmd *cobra.Command, args []string) {
 
 	if envName == activeEnv.GetName() {
 		viper.Set("active", "-")
+
 		config.Save(chalk.Yellow.Color("Unset active environment."), errors.New("Failed to unset active environment"))
 	}
 
@@ -52,5 +53,5 @@ func runRemoveCommand(cmd *cobra.Command, args []string) {
 	delete(envs, envName)
 	viper.Set("envs", envs)
 
-	config.Save(fmt.Sprintf("Removed environment: %s", chalk.Cyan.Color(envName)), errors.New("Failed to remove environment"))
+	config.Save(fmt.Sprintf("Removed environment: %s", chalk.Cyan.Color(envName)), fmt.Errorf("Failed to remove environment: %s", envName))
 }

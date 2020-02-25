@@ -30,7 +30,6 @@ func GetRestartCommand() *cobra.Command {
 
 func runRestartCommand(cmd *cobra.Command, args []string) {
 	activeEnv := config.GetActiveEnv()
-
 	envHomeDir := activeEnv.GetHomeDir()
 
 	err := os.Chdir(envHomeDir)

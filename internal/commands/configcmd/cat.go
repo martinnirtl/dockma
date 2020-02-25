@@ -28,10 +28,11 @@ func runCatCommand(cmd *cobra.Command, args []string) {
 	content, err := ioutil.ReadFile(filepath)
 
 	if err != nil {
-		utils.ErrorAndExit(errors.New("Could not read config file"))
-	} else {
-		fmt.Printf("Here comes the %s file:\n", chalk.Cyan.Color("Dockma config"))
+		fmt.Println(err)
 
-		fmt.Println(string(content))
+		utils.ErrorAndExit(errors.New("Could not read config file"))
 	}
+
+	fmt.Printf("Here comes the %s file:\n", chalk.Cyan.Color("Dockma config"))
+	fmt.Println(string(content))
 }

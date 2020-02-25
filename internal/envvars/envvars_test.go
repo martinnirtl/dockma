@@ -21,7 +21,7 @@ func TestSetEnvVars(t *testing.T) {
 	services := []string{"database", "backend", "frontend"}
 	selected := []string{"database", "frontend"}
 
-	SetEnvVars(services, selected)
+	SetEnvVars("", services, selected)
 
 	for _, service := range services {
 		envName := fmt.Sprintf("%s_HOST", strings.ToUpper(strings.ReplaceAll(service, "-", "_")))

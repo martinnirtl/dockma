@@ -16,8 +16,8 @@ var configVars []string = []string{"hidesubcommandoutput", "username"}
 func getSetCommand() *cobra.Command {
 	return &cobra.Command{
 		Use:       "set",
-		Short:     "Set Dockma config vars in an interactive walkthrough",
-		Long:      "Set Dockma config vars in an interactive walkthrough",
+		Short:     "Set variables of Dockma configuration",
+		Long:      "Set variables of Dockma configuration",
 		Example:   "dockma config set",
 		Args:      cobra.OnlyValidArgs,
 		ValidArgs: configVars,

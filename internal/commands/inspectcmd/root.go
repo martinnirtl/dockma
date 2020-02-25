@@ -17,8 +17,8 @@ import (
 func GetInspectCommand() *cobra.Command {
 	return &cobra.Command{
 		Use:     "inspect",
-		Short:   "Print detailed output of previously executed external command [up|down|pull]",
-		Long:    "Print detailed output of previously executed external command [up|down|pull]",
+		Short:   "Print detailed output of previously executed external command",
+		Long:    "Print detailed output of previously executed external command",
 		Example: "dockma inspect",
 		Args:    cobra.NoArgs,
 		Run:     runInspectCommand,
@@ -34,10 +34,12 @@ func runInspectCommand(cmd *cobra.Command, args []string) {
 		if errors.Is(err, os.ErrNotExist) {
 			fmt.Println("Nothing to output yet.")
 		} else {
-			utils.ErrorAndExit(fmt.Errorf("Could not read logfile %s", viper.GetString("subcommandlogfile")))
+			logfileName := viper.GetString("subcommandlogfile")
+
+			utils.ErrorAndExit(fmt.Errorf("Could not read logfile %s", chalk.Underline.TextStyle(logfileName)))
 		}
 	} else {
-		fmt.Println(chalk.Cyan.Color("Here come the logs:"))
+		fmt.Println(chalk.Cyan.Color("Here comes the original output:"))
 		fmt.Print(string(content))
 	}
 }

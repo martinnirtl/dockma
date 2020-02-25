@@ -46,14 +46,14 @@ func runUpCommand(cmd *cobra.Command, args []string) {
 	case "auto":
 		doPull = true
 	case "optional":
-		doPull = survey.Confirm("Pull changes from git", false)
+		doPull = survey.Confirm("Pull changes from git", true)
 	case "manual":
 		timePassed, err := activeEnv.LastUpdate()
 
 		if err != nil {
-			doPull = survey.Confirm(fmt.Sprintf("Environment never got updated (%s). Wanna pull now", chalk.Cyan.Color("dockma env pull")), true)
+			doPull = survey.Confirm(fmt.Sprintf("Environment %s not yet updated (%s). Pull now", chalk.Cyan.Color(activeEnv.GetName()), chalk.Cyan.Color("dockma env pull")), true)
 		} else if timePassed.Hours() > 24*7 {
-			doPull = survey.Confirm(fmt.Sprintf("Some time has passed since last %s. Wanna pull now", chalk.Cyan.Color("git pull")), true)
+			doPull = survey.Confirm(fmt.Sprintf("Some time has passed since last %s. Pull now", chalk.Cyan.Color("git pull")), true)
 		}
 	case "off":
 		doPull = false
@@ -67,7 +67,7 @@ func runUpCommand(cmd *cobra.Command, args []string) {
 		output, err := envcmd.Pull(envHomeDir, hideCmdOutput, false)
 		if err != nil && hideCmdOutput {
 			fmt.Print(string(output))
-			utils.Warn("Could not execute command: git pull")
+			utils.Warn(fmt.Sprintf("Could not execute command %s.", chalk.Underline.TextStyle("git pull")))
 
 			fmt.Println() // Add empty line for better readability
 		} else {
@@ -153,7 +153,7 @@ func runUpCommand(cmd *cobra.Command, args []string) {
 	utils.ErrorAndExit(err)
 
 	viper.Set(fmt.Sprintf("envs.%s.running", activeEnv.GetName()), true)
-	config.Save("", fmt.Errorf("Failed to save running state of environment: %s", activeEnv.GetName()))
+	config.Save("", fmt.Errorf("Failed to set environment %s to %s", chalk.Underline.TextStyle(activeEnv.GetName()), chalk.Underline.TextStyle("running")))
 
 	utils.Success("Executed command: docker-compose up")
 }

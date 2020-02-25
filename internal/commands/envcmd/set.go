@@ -46,14 +46,14 @@ func runSetCommand(cmd *cobra.Command, args []string) {
 		utils.Warn(fmt.Sprintf("Leaving running environment: %s", activeEnv.GetName()))
 	}
 
-	viper.Set("active", envName)
-
-	config.Save(fmt.Sprintf("New active environment: %s (old: %s)", chalk.Cyan.Color(envName), activeEnv.GetName()), fmt.Errorf("Failed to set active environment"))
-
 	env, err := config.GetEnv(envName)
 	utils.ErrorAndExit(err)
 
 	if env.IsRunning() {
 		utils.Warn("New active environment is presently running.")
 	}
+
+	viper.Set("active", envName)
+
+	config.Save(fmt.Sprintf("New active environment: %s (old: %s)", chalk.Cyan.Color(envName), activeEnv.GetName()), fmt.Errorf("Failed to set active environment: %s", envName))
 }

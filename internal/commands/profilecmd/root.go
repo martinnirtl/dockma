@@ -7,8 +7,8 @@ func GetProfileCommand() *cobra.Command {
 	profileCommand := &cobra.Command{
 		Use:     "profile",
 		Aliases: []string{"profiles"},
-		Short:   "Manage profiles (predefined service selections)",
-		Long:    "Manage profiles (predefined service selections)",
+		Short:   "Manage profiles (named service selections)",
+		Long:    "Manage profiles (named service selections)",
 	}
 
 	profileCommand.AddCommand(getCreateCommand())

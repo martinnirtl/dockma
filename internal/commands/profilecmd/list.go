@@ -45,7 +45,6 @@ func runListCommand(cmd *cobra.Command, args []string) {
 			fmt.Println(chalk.Bold.TextStyle(profileName))
 
 			profile, err := activeEnv.GetProfile(profileName)
-
 			utils.ErrorAndExit(err)
 
 			for _, service := range profile.Services {

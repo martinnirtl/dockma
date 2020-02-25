@@ -13,14 +13,15 @@ import (
 	"github.com/martinnirtl/dockma/internal/utils"
 	"github.com/martinnirtl/dockma/pkg/externalcommand"
 	"github.com/spf13/cobra"
+	"github.com/ttacon/chalk"
 )
 
 // GetScriptCommand returns the top level script command
 func GetScriptCommand() *cobra.Command {
 	return &cobra.Command{
 		Use:     "script [scriptname]",
-		Short:   "Run script located in scripts dir of active environment",
-		Long:    "Run script located in scripts dir of active environment",
+		Short:   "Run script (.sh) located in scripts dir of active environment",
+		Long:    "Run script (.sh) located in scripts dir of active environment",
 		Example: "dockma script",
 		Args:    cobra.ArbitraryArgs,
 		PreRun:  hooks.RequiresActiveEnv,
@@ -46,11 +47,15 @@ func runScriptCommand(cmd *cobra.Command, args []string) {
 		}
 	} else {
 		files, err := ioutil.ReadDir(filepath.Join(envHomeDir, "scripts"))
-		utils.ErrorAndExit(err)
+		if err != nil {
+			fmt.Println(err)
+
+			utils.ErrorAndExit(fmt.Errorf("Could not read dir %s", chalk.Underline.TextStyle(envHomeDir+"/scripts")))
+		}
 
 		scripts := make([]string, 0, len(files))
 		for _, file := range files {
-			if !file.IsDir() && len(file.Name()) > 0 {
+			if !file.IsDir() && strings.HasSuffix(file.Name(), ".sh") {
 				scripts = append(scripts, file.Name())
 			}
 		}

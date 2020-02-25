@@ -5,6 +5,7 @@ import (
 
 	"github.com/martinnirtl/dockma/internal/commands/hooks"
 	"github.com/martinnirtl/dockma/internal/config"
+	"github.com/martinnirtl/dockma/internal/utils"
 	"github.com/spf13/cobra"
 	"github.com/ttacon/chalk"
 )
@@ -15,6 +16,7 @@ var pathFlag bool
 func getListCommand() *cobra.Command {
 	listCommand := &cobra.Command{
 		Use:     "list",
+		Aliases: []string{"ls"},
 		Short:   "List all configured environments",
 		Long:    "List all configured environments",
 		Example: "dockma envs list",
@@ -36,13 +38,15 @@ func runListCommand(cmd *cobra.Command, args []string) {
 	activeEnvName := activeEnv.GetName()
 
 	if activeEnvName == "-" {
-		hooks.PrintNoActiveEnvSet()
+		utils.Warn("Active environment not set.")
+
+		fmt.Printf("Use %s or %s to set active environment.\n\nEnvironments:\n", chalk.Cyan.Color("dockma env init"), chalk.Cyan.Color("dockma env set"))
 	}
 
 	for _, envName := range envs {
 		if envName == activeEnvName {
 			fmt.Printf("%s ", chalk.Cyan.Color("[active]"))
-		} else {
+		} else if activeEnvName != "-" {
 			fmt.Print("         ")
 		}
 
