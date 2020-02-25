@@ -30,12 +30,8 @@ Level up your docker-compose game during development!
 
 ### Code-Related
 
-- implement argument based command execution
-  - check all commands for arg count check and command usage definition
-  - add 'dynamic' bash completion
-- add support for env var prefix (eg. 'DOCKMA\_') and make configurable per environment (subcommand 'env set' is taken and should prob be changed to 'env act(ivate)')
 - build command/solution to change selection without downing env in between
-- format error messages which get logged with prefix 'Error: ' (not handed over to config.Save func) and include ':'
+- add support for env var prefix (eg. 'DOCKMA\_') and make configurable per environment (subcommand 'env set' is taken and should prob be changed to 'env act(ivate)')
 - think about wrapping viper completely in config package
 - add logging for verbose output
   - inspect cmd only for external commands
@@ -43,6 +39,7 @@ Level up your docker-compose game during development!
 - write long command descriptions (eg. doctl help completion)
 - rethink git-pull setting and updating it becoming git-based project
 - use table instead of long lists (dockma profile list --services)
+- add 'dynamic' bash completion
 - support swarm mode and move towards kubernetes ?
 - build "assessment" tool for docker-compose files
 - write unit tests 😂
