@@ -1,27 +1,60 @@
 project_name: dockma
 before:
   hooks:
-    # you may remove this if you don't use vgo
     - go mod tidy
-    # you may remove this if you don't need go generate
-    - go generate ./...
 builds:
-  - env:
+  - main: ./cmd/dockma.go
+    env:
       - CGO_ENABLED=0
+      - GO111MODULE=on
+    flags:
+      - -v
+    ldflags:
+      - -X github.com/martinnirtl/dockma/internal/buildinfo.version={{ .Version }}
+      - -X github.com/martinnirtl/dockma/internal/buildinfo.commit={{ .Commit }}
+      - -X github.com/martinnirtl/dockma/internal/buildinfo.date={{ .Date }}
+    goos:
+      - windows
+      - darwin
+      - linux
+    ignore:
+      - goos: darwin
+        goarch: 386
 archives:
-  - replacements:
-      darwin: Darwin
-      linux: Linux
-      windows: Windows
+  - name_template: "dockma-{{ .Version }}-{{ .Os }}-{{ .Arch }}"
+    replacements:
       386: i386
       amd64: x86_64
+    format_overrides:
+      - goos: windows
+        format: zip
+    files:
+      - none*
+    wrap_in_directory: false
 checksum:
-  name_template: "checksums.txt"
+  name_template: "dockma-{{ .Version }}-checksums.sha256"
+  algorithm: sha256
+release:
+  github:
+    owner: martinnirtl
+    name: dockma
 snapshot:
-  name_template: "{{ .Tag }}-next"
+  name_template: "{{ .Version }}-SNAPSHOT-{{ .ShortCommit }}"
 changelog:
   sort: asc
   filters:
     exclude:
       - "^docs:"
       - "^test:"
+brews:
+  - name: dockma
+    github:
+      owner: martinnirtl
+      name: homebrew-dockma
+    homepage: "https://dockma.dev"
+    description: "Level up your docker-compose game!"
+    dependencies:
+      - docker-compose
+    test: |
+      system "#{bin}/dockma version"
+    # skip_upload: true
