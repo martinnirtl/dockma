@@ -1,6 +1,6 @@
 # Dockma CLI ![Gorelease](https://github.com/martinnirtl/dockma/workflows/Gorelease/badge.svg)
 
-Official Website and Documentation on [dockma.dev](https://dockma.dev).
+Official Website and Documentation on [dockma.dev](https://dockma.dev) (WIP).
 
 <!-- Level up your docker-compose game during development!
 
