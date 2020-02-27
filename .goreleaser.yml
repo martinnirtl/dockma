@@ -41,7 +41,6 @@ release:
 snapshot:
   name_template: "{{ .Version }}-SNAPSHOT-{{ .ShortCommit }}"
 changelog:
-  sort: asc
   filters:
     exclude:
       - "^docs:"
