@@ -80,6 +80,7 @@ Use "dockma [command] --help" for more information about a command.
 - add logging for verbose output
   - inspect cmd only for external commands
   - verboseFlag shall ignore timebridgers
+- use tabby and tablewriter where it makes sense
 - write long command descriptions (eg. doctl help completion)
 - rethink git-pull setting and updating it becoming git-based project
 - use table instead of long lists (dockma profile list --services)
