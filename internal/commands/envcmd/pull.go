@@ -19,7 +19,7 @@ import (
 
 func getPullCommand() *cobra.Command {
 	return &cobra.Command{
-		Use:     "pull [env]",
+		Use:     "pull [environment]",
 		Short:   "Run 'git pull' in environment home dir",
 		Long:    "Run 'git pull' in environment home dir",
 		Example: "dockma env pull",
