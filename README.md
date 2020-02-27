@@ -1,4 +1,4 @@
-# Dockma CLI [WIP]
+# Dockma CLI ![build](https://github.com/martinnirtl/dockma/workflows/Gorelease/badge.svg)
 
 Official Website and Documentation on [dockma.dev](https://dockma.dev).
 
