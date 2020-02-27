@@ -1,0 +1,29 @@
+name: Gorelease
+on: 
+  push:
+    branches: 
+      - "!*"
+    tags:
+      - "v*.*.*"
+jobs:
+
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Set up Go 1.14
+      uses: actions/setup-go@v1
+      with:
+        go-version: 1.14
+      id: go
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v2
+    
+    - name: GoReleaser Action
+      uses: goreleaser/goreleaser-action@v1.3.1
+      with:
+        # GoReleaser version. Example: v0.118.0
+        version: latest
+        args: release --rm-dist
