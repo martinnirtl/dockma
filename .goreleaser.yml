@@ -1,7 +1,7 @@
 project_name: dockma
 before:
   hooks:
-    - go mod tidy
+    - go mod download
 builds:
   - main: ./cmd/dockma.go
     env:

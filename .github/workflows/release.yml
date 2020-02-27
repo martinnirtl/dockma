@@ -1,4 +1,4 @@
-name: Gorelease
+name: Build and Gorelease
 on:
   push:
     branches:
@@ -7,6 +7,7 @@ on:
       - "v*.*.*"
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
