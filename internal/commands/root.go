@@ -33,8 +33,8 @@ var verboseFlag bool
 // RootCommand is the root command of dockma
 var RootCommand = &cobra.Command{
 	Use:               "dockma",
-	Short:             "Dockma is bringing your docker-compose game to the next level.",
-	Long:              `A fast and flexible CLI tool to boost your productivity during development with docker containers built with Go. Full documentation is available at https://dockma.dev`,
+	Short:             "Dockma brings your docker-compose game to the next level.",
+	Long:              `A fast and flexible CLI tool to boost your productivity during development in docker-compose based environments. Full documentation is available on https://dockma.dev.`,
 	PersistentPreRun:  hooks.RequiresInit,
 	PersistentPostRun: rootPostRunHook,
 }
