@@ -14,7 +14,7 @@ import (
 // )
 
 func main() {
-	log.SetPrefix("Dockma")
+	log.SetPrefix("dockma: ")
 
 	commands.Execute()
 }
