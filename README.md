@@ -1,4 +1,4 @@
-# Dockma CLI ![Gorelease](https://github.com/martinnirtl/dockma/workflows/Gorelease/badge.svg)
+# Dockma CLI ![Gorelease](https://github.com/martinnirtl/dockma/workflows/Gorelease/badge.svg) [![Go Report Card](https://goreportcard.com/badge/github.com/martinnirtl/dockma)](https://goreportcard.com/report/github.com/martinnirtl/dockma) [![Awesome Card](https://img.shields.io/badge/level-awesome-green)]
 
 Official Website and Documentation on [dockma.dev](https://dockma.dev) (WIP).
 
