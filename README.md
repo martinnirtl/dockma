@@ -1,6 +1,6 @@
-# Dockma CLI ![Gorelease](https://github.com/martinnirtl/dockma/workflows/Gorelease/badge.svg) [![Go Report Card](https://goreportcard.com/badge/github.com/martinnirtl/dockma)](https://goreportcard.com/report/github.com/martinnirtl/dockma)
+# Dockma CLI ![Gorelease](https://github.com/martinnirtl/dockma/workflows/Gorelease/badge.svg) [![Go Report Card](https://goreportcard.com/badge/github.com/martinnirtl/dockma)](https://goreportcard.com/report/github.com/martinnirtl/dockma) ![GitHub](https://img.shields.io/github/license/martinnirtl/dockma) ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/martinnirtl/dockma)
 
-Official Website and Documentation on [dockma.dev](https://dockma.dev) (WIP).
+Official Website and Documentation on [dockma.dev](https://dockma.dev) (WIP - coming soon).
 
 <!-- Level up your docker-compose game during development!
 
