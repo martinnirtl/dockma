@@ -14,8 +14,8 @@ import (
 func getCatCommand() *cobra.Command {
 	return &cobra.Command{
 		Use:     "cat",
-		Short:   "Print config.json of Dockma",
-		Long:    "Print config.json of Dockma",
+		Short:   "Print config.json of dockma",
+		Long:    "Print config.json of dockma",
 		Example: "dockma config cat",
 		Args:    cobra.NoArgs,
 		Run:     runCatCommand,
@@ -33,6 +33,6 @@ func runCatCommand(cmd *cobra.Command, args []string) {
 		utils.ErrorAndExit(errors.New("Could not read config file"))
 	}
 
-	fmt.Printf("Here comes the %s file:\n", chalk.Cyan.Color("Dockma config"))
+	fmt.Printf("Here comes the %s file:\n", chalk.Cyan.Color("dockma config"))
 	fmt.Println(string(content))
 }

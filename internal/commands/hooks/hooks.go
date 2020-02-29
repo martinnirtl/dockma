@@ -12,7 +12,7 @@ import (
 	"github.com/ttacon/chalk"
 )
 
-// RequiresInit ensures Dockma has been initialized.
+// RequiresInit ensures dockma has been initialized.
 func RequiresInit(cmd *cobra.Command, args []string) {
 	// enable printing of help
 	if cmd.Name() == "help" {
@@ -21,9 +21,9 @@ func RequiresInit(cmd *cobra.Command, args []string) {
 
 	if init := viper.GetTime("init"); init.IsZero() {
 		if user, err := user.Current(); err == nil {
-			fmt.Printf("Come on, %s! Run %sdockma init%s first to initialize the Dockma CLI.\n", strings.Title(user.Username), chalk.Cyan, chalk.ResetColor)
+			fmt.Printf("Come on, %s! Run %sdockma init%s first to initialize dockma.\n", strings.Title(user.Username), chalk.Cyan, chalk.ResetColor)
 		} else {
-			fmt.Printf("Please run %sdockma init%s first to initialize the Dockma CLI.\n", chalk.Cyan, chalk.ResetColor)
+			fmt.Printf("Please run %sdockma init%s first to initialize dockma.\n", chalk.Cyan, chalk.ResetColor)
 		}
 
 		os.Exit(0)

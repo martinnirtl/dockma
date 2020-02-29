@@ -20,8 +20,8 @@ import (
 func GetInitCommand() *cobra.Command {
 	return &cobra.Command{
 		Use:              "init",
-		Short:            "Initialize the Dockma CLI.",
-		Long:             "Initialize the Dockma CLI.",
+		Short:            "Initialize dockma",
+		Long:             "Initialize dockma",
 		Example:          "dockma init",
 		Args:             cobra.NoArgs,
 		PersistentPreRun: initPreRunHook, // used to override root PreRun func
@@ -31,12 +31,12 @@ func GetInitCommand() *cobra.Command {
 
 func initPreRunHook(cmd *cobra.Command, args []string) {
 	if init := config.GetInitTime(); !init.IsZero() {
-		proceed := survey.Confirm(fmt.Sprintf("%s Do you want to proceed", chalk.Yellow.Color("Dockma CLI has already been initialized!")), false)
+		proceed := survey.Confirm(fmt.Sprintf("%s Do you want to proceed", chalk.Yellow.Color("Dockma has already been initialized!")), false)
 		if !proceed {
 			utils.Abort()
 		}
 	} else {
-		accept := survey.Confirm(fmt.Sprintf("Dockma CLI config will be stored at: %s", config.GetHomeDir()), true)
+		accept := survey.Confirm(fmt.Sprintf("Dockma config will be stored at: %s", config.GetHomeDir()), true)
 
 		if !accept {
 			fmt.Printf("Dockma's config location can be set by %s environment variable.\n", chalk.Cyan.Color("DOCKMA_HOME"))
