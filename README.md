@@ -1,7 +1,5 @@
 # Dockma CLI ![build](https://github.com/martinnirtl/dockma/workflows/build/badge.svg) [![Go Report Card](https://goreportcard.com/badge/github.com/martinnirtl/dockma)](https://goreportcard.com/report/github.com/martinnirtl/dockma) ![GitHub](https://img.shields.io/github/license/martinnirtl/dockma) ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/martinnirtl/dockma)
 
-Official Website and Documentation on [dockma.dev](https://dockma.dev) (WIP - coming soon).
-
 ```
 A fast and flexible CLI tool to boost your productivity during development in docker-compose based environments. Full documentation is available on https://dockma.dev.
 
@@ -65,7 +63,7 @@ Dockma CLI gets built and released for the following operating systems. If your 
 The recommended way to install dockma on macOS is to use the **dockma** homebrew-tap:
 
 ```
-brew install martinnirtl/dockma`
+brew install martinnirtl/dockma
 ```
 
 Another option is to use the install script:
