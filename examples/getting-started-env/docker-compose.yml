@@ -4,13 +4,17 @@ services:
   backend:
     image: kennethreitz/httpbin:latest
 
+  middleware:
+    build: ../middleware-service
+    image: middleware-service:local
+    environment:
+      - PORT=3500
+      - BACKEND_BASEURL=http://${BACKEND_HOST} # backend api published on port 80
+
   polling:
     build: ../polling-service
-    image: polling-service:latest
+    image: polling-service:local
     environment:
       - PORT=4000
       - POLL_INTERVAL_MS=5000
-      - API_BASEURL=http://backend # backend api published on port 80
-    ports:
-      # - "HOST:CONTAINER"
-      - "4000:4000"
+      - API_BASEURL=http://${MIDDLEWARE_HOST}:3500 # backend api published on port 80

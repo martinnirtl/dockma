@@ -2,9 +2,10 @@
   "name": "polling-service",
   "version": "1.0.0",
   "description": "example polling service",
+  "repository": "https://github.com/martinnirtl/dockma",
   "main": "index.js",
   "scripts": {
-    "dev": "node -r dotenv/config index.js .env",
+    "dev": "nodemon -r dotenv/config index.js .env",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Martin Nirtl <martin@nirtl.rocks>",
@@ -13,6 +14,7 @@
     "axios": "^0.19.2"
   },
   "devDependencies": {
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "nodemon": "^2.0.2"
   }
 }
