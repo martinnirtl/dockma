@@ -96,7 +96,7 @@ To build dockma from source, you have to **install [go](https://golang.org/doc/i
 
 To initialize **dockma** on your system just run the following command:
 
-![Dockma init command GIF](https://raw.githubusercontent.com/martinnirtl/dockma/master/assets/gifs/dockma_init.gif)
+![Dockma env init command GIF](https://raw.githubusercontent.com/martinnirtl/dockma/master/assets/gifs/dockma_env_init_hello-world.gif)
 
 Afterwards you usually would continue with adding the first docker-compose based project to **dockma**:
 
@@ -116,11 +116,11 @@ Please note note that using DOCKMA_HOME variable assumes you already set it some
 
 As already mentioned in [setup](#setup), the usual thing you would start with is adding a so-called environment (mainly represents a dir containing docker-compose file).
 
-// dockma env init examples...
+![Dockma env init command GIF](https://raw.githubusercontent.com/martinnirtl/dockma/master/assets/gifs/dockma_env_init_getting-started.gif)
 
 After adding it, you can check your configured environments:
 
-// dockma envs list --path
+![Dockma envs list command GIF](https://raw.githubusercontent.com/martinnirtl/dockma/master/assets/gifs/dockma_envs_list.gif)
 
 Now let's say you want to add a small feature in the service `backend`. You would run `backend` locally with `yarn run dev`. Rest of your services would be running in docker:
 
