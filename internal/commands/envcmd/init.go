@@ -67,11 +67,11 @@ func runInitCommand(cmd *cobra.Command, args []string) {
 	config.Save(fmt.Sprintf("Initialized new environment: %s", chalk.Cyan.Color(envName)), fmt.Errorf("Failed to save newly created environment: %s", envName))
 
 	activeEnv := config.GetActiveEnv()
-	oldEnv := activeEnv.GetName()
+	oldEnvName := activeEnv.GetName()
 
 	set := true
 	if activeEnv.IsRunning() {
-		message := fmt.Sprintf("Currently active environment %s is %s. Set new environment %s active", chalk.Cyan.Color(oldEnv), chalk.Green.Color("running"), chalk.Cyan.Color(envName))
+		message := fmt.Sprintf("Currently active environment %s is %s. Set new environment %s active", chalk.Cyan.Color(oldEnvName), chalk.Green.Color("running"), chalk.Cyan.Color(envName))
 
 		set = survey.Confirm(message, false)
 	}
@@ -79,7 +79,7 @@ func runInitCommand(cmd *cobra.Command, args []string) {
 	if set {
 		viper.Set("active", envName)
 
-		config.Save(fmt.Sprintf("Set active environment: %s", chalk.Cyan.Color(envName)), fmt.Errorf("Failed to set active environment: %s", envName))
+		config.Save(fmt.Sprintf("Set active environment: %s (old: %s)", chalk.Cyan.Color(envName), oldEnvName), fmt.Errorf("Failed to set active environment: %s", envName))
 	}
 
 }
