@@ -48,21 +48,21 @@ Use "dockma [command] --help" for more information about a command.
 
 ## Features
 
-The following list of features outlines the main features of dockma and how it can improve your workflow:
+The following list of features outlines the main features of **dockma** and how it can improve your workflow:
 
 - No more navigating to your docker-compose files
 - Develop locally while the rest of your micro-services run inside docker
 - Launch your defined services with an interactive CLI or directly from the command line
 - Switch between your docker-compose based projects quickly
-- Extend dockma by custom scripts and bring your own specific functionality (e.g. database import/export scripts)
+- Extend **dockma** by custom scripts and bring your own specific functionality (e.g. database import/export scripts)
 
 ## Install
 
-Dockma CLI gets built and released for the following operating systems. If your platform is not supported, you can also [build **dockma** from source](#build-dockma-from-source).
+**Dockma CLI** gets built and released for the following operating systems. If your platform is not supported, you can also [build **dockma** from source](#build-dockma-from-source).
 
 ### macOS
 
-The recommended way to install dockma on macOS is to use the **dockma homebrew-tap**:
+The recommended way to install **dockma** on macOS is to use the **dockma homebrew-tap**:
 
 ```
 brew install martinnirtl/dockma
@@ -88,7 +88,7 @@ The only way to get **dockma** for windows at the moment, is to **download it fr
 
 ### Build Dockma from Source
 
-To build dockma from source, you have to **install [go](https://golang.org/doc/install)** first. Afterwards just clone the repository by running `git clone https://github.com/martinnirtl/dockma.git` and execute `make build` in the project directory. This will generate a **dockma binary** in _builds_ named **dockma**.
+To build **dockma** from source, you have to **install [go](https://golang.org/doc/install)** first. Afterwards just clone the repository by running `git clone https://github.com/martinnirtl/dockma.git` and execute `make build` in the project directory. This will generate a **dockma binary** in _builds_ named **dockma**.
 
 **Linux or macOS:** You can `cp` the binary to _/usr/local/bin_ or create a symlink with `ln -s` to make it globally available on the command line.
 
@@ -104,7 +104,7 @@ Afterwards you usually would continue with adding the first docker-compose based
 
 ### Shell Completion
 
-Shell completion is supported for bash, zsh and powershell. To add it to your dockma installation, run the dockma completion command (example for macOS with brew's bash-completion):
+Shell completion is supported for bash, zsh and powershell. To add it to your **dockma** installation, run the `dockma completion` command (example for macOS with brew's bash-completion):
 
 // dockma completion bash > $DOCKMA_HOME/completion && ln -s $DOCKMA_HOME/completion /usr/local/etc/bash_completion.d/dockma
 
@@ -114,7 +114,38 @@ Please note note that using DOCKMA_HOME variable assumes you already set it some
 
 ## Usage
 
-As already mentioned in [setup](#setup), the usual thing you would start with is adding a so-called environment (mainly represents a dir containing docker-compose file).
+As already mentioned in [setup](#setup), the usual thing you would start with is adding a so-called environment (directory containing docker-compose file). Below you find a [docker-compose example](https://github.com/martinnirtl/dockma/tree/master/examples/getting-started-env), which lists three services:
+
+- backend service is based on the popular http-bin container
+- middleware-service uses the backend service
+- polling-service is uses the middleware-service as API
+
+The **dockma** specific part in docker-compose files are the variables (see `BACKEND_HOST` and `MIDDLEWARE_HOST` variables), which get set by **dockma** automatically depending on the service selection on `dockma up`. This way all services' addresses get set correctly whether running inside docker or locally on your machine. The variable names are created dynamically following the pattern `<SERVICE-NAME>_HOST` and are always all upper case.
+
+```yaml
+version: "3"
+
+services:
+  backend:
+    image: kennethreitz/httpbin:latest
+
+  middleware:
+    build: ../middleware-service
+    image: middleware-service:local
+    environment:
+      - PORT=3500
+      - BACKEND_BASEURL=http://${BACKEND_HOST} # backend api published on port 80
+
+  polling:
+    build: ../polling-service
+    image: polling-service:local
+    environment:
+      - PORT=4000
+      - POLL_INTERVAL_MS=5000
+      - API_BASEURL=http://${MIDDLEWARE_HOST}:3500 # backend api published on port 80
+```
+
+The following command shows now how to add the [getting-started](https://github.com/martinnirtl/dockma/tree/master/examples/getting-started-env) environment to **dockma**:
 
 ![Dockma env init command GIF](https://raw.githubusercontent.com/martinnirtl/dockma/master/assets/gifs/dockma_env_init_getting-started.gif)
 
