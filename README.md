@@ -96,11 +96,11 @@ To build dockma from source, you have to **install [go](https://golang.org/doc/i
 
 To initialize **dockma** on your system just run the following command:
 
-![Dockma env init command GIF](https://raw.githubusercontent.com/martinnirtl/dockma/master/assets/gifs/dockma_env_init_hello-world.gif)
+![Dockma init command GIF](https://raw.githubusercontent.com/martinnirtl/dockma/master/assets/gifs/dockma_init.gif)
 
 Afterwards you usually would continue with adding the first docker-compose based project to **dockma**:
 
-![Dockma env init command GIF](https://raw.githubusercontent.com/martinnirtl/dockma/master/assets/gifs/dockma_env_init.gif)
+![Dockma env init command GIF](https://raw.githubusercontent.com/martinnirtl/dockma/master/assets/gifs/dockma_env_init_hello-world.gif)
 
 ### Shell Completion
 
