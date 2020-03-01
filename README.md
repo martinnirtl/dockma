@@ -1,7 +1,9 @@
 # Dockma CLI ![build](https://github.com/martinnirtl/dockma/workflows/build/badge.svg) [![Go Report Card](https://goreportcard.com/badge/github.com/martinnirtl/dockma)](https://goreportcard.com/report/github.com/martinnirtl/dockma) ![GitHub](https://img.shields.io/github/license/martinnirtl/dockma) ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/martinnirtl/dockma)
 
+Level up your docker-compose game during development with [**dockma**](#features)!
+
 ```
-A fast and flexible CLI tool to boost your productivity during development in docker-compose based environments. Full documentation is available on https://dockma.dev.
+A fast and flexible CLI tool to boost your productivity during development in docker-compose based environments.
 
 Usage:
   dockma [command]
@@ -46,7 +48,7 @@ Use "dockma [command] --help" for more information about a command.
 
 ## Features
 
-Level up your docker-compose game during development by the following main features:
+The following list of features outlines the main features of dockma and how it can improve your workflow:
 
 - No more navigating to your docker-compose files
 - Develop locally while the rest of your micro-services run inside docker
@@ -74,7 +76,15 @@ curl TODO
 
 ### Linux
 
+On Linux, you can either download the binary directly from [github](https://github.com/martinnirtl/dockma/releases) or you can use the install script:
+
+```
+curl TODO
+```
+
 ### Windows
+
+The only way to get **dockma** for windows is to download it from [gitub](https://github.com/martinnirtl/dockma/releases) directly.
 
 ### Build dockma from source
 
@@ -93,6 +103,26 @@ Afterwards you usually would continue with adding the first docker-compose based
 // dockma env init dockma/examples/hello-world GIF
 
 ## Usage
+
+As already mentioned in [setup](#setup), the usual thing you would start with is adding a so-called environment (mainly represents a dir containing docker-compose file).
+
+// dockma env init
+
+After adding it, you can check your configured environments:
+
+// dockma envs list --path
+
+Now let's say you want to add a small feature in the service `backend`. You would run `backend` locally with `yarn run dev`. Rest of your services would be running in docker:
+
+// dockma up
+
+**Important:** Make sure you map all required ports required for `backend` to work to your localhost in docker-compose.override.yaml.
+
+Finally, after `dockma up` was executed successfully, you can check if everything is up and running by:
+
+// dockma logs
+
+For a more detailed tutorial, have a look into [examples](https://github.com/martinnirtl/dockma/tree/master/examples).
 
 ## Roadmap
 
@@ -119,3 +149,7 @@ Afterwards you usually would continue with adding the first docker-compose based
 - show build tags etc. on top of readme
 
 ## Contribute
+
+Everybody is welcome to contribute new features or bugfixes. To do so, please first create a issue with the respective [template](https://github.com/martinnirtl/dockma/issues/new/choose). Fork the repository, add your code and submit your changes linked to feature request or bug report as a pull request.
+
+After reviewing it, your changes get merged into the project.

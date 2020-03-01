@@ -34,7 +34,7 @@ var verboseFlag bool
 var RootCommand = &cobra.Command{
 	Use:               "dockma",
 	Short:             "Dockma brings your docker-compose game to the next level.",
-	Long:              `A fast and flexible CLI tool to boost your productivity during development in docker-compose based environments. Full documentation is available on https://dockma.dev.`,
+	Long:              `A fast and flexible CLI tool to boost your productivity during development in docker-compose based environments.`,
 	PersistentPreRun:  hooks.RequiresInit,
 	PersistentPostRun: rootPostRunHook,
 }
