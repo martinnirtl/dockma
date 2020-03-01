@@ -108,13 +108,15 @@ Shell completion is supported for bash, zsh and powershell. To add it to your do
 
 // dockma completion bash > $DOCKMA_HOME/completion && ln -s $DOCKMA_HOME/completion /usr/local/etc/bash_completion.d/dockma
 
-**Please note** that, using `DOCKMA_HOME` variable assumes you already set it somewhere.
+```
+Please note note that using DOCKMA_HOME variable assumes you already set it somewhere.
+```
 
 ## Usage
 
 As already mentioned in [setup](#setup), the usual thing you would start with is adding a so-called environment (mainly represents a dir containing docker-compose file).
 
-// dockma env init
+![Dockma init command GIF](https://raw.githubusercontent.com/martinnirtl/dockma/master/assets/gifs/dockma_init.gif)
 
 After adding it, you can check your configured environments:
 
@@ -124,7 +126,9 @@ Now let's say you want to add a small feature in the service `backend`. You woul
 
 // dockma up
 
-**Important:** Make sure you map all required ports required for `backend` to work to your localhost in docker-compose.override.yaml.
+```
+Important: Make sure you map all ports required for `backend` to work to localhost in docker-compose.override.yaml.
+```
 
 Finally, after `dockma up` was executed successfully, you can check if everything is up and running by:
 
