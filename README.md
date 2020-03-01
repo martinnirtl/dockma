@@ -122,12 +122,12 @@ After adding it, you can check your configured environments:
 
 ![Dockma envs list command GIF](https://raw.githubusercontent.com/martinnirtl/dockma/master/assets/gifs/dockma_envs_list.gif)
 
-Now let's say you want to add a small feature in the service `backend`. You would run `backend` locally with `yarn run dev`. Rest of your services would be running in docker:
+Now let's say you want to add a small feature to the `middleware-service` (see nodejs-project _examples/middleware-service_). You would run the `middleware-service` locally with `npm run dev`. Rest of your services would be running in docker:
 
 // dockma up
 
 ```
-Important: Make sure you map all ports required for `backend` to work to localhost in docker-compose.override.yaml.
+Important: Make sure you map all ports required for middleware-service to work to localhost in docker-compose.override.yml. Otherwise middleware-service could not reach the API.
 ```
 
 Finally, after `dockma up` was executed successfully, you can check if everything is up and running by:
