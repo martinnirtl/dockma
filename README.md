@@ -62,13 +62,13 @@ Dockma CLI gets built and released for the following operating systems. If your 
 
 ### macOS
 
-The recommended way to install dockma on macOS is to use the **dockma** homebrew-tap:
+The recommended way to install dockma on macOS is to use the **dockma homebrew-tap**:
 
 ```
 brew install martinnirtl/dockma
 ```
 
-Another option is to use the install script:
+Another option is to **use** the **install script**:
 
 ```
 curl TODO
@@ -76,7 +76,7 @@ curl TODO
 
 ### Linux
 
-On Linux, you can either download the binary directly from [github](https://github.com/martinnirtl/dockma/releases) or you can use the install script:
+On Linux, you can either **download** the binary directly **from [github](https://github.com/martinnirtl/dockma/releases)** or you can use the install script:
 
 ```
 curl TODO
@@ -84,13 +84,13 @@ curl TODO
 
 ### Windows
 
-The only way to get **dockma** for windows is to download it from [gitub](https://github.com/martinnirtl/dockma/releases) directly.
+The only way to get **dockma** for windows at the moment, is to **download it from [gitub](https://github.com/martinnirtl/dockma/releases)** directly or [**build it from source**](#build-dockma-from-source).
 
-### Build dockma from source
+### Build Dockma from Source
 
-To build dockma from source, you have to install [go](https://golang.org/doc/install) first. Afterwards just clone the repository by running `git clone https://github.com/martinnirtl/dockma.git` and execute `make build` in the project directory. This will generate a dockma binary in _builds_ named **dockma**.
+To build dockma from source, you have to **install [go](https://golang.org/doc/install)** first. Afterwards just clone the repository by running `git clone https://github.com/martinnirtl/dockma.git` and execute `make build` in the project directory. This will generate a **dockma binary** in _builds_ named **dockma**.
 
-**Linux or macOS:** You can `cp` the binary to _/usr/local/bin_ or create a symlink with `ln -s` to make it available globally.
+**Linux or macOS:** You can `cp` the binary to _/usr/local/bin_ or create a symlink with `ln -s` to make it globally available on the command line.
 
 ## Setup
 
@@ -101,6 +101,14 @@ To initialize **dockma** on your system just run the following command:
 Afterwards you usually would continue with adding the first docker-compose based project to **dockma**:
 
 // dockma env init dockma/examples/hello-world GIF
+
+### Shell Completion
+
+Shell completion is supported for bash, zsh and powershell. To add it to your dockma installation, run the dockma completion command (example for macOS with brew's bash-completion):
+
+// dockma completion bash > $DOCKMA_HOME/completion && ln -s $DOCKMA_HOME/completion /usr/local/etc/bash_completion.d/dockma
+
+**Please note** that, using `DOCKMA_HOME` variable assumes you already set it somewhere.
 
 ## Usage
 
@@ -150,6 +158,6 @@ For a more detailed tutorial, have a look into [examples](https://github.com/mar
 
 ## Contribute
 
-Everybody is welcome to contribute new features or bugfixes. To do so, please first create a issue with the respective [template](https://github.com/martinnirtl/dockma/issues/new/choose). Fork the repository, add your code and submit your changes linked to feature request or bug report as a pull request.
+Everybody is welcome to contribute new features or bugfixes. To do so, please first create a issue with the respective [template](https://github.com/martinnirtl/dockma/issues/new/choose). Fork the repository, add your code and submit your changes linked to the feature request or bug report as a pull request.
 
 After reviewing it, your changes get merged into the project.
