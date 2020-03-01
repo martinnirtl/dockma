@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  backend:
+    image: kennethreitz/httpbin:latest
+
+  polling:
+    build: ../polling-service
+    image: polling-service:latest
+    environment:
+      - PORT=4000
+      - POLL_INTERVAL_MS=5000
+      - API_BASEURL=http://backend # backend api published on port 80
+    ports:
+      # - "HOST:CONTAINER"
+      - "4000:4000"

@@ -1,0 +1,7 @@
+version: "3"
+
+services:
+  backend:
+    ports:
+      # - "HOST:CONTAINER"
+      - "3000:80"
