@@ -13,6 +13,7 @@ func GetEnvCommand() *cobra.Command {
 		Long:    "Environments reflect docker-compose based projects",
 	}
 
+	envCommand.AddCommand(getHomeCommand())
 	envCommand.AddCommand(getInitCommand())
 	envCommand.AddCommand(getListCommand())
 	envCommand.AddCommand(getPullCommand())
