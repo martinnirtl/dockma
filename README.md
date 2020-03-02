@@ -65,10 +65,12 @@ The following list of features outlines the main features of **dockma** and how 
 The recommended way to install **dockma** on macOS is to use the **dockma homebrew-tap**:
 
 ```
-brew install martinnirtl/dockma
+brew install martinnirtl/tap/dockma
 ```
 
-Another option is to **use** the **install script**:
+To easily receive **dockma** updates, you should add the homebrew tap to your brew installation by `brew tap martinnirtl/tap`. This would then always automatically update **dockma** on `brew update`.
+
+Another option next to homebrew, is to **use** the **install script**:
 
 ```
 curl TODO
@@ -76,11 +78,13 @@ curl TODO
 
 ### Linux
 
-On Linux, you can either **download** the binary directly **from [github](https://github.com/martinnirtl/dockma/releases)** or you can use the install script:
+The recommended way of installing **dockma** on linux is to **use** the **install script**:
 
 ```
 curl TODO
 ```
+
+Other options are **downloading** the binary directly **from [github](https://github.com/martinnirtl/dockma/releases)** or installing **dockma** via linux homebrew (see [homebrew installation macOS](#macos)).
 
 ### Windows
 
@@ -134,7 +138,7 @@ services:
     image: middleware-service:local
     environment:
       - PORT=3500
-      - BACKEND_BASEURL=http://${BACKEND_HOST} # backend api published on port 80
+      - BACKEND_BASEURL=http://${BACKEND_HOST} # dynamic address resolution by dockma
 
   polling:
     build: ../polling-service
@@ -142,7 +146,7 @@ services:
     environment:
       - PORT=4000
       - POLL_INTERVAL_MS=5000
-      - API_BASEURL=http://${MIDDLEWARE_HOST}:3500 # backend api published on port 80
+      - API_BASEURL=http://${MIDDLEWARE_HOST}:3500 # dynamic address resolution by dockma
 ```
 
 The following command shows now how to add the [getting-started](https://github.com/martinnirtl/dockma/tree/master/examples/getting-started-env) environment to **dockma**:
@@ -153,7 +157,7 @@ After adding it, you can check your configured environments:
 
 ![Dockma envs list command GIF](https://raw.githubusercontent.com/martinnirtl/dockma/master/assets/gifs/dockma_envs_list.gif)
 
-Now let's say you want to add a small feature to the `middleware-service` (see nodejs-project _examples/middleware-service_). You would run the `middleware-service` locally with `npm run dev`. Rest of your services would be running in docker:
+Now let's say you want to add a small feature to the [middleware-service](https://github.com/martinnirtl/dockma/tree/master/examples/middleware-service). You would run the `middleware-service` locally with `npm run dev`. Rest of your services would be running in docker:
 
 // dockma up
 
