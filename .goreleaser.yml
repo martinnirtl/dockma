@@ -45,15 +45,16 @@ changelog:
     exclude:
       - "^docs:"
       - "^test:"
+      - "^update readme"
 brews:
   - name: dockma
     github:
       owner: martinnirtl
-      name: homebrew-dockma
-    homepage: "https://dockma.dev"
+      name: homebrew-tap
+    homepage: "https://github.com/martinnirtl/dockma"
     description: "Level up your docker-compose game!"
-    dependencies:
-      - docker-compose
+    # dependencies:
+    #   - docker-compose
     test: |
       system "#{bin}/dockma version"
     # skip_upload: true
