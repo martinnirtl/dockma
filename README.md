@@ -58,7 +58,13 @@ The following list of features outlines the main features of **dockma** and how 
 
 ## Install
 
-**Dockma CLI** gets built and released for the following operating systems. If your platform is not supported, you can also [build **dockma** from source](#build-dockma-from-source).
+**Dockma CLI** gets built and released for the following operating systems:
+
+- Linux
+- macOS
+- Windows
+
+If your platform is not built and released automatically, you can also [build **dockma** from source](#build-dockma-from-source).
 
 ### macOS
 
@@ -68,31 +74,45 @@ The recommended way to install **dockma** on macOS is to use the **dockma homebr
 brew install martinnirtl/tap/dockma
 ```
 
-To easily receive **dockma** updates, you should add the homebrew tap to your brew installation by `brew tap martinnirtl/tap`. This would then always automatically update **dockma** on `brew update`.
-
-Another option next to homebrew, is to **use** the **install script**:
-
-```
-curl TODO
-```
-
 ### Linux
 
-The recommended way of installing **dockma** on linux is to **use** the **install script**:
+To install **dockma** on linux, you can **download** the binary manually **from [github releases](https://github.com/martinnirtl/dockma/releases)** or you can also use utilities like `curl`:
 
 ```
-curl TODO
+curl -OL https://github.com/martinnirtl/dockma/releases/download/v<version>/dockma-<version>-linux-i386.tar.gz
 ```
 
-Other options are **downloading** the binary directly **from [github](https://github.com/martinnirtl/dockma/releases)** or installing **dockma** via linux homebrew (see [homebrew installation macOS](#macos)).
+Make sure to replace `<version>` by the version you want to download!
+
+Afterwards just extract the binary by:
+
+```
+tar xf ~/dockma-<version>-linux-i386.tar.gz
+```
+
+To make **dockma** globally available on the command line, run the following command (maybe as `sudo`):
+
+```
+mv ./dockma /usr/local/bin
+```
+
+Another option is installing **dockma** via linux homebrew (see [homebrew installation macOS](#macos))
 
 ### Windows
 
-The only way to get **dockma** for windows at the moment, is to **download it from [gitub](https://github.com/martinnirtl/dockma/releases)** directly or [**build it from source**](#build-dockma-from-source).
+To get **dockma** for windows, you can **download it from [github releases](https://github.com/martinnirtl/dockma/releases)** or [**build it from source**](#build-dockma-from-source).
+
+If you have `wget` installed, you can also download it from the command line:
+
+```
+wget https://github.com/martinnirtl/dockma/releases/download/v<version>/dockma-<version>-windows-i386.zip
+```
+
+Make sure to replace `<version>` by the version you want to download!
 
 ### Build Dockma from Source
 
-To build **dockma** from source, you have to **install [go](https://golang.org/doc/install)** first. Afterwards just clone the repository by running `git clone https://github.com/martinnirtl/dockma.git` and execute `make build` in the project directory. This will generate a **dockma binary** in _builds_ named **dockma**.
+To build **dockma** from source, you have to **setup [go](https://golang.org/doc/install)** first. Afterwards just clone the repository by running `git clone https://github.com/martinnirtl/dockma.git` and execute `make build` in the project directory. This will generate a **dockma binary** in _builds_ named **dockma**.
 
 **Linux or macOS:** You can `cp` the binary to _/usr/local/bin_ or create a symlink with `ln -s` to make it globally available on the command line.
 
