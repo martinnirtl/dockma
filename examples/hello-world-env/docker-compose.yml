@@ -10,7 +10,7 @@ services:
     environment:
       - PORT=4000
       - POLL_INTERVAL_MS=5000
-      - API_BASEURL=http://${BACKEND_HOST} # backend api published on port 80
+      - API_BASEURL=http://${BACKEND_HOST} # dynamic address resolution by dockma
     ports:
       # - "HOST:CONTAINER"
       - "4000:4000"

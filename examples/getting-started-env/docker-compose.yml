@@ -9,7 +9,7 @@ services:
     image: middleware-service:local
     environment:
       - PORT=3500
-      - BACKEND_BASEURL=http://${BACKEND_HOST} # backend api published on port 80
+      - BACKEND_BASEURL=http://${BACKEND_HOST} # dynamic address resolution by dockma
 
   polling:
     build: ../polling-service
@@ -17,4 +17,4 @@ services:
     environment:
       - PORT=4000
       - POLL_INTERVAL_MS=5000
-      - API_BASEURL=http://${MIDDLEWARE_HOST}:3500 # backend api published on port 80
+      - API_BASEURL=http://${MIDDLEWARE_HOST}:3500 # dynamic address resolution by dockma
