@@ -19,6 +19,7 @@ import (
 func GetRestartCommand() *cobra.Command {
 	return &cobra.Command{
 		Use:     "restart [service...]",
+		Aliases: []string{"rs"},
 		Short:   "Restart all or only selected services",
 		Long:    "Restart all or only selected services",
 		Example: "dockma restart database",

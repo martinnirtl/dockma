@@ -20,6 +20,7 @@ import (
 func GetScriptCommand() *cobra.Command {
 	return &cobra.Command{
 		Use:     "script [scriptname]",
+		Aliases: []string{"sc"},
 		Short:   "Run script (.sh) located in scripts dir of active environment",
 		Long:    "Run script (.sh) located in scripts dir of active environment",
 		Example: "dockma script",
