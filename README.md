@@ -64,7 +64,7 @@ The following list of features outlines the main features of **dockma** and how 
 - macOS
 - Windows
 
-If your platform is not built and released automatically, you can also [build **dockma** from source](#build-dockma-from-source).
+If **dockma** is not built and released automatically for your platform, you can also [build **dockma** from source](#build-dockma-from-source).
 
 ### macOS
 
