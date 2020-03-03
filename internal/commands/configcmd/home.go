@@ -3,9 +3,8 @@ package configcmd
 import (
 	"fmt"
 
+	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
-	"github.com/ttacon/chalk"
 )
 
 func getHomeCommand() *cobra.Command {
@@ -20,5 +19,5 @@ func getHomeCommand() *cobra.Command {
 }
 
 func runHomeCommand(cmd *cobra.Command, args []string) {
-	fmt.Printf("Dockma config home dir: %s\n", chalk.Cyan.Color(viper.GetString("home")))
+	fmt.Println(config.GetHomeDir())
 }
