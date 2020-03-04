@@ -1,6 +1,7 @@
 package upcmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -20,10 +21,13 @@ import (
 	"github.com/ttacon/chalk"
 )
 
+var latestFlag bool
+var skipFlag bool
+
 // GetUpCommand returns the top level up command
 func GetUpCommand() *cobra.Command {
-	return &cobra.Command{
-		Use:     "up",
+	upCommand := &cobra.Command{
+		Use:     "up [profile]",
 		Aliases: []string{"run"},
 		Short:   "Runs active environment with profile or service selection",
 		Long:    "Runs active environment with profile or service selection",
@@ -32,6 +36,11 @@ func GetUpCommand() *cobra.Command {
 		PreRun:  hooks.RequiresActiveEnv,
 		Run:     runUpCommand,
 	}
+
+	upCommand.Flags().BoolVarP(&latestFlag, "latest", "l", false, "use latest service selection")
+	upCommand.Flags().BoolVarP(&skipFlag, "select", "s", false, "select services")
+
+	return upCommand
 }
 
 func runUpCommand(cmd *cobra.Command, args []string) {
@@ -39,6 +48,108 @@ func runUpCommand(cmd *cobra.Command, args []string) {
 	activeEnv := config.GetActiveEnv()
 	envHomeDir := activeEnv.GetHomeDir()
 
+	pull(activeEnv)
+
+	services, err := dockercompose.GetServices(envHomeDir)
+	utils.ErrorAndExit(err)
+
+	if len(services.Override) > 0 {
+		utils.Warn(fmt.Sprintf("Found %d services in docker-compose override file: %s", len(services.Override), strings.Join(services.Override, ", ")))
+	}
+
+	profileNames := activeEnv.GetProfileNames()
+
+	// default
+	profileName := "$latest"
+	var preselected []string
+
+	if latestFlag {
+		profile, err := activeEnv.GetLatest()
+		utils.ErrorAndExit(err)
+
+		preselected = profile.Selected
+	} else if len(args) > 0 {
+		profileName = args[0]
+
+		profile, err := activeEnv.GetProfile(profileName)
+		utils.ErrorAndExit(err)
+
+		preselected = profile.Selected
+	} else if len(profileNames) > 0 {
+		profileNames = append(profileNames, "$custom")
+		profileNames = append(profileNames, "$latest")
+
+		profileName = survey.Select(fmt.Sprintf("Select profile to run"), profileNames)
+
+		if profileName == "$custom" {
+			preselected = services.All
+		} else if profileName == "$latest" {
+			profile, err := activeEnv.GetLatest()
+			utils.ErrorAndExit(err)
+
+			preselected = profile.Selected
+		} else {
+			profile, err := activeEnv.GetProfile(profileName)
+			utils.ErrorAndExit(err)
+
+			preselected = profile.Selected
+		}
+	}
+
+	// if len(preselected) == 0 {
+	// 	preselected = services.All
+	// }
+
+	var selectedServices []string
+	if skipFlag {
+		selectedServices = preselected
+	} else {
+		selectedServices = survey.MultiSelect("Select services to start", services.All, preselected)
+	}
+
+	if profileName == "$custom" || (profileName == "$latest" && !skipFlag) {
+		saveProfile := survey.Confirm("Save as profile", false)
+
+		if saveProfile {
+			profileName = survey.InputName("Enter profile name", "")
+
+			viper.Set(fmt.Sprintf("envs.%s.profiles.%s", activeEnv.GetName(), profileName), selectedServices)
+			config.Save(fmt.Sprintf("Saved profile: %s", chalk.Cyan.Color(profileName)), fmt.Errorf("Failed to save profile: %s", profileName))
+		}
+	}
+
+	viper.Set(fmt.Sprintf("envs.%s.latest", activeEnv.GetName()), selectedServices)
+	config.Save("", errors.New("Failed to save latest selection"))
+
+	err = envvars.SetEnvVars("", services.All, selectedServices)
+	utils.ErrorAndExit(err)
+
+	err = os.Chdir(envHomeDir)
+	utils.ErrorAndExit(err)
+
+	hideCmdOutput := config.GetHideSubcommandOutputSetting()
+
+	var timebridger externalcommand.Timebridger
+	if hideCmdOutput {
+		timebridger = spinnertimebridger.Default(fmt.Sprintf("Running %s", chalk.Cyan.Color("docker-compose up")))
+	}
+
+	command := externalcommand.JoinCommand("docker-compose up -d", selectedServices...)
+
+	output, err := externalcommand.Execute(command, timebridger, filepath)
+	if err != nil && timebridger != nil {
+		fmt.Print(string(output))
+	}
+	utils.ErrorAndExit(err)
+
+	viper.Set(fmt.Sprintf("envs.%s.running", activeEnv.GetName()), true)
+	config.Save("", fmt.Errorf("Failed to set environment %s to %s", chalk.Underline.TextStyle(activeEnv.GetName()), chalk.Underline.TextStyle("running")))
+
+	utils.Success("Executed command: docker-compose up")
+}
+
+func pull(activeEnv config.Env) {
+	envHomeDir := activeEnv.GetHomeDir()
 	pull := activeEnv.GetPullSetting()
 
 	var doPull bool
@@ -74,86 +185,4 @@ func runUpCommand(cmd *cobra.Command, args []string) {
 			utils.Success(fmt.Sprintf("Pulled environment: %s", activeEnv.GetName()))
 		}
 	}
-
-	services, err := dockercompose.GetServices(envHomeDir)
-	utils.ErrorAndExit(err)
-
-	if len(services.Override) > 0 {
-		utils.Warn(fmt.Sprintf("Found %d services in docker-compose override file: %s", len(services.Override), strings.Join(services.Override, ", ")))
-	}
-
-	profileNames := activeEnv.GetProfileNames()
-
-	var preselected []string
-
-	// default
-	profileName := "latest"
-	if len(args) > 0 {
-		profileName = args[0]
-
-		profile, err := activeEnv.GetProfile(profileName)
-		utils.ErrorAndExit(err)
-
-		preselected = profile.Selected
-	} else if len(profileNames) > 0 {
-		profileNames = append(profileNames, "latest")
-
-		profileName = survey.Select(fmt.Sprintf("Select profile to run"), profileNames)
-
-		if profileName != "latest" {
-			profile, err := activeEnv.GetProfile(profileName)
-			utils.ErrorAndExit(err)
-
-			preselected = profile.Selected
-		} else {
-			profile, err := activeEnv.GetLatest()
-			utils.ErrorAndExit(err)
-
-			preselected = profile.Selected
-		}
-	}
-
-	if len(preselected) == 0 {
-		preselected = services.All
-	}
-
-	selectedServices := survey.MultiSelect("Select services to start", services.All, preselected)
-
-	if profileName == "latest" {
-		saveProfile := survey.Confirm("Save as profile", false)
-
-		if saveProfile {
-			profileName = survey.InputName("Enter profile name", "")
-
-			viper.Set(fmt.Sprintf("envs.%s.profiles.%s", activeEnv.GetName(), profileName), selectedServices)
-
-			config.Save(fmt.Sprintf("Saved profile: %s", chalk.Cyan.Color(profileName)), fmt.Errorf("Failed to save profile: %s", profileName))
-		}
-	}
-
-	viper.Set(fmt.Sprintf("envs.%s.latest", activeEnv.GetName()), selectedServices)
-
-	err = envvars.SetEnvVars("", services.All, selectedServices)
-	utils.ErrorAndExit(err)
-
-	err = os.Chdir(envHomeDir)
-	utils.ErrorAndExit(err)
-
-	var timebridger externalcommand.Timebridger
-	if hideCmdOutput {
-		timebridger = spinnertimebridger.Default(fmt.Sprintf("Running %s", chalk.Cyan.Color("docker-compose up")))
-	}
-
-	command := externalcommand.JoinCommand("docker-compose up -d", selectedServices...)
-
-	output, err := externalcommand.Execute(command, timebridger, filepath)
-	if err != nil && timebridger != nil {
-		fmt.Print(string(output))
-	}
-	utils.ErrorAndExit(err)
-
-	viper.Set(fmt.Sprintf("envs.%s.running", activeEnv.GetName()), true)
-	config.Save("", fmt.Errorf("Failed to set environment %s to %s", chalk.Underline.TextStyle(activeEnv.GetName()), chalk.Underline.TextStyle("running")))
-
-	utils.Success("Executed command: docker-compose up")
 }
