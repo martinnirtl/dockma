@@ -11,7 +11,7 @@ import (
 )
 
 // NameRegex should be used to verify all names
-var NameRegex string = "^[a-zA-Z].[-.a-zA-Z0-9]*[a-zA-Z0-9]$"
+var NameRegex string = "^[a-zA-Z0-9].[-.a-zA-Z0-9]*$"
 
 // ValidateName implements the validate func type
 func ValidateName(val interface{}) error {
