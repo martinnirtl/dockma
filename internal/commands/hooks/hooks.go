@@ -3,8 +3,6 @@ package hooks
 import (
 	"fmt"
 	"os"
-	"os/user"
-	"strings"
 
 	"github.com/martinnirtl/dockma/internal/config"
 	"github.com/spf13/cobra"
@@ -20,11 +18,7 @@ func RequiresInit(cmd *cobra.Command, args []string) {
 	}
 
 	if init := viper.GetTime("init"); init.IsZero() {
-		if user, err := user.Current(); err == nil {
-			fmt.Printf("Come on, %s! Run %sdockma init%s first to initialize dockma.\n", strings.Title(user.Username), chalk.Cyan, chalk.ResetColor)
-		} else {
-			fmt.Printf("Please run %sdockma init%s first to initialize dockma.\n", chalk.Cyan, chalk.ResetColor)
-		}
+		fmt.Printf("Run %s first to initialize dockma.\n", chalk.Cyan.Color("dockma init"))
 
 		os.Exit(0)
 	}

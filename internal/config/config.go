@@ -77,11 +77,6 @@ func GetInitTime() time.Time {
 	return viper.GetTime("init")
 }
 
-// GetUsername returns the user's name.
-func GetUsername() string {
-	return viper.GetString("username")
-}
-
 // GetHomeDir returns the full path to dockma home dir.
 func GetHomeDir() string {
 	return viper.GetString("home")

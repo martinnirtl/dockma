@@ -59,7 +59,6 @@ func init() {
 		viper.SetDefault("home", path.Join(userHome, ".dockma"))
 	}
 
-	viper.SetDefault("username", "User")
 	viper.SetDefault("hidesubcommandoutput", true)
 	viper.SetDefault("subcommandlogfile", "subcommand.log")
 	viper.SetDefault("dockmalogfile", "dockma.log")

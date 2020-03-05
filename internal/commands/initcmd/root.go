@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"os/user"
 	"path"
 	"time"
 
@@ -47,14 +46,6 @@ func initPreRunHook(cmd *cobra.Command, args []string) {
 }
 
 func runInitCommand(cmd *cobra.Command, args []string) {
-	username := "User"
-	if sysUser, err := user.Current(); err == nil {
-		username = sysUser.Username
-	}
-
-	username = survey.InputName("What is your name", username)
-
-	viper.Set("username", username)
 	viper.Set("init", time.Now())
 
 	home := config.GetHomeDir()
