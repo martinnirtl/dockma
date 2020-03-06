@@ -90,8 +90,9 @@ func InputName(message string, suggestion string) (response string) {
 // Select abstracts survey's select and adds styling
 func Select(message string, options []string) (selection string) {
 	err := survey.AskOne(&survey.Select{
-		Message: message,
-		Options: options,
+		Message:  message,
+		Options:  options,
+		PageSize: len(options),
 	}, &selection, survey.WithIcons(func(icons *survey.IconSet) {
 		icons.Question.Format = "magenta+hb"
 
