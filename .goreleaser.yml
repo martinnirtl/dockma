@@ -51,8 +51,5 @@ brews:
       name: homebrew-tap
     homepage: "https://github.com/martinnirtl/dockma"
     description: "Level up your docker-compose game!"
-    # dependencies:
-    #   - docker-compose
     test: |
       system "#{bin}/dockma version"
-    # skip_upload: true
