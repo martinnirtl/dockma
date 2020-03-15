@@ -210,7 +210,7 @@ For a more detailed tutorial, have a look into [examples](https://github.com/mar
 - add 'dynamic' bash completion
 - support swarm mode and move towards kubernetes ?
 - build "assessment" tool for docker-compose files
-- write unit tests 😂
+- write unit tests
 
 ### Other
 
