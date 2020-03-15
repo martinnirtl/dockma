@@ -6,7 +6,7 @@ builds:
       - GO111MODULE=on
     flags:
       - -v
-      - -mod vendor # default since go 1.14
+      - -mod=vendor # default since go 1.14
     ldflags:
       - -X github.com/martinnirtl/dockma/internal/buildinfo.version={{ .Version }}
       - -X github.com/martinnirtl/dockma/internal/buildinfo.commit={{ .Commit }}
