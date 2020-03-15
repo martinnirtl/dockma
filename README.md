@@ -177,11 +177,19 @@ Now let's say you want to add a small feature to the [middleware-service](https:
 
 ![Dockma up command GIF](https://raw.githubusercontent.com/martinnirtl/dockma/master/assets/gifs/dockma_up.gif)
 
-```
-Important: Make sure you map all ports required for middleware-service to work (see override file in getting-started-env) to localhost in docker-compose.override.yml. Otherwise middleware-service could not reach the API.
+```yaml
+# Important: Make sure you map all ports required for middleware-service to work to localhost in docker-compose.override.yml. Otherwise middleware-service can't reach the API.
+
+version: "3"
+
+services:
+  backend:
+    ports:
+      # - "HOST:CONTAINER"
+      - "3000:80"
 ```
 
-You may have noticed, that after `dockma up` was executed successfully, we also checked if everything was up and running by running `dockma logs -f`.
+You may have noticed, that after `dockma up` was executed successfully, we also checked if all docker containers were up and running by running `dockma logs -f`.
 
 For a more detailed tutorial, have a look into [examples](https://github.com/martinnirtl/dockma/tree/master/examples).
 
