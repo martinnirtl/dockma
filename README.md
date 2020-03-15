@@ -130,11 +130,7 @@ Afterwards you usually would continue with adding the first docker-compose based
 
 Shell completion is supported for bash, zsh and powershell. To add it to your **dockma** installation, run the `dockma completion` command (example for macOS with brew's bash-completion):
 
-// dockma completion bash > $DOCKMA_HOME/completion && ln -s $DOCKMA_HOME/completion /usr/local/etc/bash_completion.d/dockma
-
-```
-Please note note that using DOCKMA_HOME variable assumes you already set it somewhere.
-```
+![Dockma completion command GIF](https://raw.githubusercontent.com/martinnirtl/dockma/master/assets/gifs/dockma_completion_bash.gif)
 
 ## Usage
 
@@ -177,17 +173,15 @@ After adding it, you can check your configured environments:
 
 ![Dockma envs list command GIF](https://raw.githubusercontent.com/martinnirtl/dockma/master/assets/gifs/dockma_envs_list.gif)
 
-Now let's say you want to add a small feature to the [middleware-service](https://github.com/martinnirtl/dockma/tree/master/examples/middleware-service). You would run the `middleware-service` locally with `npm run dev`. Rest of your services would be running in docker:
+Now let's say you want to add a small feature to the [middleware-service](https://github.com/martinnirtl/dockma/tree/master/examples/middleware-service). You would run the `middleware-service` locally with `npm run dev` and do your changes. Rest of your services would run in docker with `dockma up`:
 
-// dockma up
+![Dockma up command GIF](https://raw.githubusercontent.com/martinnirtl/dockma/master/assets/gifs/dockma_up.gif)
 
 ```
-Important: Make sure you map all ports required for middleware-service to work to localhost in docker-compose.override.yml. Otherwise middleware-service could not reach the API.
+Important: Make sure you map all ports required for middleware-service to work (see override file in getting-started-env) to localhost in docker-compose.override.yml. Otherwise middleware-service could not reach the API.
 ```
 
-Finally, after `dockma up` was executed successfully, you can check if everything is up and running by:
-
-// dockma logs
+You may have noticed, that after `dockma up` was executed successfully, we also checked if everything was up and running by running `dockma logs -f`.
 
 For a more detailed tutorial, have a look into [examples](https://github.com/martinnirtl/dockma/tree/master/examples).
 
