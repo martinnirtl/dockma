@@ -1,3 +1,3 @@
 # Polling Service
 
-WIP - expect on 8th of march.
+WIP - expect end of march.
