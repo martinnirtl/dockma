@@ -1,7 +1,4 @@
 project_name: dockma
-before:
-  hooks:
-    - go mod download
 builds:
   - main: ./cmd/dockma.go
     env:
@@ -9,6 +6,7 @@ builds:
       - GO111MODULE=on
     flags:
       - -v
+      - -mod vendor
     ldflags:
       - -X github.com/martinnirtl/dockma/internal/buildinfo.version={{ .Version }}
       - -X github.com/martinnirtl/dockma/internal/buildinfo.commit={{ .Commit }}
