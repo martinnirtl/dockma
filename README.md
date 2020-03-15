@@ -191,7 +191,7 @@ services:
 
 You may have noticed, that after `dockma up` was executed successfully, we also checked if all docker containers were up and running by running `dockma logs -f`.
 
-For a more detailed tutorial, have a look into [examples](https://github.com/martinnirtl/dockma/tree/master/examples).
+For a more detailed tutorial, have a look into [examples](https://github.com/martinnirtl/dockma/tree/master/examples) or get started by exploring `dockma help`.
 
 ## Roadmap
 
