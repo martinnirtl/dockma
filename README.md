@@ -31,6 +31,8 @@ Flags:
 Use "dockma [command] --help" for more information about a command.
 ```
 
+---
+
 ## Content
 
 - [Features](#features)
@@ -46,6 +48,8 @@ Use "dockma [command] --help" for more information about a command.
   - [Other](#other)
 - [Contribute](#contribute)
 
+---
+
 ## Features
 
 The following list of features outlines the main features of **dockma** and how it can improve your workflow:
@@ -55,6 +59,8 @@ The following list of features outlines the main features of **dockma** and how 
 - Launch your defined services with an interactive CLI or directly from the command line
 - Switch between your docker-compose based projects quickly
 - Extend **dockma** by custom scripts and bring your own specific functionality (e.g. database import/export scripts)
+
+---
 
 ## Install
 
@@ -82,7 +88,7 @@ To install **dockma** on linux, you can **download** the binary manually **from 
 curl -OL https://github.com/martinnirtl/dockma/releases/download/v<version>/dockma-<version>-linux-i386.tar.gz
 ```
 
-Make sure to replace `<version>` by the version you want to download!
+> Make sure to replace `<version>` by the version you want to download!
 
 Afterwards just extract the binary by:
 
@@ -108,13 +114,15 @@ If you have `wget` installed, you can also download it from the command line:
 wget https://github.com/martinnirtl/dockma/releases/download/v<version>/dockma-<version>-windows-i386.zip
 ```
 
-Make sure to replace `<version>` by the version you want to download!
+> Make sure to replace `<version>` by the version you want to download!
 
 ### Build Dockma from Source
 
 To build **dockma** from source, you have to **setup [go](https://golang.org/doc/install)** first. Afterwards just clone the repository by running `git clone https://github.com/martinnirtl/dockma.git` and execute `make build` in the project directory. This will generate a **dockma binary** in _builds_ named **dockma**.
 
-**Linux or macOS:** You can `cp` the binary to _/usr/local/bin_ or create a symlink with `ln -s` to make it globally available on the command line.
+> **Linux or macOS:** You can `cp` the binary to _/usr/local/bin_ or create a symlink with `ln -s` to make it globally available on the command line.
+
+---
 
 ## Setup
 
@@ -131,6 +139,8 @@ Afterwards you usually would continue with adding the first docker-compose based
 Shell completion is supported for bash, zsh and powershell. To add it to your **dockma** installation, run the `dockma completion` command (example for macOS with brew's bash-completion):
 
 ![Dockma completion command GIF](https://raw.githubusercontent.com/martinnirtl/dockma/master/assets/gifs/dockma_completion_bash.gif)
+
+---
 
 ## Usage
 
@@ -177,9 +187,9 @@ Now let's say you want to add a small feature to the [middleware-service](https:
 
 ![Dockma up command GIF](https://raw.githubusercontent.com/martinnirtl/dockma/master/assets/gifs/dockma_up.gif)
 
-```yaml
-# Important: Make sure you map all ports required for middleware-service to work to localhost in docker-compose.override.yml. Otherwise middleware-service can't reach the API.
+> **Important**: Make sure you map all ports required for middleware-service to work to localhost in docker-compose.override.yml. Otherwise middleware-service can't reach the API.
 
+```yaml
 version: "3"
 
 services:
@@ -192,6 +202,8 @@ services:
 You may have noticed, that after `dockma up` was executed successfully, we also checked if all docker containers were up and running by running `dockma logs -f`.
 
 For a more detailed tutorial, have a look into [examples](https://github.com/martinnirtl/dockma/tree/master/examples) or get started by exploring `dockma help`.
+
+---
 
 ## Roadmap
 
@@ -217,6 +229,8 @@ For a more detailed tutorial, have a look into [examples](https://github.com/mar
 | Description                                                     | Progress | Expected Finishing |
 | --------------------------------------------------------------- | -------- | ------------------ |
 | use bats for system tests (https://github.com/sstephenson/bats) |          |                    |
+
+---
 
 ## Contribute
 
