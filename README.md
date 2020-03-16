@@ -197,21 +197,6 @@ For a more detailed tutorial, have a look into [examples](https://github.com/mar
 
 ### Features/Todos
 
-- build command/solution to change selection without downing env in between
-- add support for env var prefix (eg. 'DOCKMA\_') and make configurable per environment (subcommand 'env set' should prob be changed)
-- think about wrapping viper completely in config package
-- add logging for verbose output
-  - inspect cmd only for external commands
-  - verboseFlag shall ignore timebridgers
-- use tabby and tablewriter where it makes sense
-- write long command descriptions (eg. doctl help completion)
-- rethink git-pull setting and updating it becoming git-based project
-- use table instead of long lists (dockma profile list --services)
-- add 'dynamic' bash completion
-- support swarm mode and move towards kubernetes ?
-- build "assessment" tool for docker-compose files
-- write unit tests
-
 | Description                                                                                                                         | Progress | Expected Finishing |
 | ----------------------------------------------------------------------------------------------------------------------------------- | -------- | ------------------ |
 | build command/solution to change selection without downing env in between                                                           |          |                    |
