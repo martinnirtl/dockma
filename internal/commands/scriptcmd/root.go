@@ -34,8 +34,7 @@ func runScriptCommand(cmd *cobra.Command, args []string) {
 	activeEnv := config.GetActiveEnv()
 	envHomeDir := activeEnv.GetHomeDir()
 
-	err := os.Chdir(envHomeDir)
-	utils.ErrorAndExit(err)
+	scriptsDir := filepath.Join(envHomeDir, "scripts")
 
 	var scriptname string
 	var scriptArgs []string
@@ -47,7 +46,7 @@ func runScriptCommand(cmd *cobra.Command, args []string) {
 			scriptname = scriptname + ".sh"
 		}
 	} else {
-		files, err := ioutil.ReadDir(filepath.Join(envHomeDir, "scripts"))
+		files, err := ioutil.ReadDir(scriptsDir)
 		if err != nil {
 			fmt.Println(err)
 
@@ -70,7 +69,10 @@ func runScriptCommand(cmd *cobra.Command, args []string) {
 		}
 	}
 
-	baseCommand := fmt.Sprintf("./scripts/%s", scriptname)
+	err := os.Chdir(scriptsDir)
+	utils.ErrorAndExit(err)
+
+	baseCommand := fmt.Sprintf("./%s", scriptname)
 	command := externalcommand.JoinCommand(baseCommand, scriptArgs...)
 
 	_, err = externalcommand.Execute(command, nil, "")
