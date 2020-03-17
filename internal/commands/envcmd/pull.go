@@ -84,7 +84,7 @@ func runPullCommand(cmd *cobra.Command, args []string) {
 	}
 	utils.ErrorAndExit(err)
 
-	utils.Success(fmt.Sprintf("Pulled environment: %s", env.GetName()))
+	utils.Success(fmt.Sprintf("Pulled environment: %s", chalk.Cyan.Color(env.GetName())))
 }
 
 // Pull runs git pull in given path and optionally logs output

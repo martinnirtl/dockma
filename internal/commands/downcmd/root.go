@@ -47,7 +47,7 @@ func runDownCommand(cmd *cobra.Command, args []string) {
 	}
 	utils.ErrorAndExit(err)
 
-	utils.Success("Executed command: docker-compose down")
+	utils.Success(fmt.Sprintf("Executed command: %s", chalk.Cyan.Color("docker-compose down")))
 
 	viper.Set(fmt.Sprintf("envs.%s.running", activeEnv.GetName()), false)
 	config.Save("", fmt.Errorf("Failed to set environment %s to %s", chalk.Underline.TextStyle(activeEnv.GetName()), chalk.Underline.TextStyle("not running")))

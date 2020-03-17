@@ -16,7 +16,7 @@ func Abort() {
 
 // Success prints green colored text to std out
 func Success(text string) {
-	fmt.Println(chalk.Green.Color(text))
+	fmt.Println(fmt.Sprintf("%s %s", chalk.Green.Color("✔"), text))
 }
 
 // Warn prints yellow colored text to std out

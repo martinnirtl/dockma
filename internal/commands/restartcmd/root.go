@@ -65,5 +65,5 @@ func runRestartCommand(cmd *cobra.Command, args []string) {
 	}
 	utils.ErrorAndExit(err)
 
-	utils.Success(fmt.Sprintf("Executed command: %s", command))
+	utils.Success(fmt.Sprintf("Executed command: %s", chalk.Cyan.Color(command)))
 }

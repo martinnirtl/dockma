@@ -78,5 +78,5 @@ func runScriptCommand(cmd *cobra.Command, args []string) {
 	_, err = externalcommand.Execute(command, nil, "")
 	utils.ErrorAndExit(err)
 
-	utils.Success(fmt.Sprintf("Executed script: %s", scriptname))
+	utils.Success(fmt.Sprintf("Executed script: %s", chalk.Cyan.Color(scriptname)))
 }

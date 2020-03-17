@@ -145,7 +145,7 @@ func runUpCommand(cmd *cobra.Command, args []string) {
 	viper.Set(fmt.Sprintf("envs.%s.running", activeEnv.GetName()), true)
 	config.Save("", fmt.Errorf("Failed to set environment %s to %s", chalk.Underline.TextStyle(activeEnv.GetName()), chalk.Underline.TextStyle("running")))
 
-	utils.Success("Executed command: docker-compose up")
+	utils.Success(fmt.Sprintf("Executed command: %s", chalk.Cyan.Color("docker-compose up")))
 }
 
 func pull(activeEnv config.Env) {
@@ -182,7 +182,7 @@ func pull(activeEnv config.Env) {
 
 			fmt.Println() // Add empty line for better readability
 		} else {
-			utils.Success(fmt.Sprintf("Pulled environment: %s", activeEnv.GetName()))
+			utils.Success(fmt.Sprintf("Pulled environment: %s", chalk.Cyan.Color(activeEnv.GetName())))
 		}
 	}
 }
