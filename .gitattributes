@@ -1,2 +1,2 @@
-vendor/** linguist-vendored
-examples/** linguist-documentation
+vendor/* linguist-vendored
+examples/* linguist-documentation
