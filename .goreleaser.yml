@@ -44,8 +44,6 @@ changelog:
       - "^docs:"
       - "^test:"
       - "^update readme"
-# signs:
-#   - artifacts: checksum
 brews:
   - name: dockma
     github:
