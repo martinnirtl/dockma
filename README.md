@@ -206,34 +206,9 @@ For a more detailed tutorial, have a look into [examples](https://github.com/mar
 ---
 
 ## Roadmap
-
-### Features/Todos
-
-| Description                                                                                                                         | Progress | Expected Finishing |
-| ----------------------------------------------------------------------------------------------------------------------------------- | -------- | ------------------ |
-| build command/solution to change selection without downing env in between                                                           |          |                    |
-| think about wrapping viper completely in config package                                                                             |          |                    |
-| add logging for verbose output (inspect cmd only for external commands, verboseFlag shall ignore timebridgers)                      |          |                    |
-| use tabby and tablewriter where it makes sense                                                                                      |          |                    |
-| write long command descriptions (eg. doctl help completion)                                                                         |          |                    |
-| rethink git-pull setting and updating it becoming git-based project                                                                 |          |                    |
-| use table instead of long lists (dockma profile list --services)                                                                    |          |                    |
-| add 'dynamic' bash completion                                                                                                       |          |                    |
-| support swarm mode and move towards kubernetes ?                                                                                    |          |                    |
-| build "assessment" tool for docker-compose files                                                                                    |          |                    |
-| write unit tests                                                                                                                    |          |                    |
-| add support for env var prefix (eg. 'DOCKMA\_') and make configurable per environment (subcommand 'env set' should prob be changed) |          |                    |
-
-### Other
-
-| Description                                                     | Progress | Expected Finishing |
-| --------------------------------------------------------------- | -------- | ------------------ |
-| use bats for system tests (https://github.com/sstephenson/bats) |          |                    |
-
----
+Please find upcoming major/minor features and ideas in the [roadmap](https://github.com/martinnirtl/dockma/projects/1) project.
 
 ## Contribute
-
 Everybody is welcome to contribute new features or bugfixes. To do so, please first create a issue with the respective [template](https://github.com/martinnirtl/dockma/issues/new/choose). Fork the repository, add your code and submit your changes linked to the feature request or bug report as a pull request.
 
 After reviewing it, your changes get merged into the project.
