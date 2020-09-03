@@ -128,23 +128,23 @@ To build **dockma** from source, you have to **setup [go](https://golang.org/doc
 
 To initialize **dockma** on your system just run the following command:
 
-![Dockma init command GIF](https://raw.githubusercontent.com/martinnirtl/dockma/master/assets/gifs/dockma_init.gif)
+![Dockma init command GIF](https://raw.githubusercontent.com/martinnirtl/dockma/master/docs/assets/gifs/dockma_init.gif)
 
 Afterwards you usually would continue with adding the first docker-compose based project to **dockma**:
 
-![Dockma env init command GIF](https://raw.githubusercontent.com/martinnirtl/dockma/master/assets/gifs/dockma_env_init_hello-world.gif)
+![Dockma env init command GIF](https://raw.githubusercontent.com/martinnirtl/dockma/master/docs/assets/gifs/dockma_env_init_hello-world.gif)
 
 ### Shell Completion
 
 Shell completion is supported for bash, zsh and powershell. To add it to your **dockma** installation, run the `dockma completion` command (example for macOS with brew's bash-completion):
 
-![Dockma completion command GIF](https://raw.githubusercontent.com/martinnirtl/dockma/master/assets/gifs/dockma_completion_bash.gif)
+![Dockma completion command GIF](https://raw.githubusercontent.com/martinnirtl/dockma/master/docs/assets/gifs/dockma_completion_bash.gif)
 
 ---
 
 ## Usage
 
-As already mentioned in [setup](#setup), the usual thing you would start with is adding a so-called environment (directory containing docker-compose file). Below you find a [docker-compose example](https://github.com/martinnirtl/dockma/tree/master/examples/getting-started-env), which lists three services:
+As already mentioned in [setup](#setup), the usual thing you would start with is adding a so-called environment (directory containing docker-compose file). Below you find a [docker-compose example](https://github.com/martinnirtl/dockma/tree/master/docs/examples/getting-started-env), which lists three services:
 
 - backend service is based on the popular http-bin container
 - middleware-service uses the backend service
@@ -175,17 +175,17 @@ services:
       - API_BASEURL=http://${MIDDLEWARE_HOST}:3500 # dynamic address resolution by dockma
 ```
 
-The following command shows now how to add the [getting-started](https://github.com/martinnirtl/dockma/tree/master/examples/getting-started-env) environment to **dockma**:
+The following command shows now how to add the [getting-started](https://github.com/martinnirtl/dockma/tree/master/docs/examples/getting-started-env) environment to **dockma**:
 
-![Dockma env init command GIF](https://raw.githubusercontent.com/martinnirtl/dockma/master/assets/gifs/dockma_env_init_getting-started.gif)
+![Dockma env init command GIF](https://raw.githubusercontent.com/martinnirtl/dockma/master/docs/assets/gifs/dockma_env_init_getting-started.gif)
 
 After adding it, you can check your configured environments:
 
-![Dockma envs list command GIF](https://raw.githubusercontent.com/martinnirtl/dockma/master/assets/gifs/dockma_envs_list.gif)
+![Dockma envs list command GIF](https://raw.githubusercontent.com/martinnirtl/dockma/master/docs/assets/gifs/dockma_envs_list.gif)
 
-Now let's say you want to add a small feature to the [middleware-service](https://github.com/martinnirtl/dockma/tree/master/examples/middleware-service). You would run the `middleware-service` locally with `npm run dev` and do your changes. Rest of your services would run in docker with `dockma up`:
+Now let's say you want to add a small feature to the [middleware-service](https://github.com/martinnirtl/dockma/tree/master/docs/examples/middleware-service). You would run the `middleware-service` locally with `npm run dev` and do your changes. Rest of your services would run in docker with `dockma up`:
 
-![Dockma up command GIF](https://raw.githubusercontent.com/martinnirtl/dockma/master/assets/gifs/dockma_up.gif)
+![Dockma up command GIF](https://raw.githubusercontent.com/martinnirtl/dockma/master/docs/assets/gifs/dockma_up.gif)
 
 > **Important**: Make sure you map all ports required for middleware-service to work to localhost in docker-compose.override.yml. Otherwise middleware-service can't reach the API.
 
@@ -201,7 +201,7 @@ services:
 
 You may have noticed, that after `dockma up` was executed successfully, we also checked if all docker containers were up and running by running `dockma logs -f`.
 
-For a more detailed tutorial, have a look into [examples](https://github.com/martinnirtl/dockma/tree/master/examples) or get started by exploring `dockma help`.
+For a more detailed tutorial, have a look into [examples](https://github.com/martinnirtl/dockma/tree/master/docs/examples) or get started by exploring `dockma help`.
 
 ---
 
