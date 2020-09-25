@@ -98,7 +98,7 @@ func GetDockmaLogfile() string {
 
 // GetSubcommandLogfile returns full path to subcommand logfile.
 func GetSubcommandLogfile() string {
-	filename := viper.GetString("subcommandlogfile")
+	filename := viper.GetString("commandlogfile")
 
 	return GetFile(filename)
 }
@@ -138,9 +138,9 @@ func SetActiveEnv(new string) (newEnv Env, oldEnv Env) {
 		}
 }
 
-// GetHideSubcommandOutputSetting returns hidesubcommandoutput flag.
+// GetHideSubcommandOutputSetting returns hidecommandoutput flag.
 func GetHideSubcommandOutputSetting() bool {
-	return viper.GetBool("hidesubcommandoutput")
+	return viper.GetBool("hidecommandoutput")
 }
 
 // GetEnv returns the named environment.

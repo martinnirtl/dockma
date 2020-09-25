@@ -59,14 +59,26 @@ func init() {
 		viper.SetDefault("home", path.Join(userHome, ".dockma"))
 	}
 
-	viper.SetDefault("hidesubcommandoutput", true)
-	viper.SetDefault("subcommandlogfile", "subcommand.log")
+	viper.SetDefault("hidecommandoutput", false)
+	viper.SetDefault("commandlogfile", "command.log")
 	viper.SetDefault("dockmalogfile", "dockma.log")
 	viper.SetDefault("active", "-")
 	viper.SetDefault("envs", map[string]interface{}{})
 
 	initConfig()
 	initRootCmd()
+}
+
+func initConfig() {
+	viper.SetConfigName("config")
+	viper.SetConfigType("json")
+
+	dockmaConfig := viper.GetString("home")
+
+	viper.AddConfigPath(dockmaConfig)
+
+	// NOTE read errors get ignored and execution is mainly prevented by rootPreRunHook func
+	_ = viper.ReadInConfig()
 }
 
 func initRootCmd() {
@@ -85,18 +97,6 @@ func initRootCmd() {
 	RootCommand.AddCommand(versioncmd.GetVersionCommand())
 
 	RootCommand.AddCommand(testcmd.GetTestCommand())
-}
-
-func initConfig() {
-	viper.SetConfigName("config")
-	viper.SetConfigType("json")
-
-	dockmaConfig := viper.GetString("home")
-
-	viper.AddConfigPath(dockmaConfig)
-
-	// NOTE read errors get ignored and execution is mainly prevented by rootPreRunHook func
-	_ = viper.ReadInConfig()
 }
 
 func rootPostRunHook(cmd *cobra.Command, args []string) {

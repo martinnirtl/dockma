@@ -11,7 +11,7 @@ import (
 	"github.com/ttacon/chalk"
 )
 
-var configVars []string = []string{"hidesubcommandoutput"}
+var configVars []string = []string{"hidecommandoutput"}
 
 func getSetCommand() *cobra.Command {
 	return &cobra.Command{
@@ -30,7 +30,7 @@ func runSetCommand(cmd *cobra.Command, args []string) {
 
 	if len(args) == 0 {
 		options := []string{
-			fmt.Sprintf("hidesubcommandoutput: %t", viper.GetBool("hidesubcommandoutput")),
+			fmt.Sprintf("Hide command output: %t", viper.GetBool("hidecommandoutput")),
 		}
 
 		selected = survey.MultiSelect("Select config items to change", options, nil)
@@ -49,11 +49,11 @@ func runSetCommand(cmd *cobra.Command, args []string) {
 	}
 }
 
-func setConfigVar(varname string) {
-	switch varname {
-	case "hidesubcommandoutput":
-		hide := survey.Confirm("Hide output of external commands [true: show output only on error, false: always pipe output]", viper.GetBool("hidesubcommandoutput"))
+func setConfigVar(selection string) {
+	switch selection {
+	case "Hide command output":
+		hide := survey.Confirm("Hide output of external commands [true: show output only on error, false: always pipe output]", viper.GetBool("hidecommandoutput"))
 
-		viper.Set("hidesubcommandoutput", hide)
+		viper.Set("hidecommandoutput", hide)
 	}
 }
