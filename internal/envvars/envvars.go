@@ -8,9 +8,9 @@ import (
 )
 
 // SetEnvVars sets env vars for given service selection
-func SetEnvVars(envVarPrefix string, services []string, selected []string) error {
+func SetEnvVars(services []string, selected []string) error {
 	for _, service := range services {
-		key := fmt.Sprintf("%s_HOST", strings.ToUpper(strings.ReplaceAll(service, "-", "_")))
+		key := fmt.Sprintf("DOCKMA_HOST_%s", strings.ToUpper(strings.ReplaceAll(service, "-", "_")))
 
 		var val string
 		for _, selectedService := range selected {

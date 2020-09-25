@@ -121,7 +121,7 @@ func runUpCommand(cmd *cobra.Command, args []string) {
 	viper.Set(fmt.Sprintf("envs.%s.latest", activeEnv.GetName()), selectedServices)
 	config.Save("", errors.New("Failed to save latest selection"))
 
-	err = envvars.SetEnvVars("", services.All, selectedServices)
+	err = envvars.SetEnvVars(services.All, selectedServices)
 	utils.ErrorAndExit(err)
 
 	err = os.Chdir(envHomeDir)
