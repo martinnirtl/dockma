@@ -1,12 +1,14 @@
 package emojis
 
-var ErrorEmojis []string = []string{"🥵", "⛑", "🐙", "🐞", "🔥", "💥", "🍎", "🌶", "🚒", "🧨", "⛔️", "🟥"}
-var SuccessEmojis []string = []string{"🦖", "🐢", "🌳", "🍏", "🥦", "✅", "🪀"}
+var errorEmojis []string = []string{"⛑", "🐙", "🐞", "🔥", "💥", "🍎", "🌶", "🚒", "🧨", "⛔️"}
+var successEmojis []string = []string{"🦖", "🐢", "🌳", "🍏", "🥦", "✅", "🪀"}
 
+// GetErrorEmoji returns negative emoji
 func GetErrorEmoji() string {
-	return ErrorEmojis[random(0, len(ErrorEmojis))]
+	return errorEmojis[random(0, len(errorEmojis))]
 }
 
+// GetSuccessEmoji returns positive emoji
 func GetSuccessEmoji() string {
-	return SuccessEmojis[random(0, len(SuccessEmojis))]
+	return successEmojis[random(0, len(successEmojis))]
 }
