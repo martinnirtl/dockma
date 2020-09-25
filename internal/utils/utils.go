@@ -28,6 +28,7 @@ func Warn(text string) {
 func Error(err error) {
 	if err != nil {
 		fmt.Println(chalk.Red.Color(fmt.Sprintf("Error: %s", err)))
+		// fmt.Println(chalk.Red.Color(fmt.Sprintf("✘ %s", err)))
 	}
 }
 
