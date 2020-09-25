@@ -9,7 +9,7 @@ import (
 
 // Abort prints 'Aborted.' to std out and exits process with 0
 func Abort() {
-	fmt.Printf("%sAborted.%s\n", chalk.Cyan, chalk.ResetColor)
+	fmt.Println(chalk.Cyan.Color("Aborted."))
 
 	os.Exit(0)
 }
