@@ -6,23 +6,23 @@ import (
 	"github.com/spf13/viper"
 )
 
+// Services of compose and override file
 type Services struct {
 	All      []string
-	Base     []string
+	Compose  []string
 	Override []string
 }
 
-var servicesChache map[string]Services = make(map[string]Services)
-
-func (s *Services) IsEmpty() bool {
-	if len(s.All) == 0 || len(s.Base) == 0 || len(s.Override) == 0 {
-		return true
-	}
-
-	return false
-}
+var composeCache map[string]*viper.Viper = make(map[string]*viper.Viper)
+var overrideCache map[string]*viper.Viper = make(map[string]*viper.Viper)
 
 func getDockerCompose(filepath string, override bool) (*viper.Viper, error) {
+	if !override && composeCache[filepath] != nil {
+		return composeCache[filepath], nil
+	} else if override && overrideCache[filepath] != nil {
+		return overrideCache[filepath], nil
+	}
+
 	fileName := "docker-compose"
 	if override {
 		fileName = "docker-compose.override"
@@ -42,6 +42,7 @@ func getDockerCompose(filepath string, override bool) (*viper.Viper, error) {
 	return temp, nil
 }
 
+// GetVersion returns the compose file's version
 func GetVersion(filepath string) string {
 	dockercompose, err := getDockerCompose(filepath, false)
 
@@ -52,13 +53,8 @@ func GetVersion(filepath string) string {
 	return dockercompose.GetString("version")
 }
 
+// GetServices returns the Services of compose/override files
 func GetServices(filepath string) (services Services, err error) {
-	services = servicesChache[filepath]
-
-	if !services.IsEmpty() {
-		return
-	}
-
 	dockercompose, err := getDockerCompose(filepath, false)
 
 	services = Services{}
@@ -70,20 +66,23 @@ func GetServices(filepath string) (services Services, err error) {
 	dockercomposeOverride, err := getDockerCompose(filepath, true)
 
 	if err == nil {
-		services.Base = getServicesFromStringMap(dockercompose.GetStringMap("services"))
+		services.Compose = getServicesFromStringMap(dockercompose.GetStringMap("services"))
 		services.Override = getServicesFromStringMap(dockercomposeOverride.GetStringMap("services"))
 
-		services.All = mergeServiceSlices(services.Base, services.Override)
+		services.All = mergeServiceSlices(services.Compose, services.Override)
 	} else {
-		services.Base = getServicesFromStringMap(dockercompose.GetStringMap("services"))
-		services.All = services.Base
+		services.Compose = getServicesFromStringMap(dockercompose.GetStringMap("services"))
+		services.All = services.Compose
 	}
-
-	servicesChache[filepath] = services
 
 	return services, nil
 }
 
-func GetEnvironment(filepath string) map[string]string {
-	return nil
+// IsEmpty returns whether the services are empty or not
+func (s *Services) IsEmpty() bool {
+	if len(s.All) == 0 || len(s.Compose) == 0 || len(s.Override) == 0 {
+		return true
+	}
+
+	return false
 }
