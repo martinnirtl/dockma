@@ -4,7 +4,7 @@ export GO111MODULE := on
 .PHONY: build
 build:
 	@echo "building dockma..."
-	@go build -mod vendor -v -o "builds/dockma" cmd/dockma.go
+	@go build -v -o "builds/dockma" cmd/dockma.go
 	@echo "built dockma 🐳"
 
 .PHONY: clean
