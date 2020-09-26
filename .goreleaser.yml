@@ -6,7 +6,6 @@ builds:
       - GO111MODULE=on
     flags:
       - -v
-      - -mod=vendor # default since go 1.14
     ldflags:
       - -X github.com/martinnirtl/dockma/internal/buildinfo.version={{ .Version }}
       - -X github.com/martinnirtl/dockma/internal/buildinfo.commit={{ .Commit }}
@@ -30,7 +29,7 @@ archives:
       - none*
     wrap_in_directory: false
 checksum:
-  name_template: "dockma-{{ .Version }}-checksums.sha256"
+  name_template: "dockma-{{ .Version }}-checksums.txt"
   algorithm: sha256
 release:
   github:
